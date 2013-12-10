@@ -10,18 +10,18 @@
 			importPackage(java.lang);
 	
 		//Use JavaScript to print the text of the button "clickable"
-			var button = window.getElementById("clickable2");
+			var button = window.getElementById("clickable3");
 			print(button.getText());
 			
 		//Use Java from JavaScript
-			var label = window.getElementById("label");
+			var label = window.getElementById("label2");
 			if (label != null) {
 				System.out.println(label.getText());
 			}
 			
 		//Button Clicking System
 			function runBtnEvt(text, sourceID) {
-				var label_list = window.getElementsByClass("label");
+				var label_list = window.getElementsByClass("label2");
 				for (index = 0; index &lt; label_list.length; ++index) {
 					if (sourceID == 0) {
 						label_list[index].setText(text+" from Label");
@@ -34,10 +34,9 @@
 
 	</script>
 	<!-- GUI code -->
-	<link href="test.rsm"></link>
 	<body style="0" gui_type="SWT" theme="camo">
-		<label class="label" onmouseup="runBtnEvt('Click', 0)" onmouseover="runBtnEvt('Mouse Over', 0)" onmouseout="runBtnEvt('Mouse Out', 0)">label changes on mouseover, mouseout, and click.</label>
-		<button id="clickable2" class="label" onclick="runBtnEvt('Click', 1)" onmouseover="runBtnEvt('Mouse Over', 1)" onmouseout="runBtnEvt('Mouse Out', 1)">Changes the status of the label</button>
+		<label class="label2" onmouseup="runBtnEvt('Click', 0)" onmouseover="runBtnEvt('Mouse Over', 0)" onmouseout="runBtnEvt('Mouse Out', 0)">label changes on mouseover, mouseout, and click.</label>
+		<button id="clickable3" class="label2" onclick="runBtnEvt('Click', 1)" onmouseover="runBtnEvt('Mouse Over', 1)" onmouseout="runBtnEvt('Mouse Out', 1)">Changes the status of the label</button>
 		<spinner id="spinner" value="10" max="20" min="-1" onclick="runBtnEvt('Spinner: '+$spinner.getSelection(), 1)"/>
 	</body>
 
