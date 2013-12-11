@@ -3,7 +3,10 @@ package us.derfers.tribex.rapids.GUI;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Composite;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -17,17 +20,17 @@ import javax.script.ScriptException;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.swt.widgets.Widget;
+import net.miginfocom.swing.MigLayout;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -36,16 +39,40 @@ import org.w3c.dom.NodeList;
 import us.derfers.tribex.rapids.Loader;
 import us.derfers.tribex.rapids.Main;
 import us.derfers.tribex.rapids.Utilities;
+import us.derfers.tribex.rapids.parsers.CSSParser;
+import static us.derfers.tribex.rapids.Utilities.debugMsg;
 
 public class GUI_Swing {
-	public static void loadGUI(String filePath, ScriptEngine engine, JPanel parentComposite, Boolean clearWidgets) {
+	
+	//Constants that need to be defined to keep the GUI in one frame system.
+	private static JFrame window = new JFrame();
+	private static JPanel windowPanel = new JPanel();
+	
+	public static void loadGUI(String filePath, ScriptEngine engine, Object parent, Boolean clearWidgets) {
 		//XXX: Initialization :XXX\\
 		/*
 		 * Basically: Port the following code to Swing, nothing hard. :P   
-		 * OK
-		 */
+		*/
 		//If this is the initial run, and therefore there is no shell or display, initialize them
-		JFrame shell = new JFrame();
+		
+		//Create ParentComposite variable
+		JPanel parentComposite = null;
+		
+		//Check to see if the parent exists
+		if (parent == null || parent.getClass().equals(JFrame.class)) {
+			//If it does not exist, add the the default panel to the window
+			window.getContentPane().add(windowPanel);
+			
+			//Set the parentComposite to the windowPanel
+			parentComposite = windowPanel;
+		} else {
+			//Set the parentComposite to the Parent
+			parentComposite = (JPanel) parent;
+		}
+		
+		//TODO: Flexible layout types
+		//Create a gridbaglayout
+		windowPanel.setLayout(new GridBagLayout());
 
 		try {
 
@@ -70,14 +97,61 @@ public class GUI_Swing {
 					final Element headElement = (Element) headNode;
 					//Set the shell title with the title or window_title node
 					if (headElement.getNodeName().equals("title") || headElement.getNodeName().equals("window_title")) {
-						shell.setTitle(headElement.getTextContent());
+						window.setTitle(headElement.getTextContent());
+					} else if (headElement.getNodeName().equals("style")) {
+							CSSParser parser = new CSSParser(headElement.getTextContent());
+							System.out.println(parser.parseAll().toString());
+						
+						//JButtons
 					}
 				}
 			}
 			
 			//XXX: BODY : XXX\\
+			//Loop through all children of the body element and add them
+			loadInComposite(parentComposite, doc.getElementsByTagName("body").item(0), engine); 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			Utilities.showError("Unable to properly initialize a SWT GUI. \n"+filePath+" may be corrupt or incorrectly formatted.");
+		}
+
+		//Fit the window to the elements in it.
+		window.pack();
+
+		//Create a subMap for holding the Window and any properties of it
+		Map<String, Object> shellMap = new HashMap<String, Object>();
+
+		shellMap.put("__WINDOW__", window);
+
+		Main.loader.XMLWidgets.put("__WINDOW__", shellMap);
+		
+		//Loading the JS must be done ABSOLUTELY LAST before the open call, or some properties will be missed.
+		Main.loader.loadJS(filePath, engine);
+		
+		//Open the window
+		window.setVisible(true);
+
+		//XXX: END WIDGET CREATION :XXX\\	
+	}
+	
+	//TODO: Comment
+	private static void loadInComposite(JPanel parentComposite, Node node, ScriptEngine engine) {
+		GridBagConstraints widgetConstraint = new GridBagConstraints(){
+
+			private static final long serialVersionUID = 1L;
+
+			{
+				fill = GridBagConstraints.BOTH;
+				gridx = GridBagConstraints.RELATIVE;
+				gridy = GridBagConstraints.RELATIVE;
+			}
+		};
+			//XXX: BODY : XXX\\
+		debugMsg(parentComposite.toString());
+
 			//Get Widgets from the Body Element
-			NodeList bodyElementList = doc.getElementsByTagName("body").item(0).getChildNodes();
+			NodeList bodyElementList = node.getChildNodes();
 			//Loop through all children of the root element.
 			for (int counter=0; counter < bodyElementList.getLength(); counter++) {
 
@@ -86,7 +160,7 @@ public class GUI_Swing {
 				if (widgetNode.getNodeType() == Node.ELEMENT_NODE) {
 					final Element widgetElement = (Element) widgetNode;
 
-					//Loading <link tags and running any script in them>
+					//Load all link tags
 					if (widgetElement.getNodeName().equals("link")) {
 						if (widgetElement.getAttributeNode("href") != null) {
 							Main.loader.loadAll((widgetElement.getAttributeNode("href").getNodeValue()), parentComposite, false, engine);
@@ -95,25 +169,20 @@ public class GUI_Swing {
 							Utilities.showError("Warning: <link> tags must contain a href attribute.");
 						}
 					
-					//Load all Button Tags
+					//JButtons
 					} else if (widgetElement.getNodeName().equals("button")) {
-						Button widget = new Button(parentComposite, SWT.NONE);
+						JButton widget = new JButton();
 						
-						
-						//Set style variables for temporary button
-						widget.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-						
+						parentComposite.add(widget, widgetConstraint);
 						//Set button text with the content of the <button></button> tags
 						widget.setText(widgetElement.getTextContent());
-						
-						//Identify the widget type via a data attribute
-						widget.setData("type", "button");
+
 						
 						//Iterate through listener types and set listeners if they exist
 						for (String listenerType : Main.loader.listenerTypesMap.keySet()) {
 							//Add a listener for listenerType if specified
 							if (widgetElement.getAttributeNode(listenerType) != null) {
-								addMethodListener(listenerType, (Widget) widget, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
+								addMethodListener(listenerType, widget, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
 							}
 						
 						}
@@ -123,38 +192,40 @@ public class GUI_Swing {
 						//SPINNER
 						final Element spinnerElement = (Element) widgetNode;
 						//Create a new composite for sub-elements
-						
-						Spinner tempspinner = new Spinner(parentComposite, SWT.BORDER);
-						tempspinner.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+						SpinnerNumberModel model = new SpinnerNumberModel();
 
 						if (spinnerElement.getAttributeNode("value") != null) {
-							tempspinner.setSelection(Integer.valueOf(spinnerElement.getAttributeNode("value").getNodeValue()));
+							model.setValue(Integer.valueOf(spinnerElement.getAttributeNode("value").getNodeValue()));
 						}
 
 						if (spinnerElement.getAttributeNode("max") != null) {
-							tempspinner.setMaximum(Integer.valueOf(spinnerElement.getAttributeNode("max").getNodeValue()));
+							model.setMaximum(Integer.valueOf(spinnerElement.getAttributeNode("max").getNodeValue()));
 						}
 
 						if (spinnerElement.getAttributeNode("min") != null) {
-							tempspinner.setMinimum(Integer.valueOf(spinnerElement.getAttributeNode("min").getNodeValue()));
+							model.setMinimum(Integer.valueOf(spinnerElement.getAttributeNode("min").getNodeValue()));
 						}
 						
 						//Add widget to maps
-						Loader.addWidgetToMaps(spinnerElement, tempspinner, engine);
+						JSpinner widget = new JSpinner(model);
+
+						Loader.addWidgetToMaps(spinnerElement, widget, engine);
 					
 					//LABEL CODE
 					} else if (widgetElement.getNodeName().equals("label")) {
 						final Element labelElement = (Element) widgetNode;
 
-						Label templabel = new Label(parentComposite, SWT.NONE);
-						templabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-						templabel.setText(labelElement.getTextContent());
+						JLabel widget = new JLabel();
 
-						Loader.addWidgetToMaps(labelElement, templabel, engine);
+						widget.setText(labelElement.getTextContent());
+
+						parentComposite.add(widget, widgetConstraint);
+
+						Loader.addWidgetToMaps(labelElement, widget, engine);
 						for (String listenerType : Main.loader.listenerTypesMap.keySet()) {
 							//Add a listener for listenerType if specified
 							if (widgetElement.getAttributeNode(listenerType) != null) {
-								addMethodListener(listenerType, templabel, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
+								addMethodListener(listenerType, (Component) widget, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
 							}
 						
 						}
@@ -165,32 +236,9 @@ public class GUI_Swing {
 
 			}
 			//position and draw the widgets
-			parentComposite.layout();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			Utilities.showError("Unable to properly initialize a SWT GUI. \n"+filePath+" may be corrupt or incorrectly formatted.");
-		}
+			//parentComposite.doLayout();
+			//window.pack();
 
-		shell.pack();
-		//Add the shell to XMLWidgets, after everything has been added, so that we can access it from JS
-		//Create a subMap for holding the Shell and any properties of it
-		Map<String, Object> shellMap = new HashMap<String, Object>();
-
-		shellMap.put("__SHELL__", shell);
-
-		Main.loader.XMLWidgets.put("__SHELL__", shellMap);
-		
-		//Loading the JS must be done ABSOLUTELY LAST before the open call, or some properties will be missed.
-		Main.loader.loadJS(filePath, engine);
-		shell.open();
-		while(!shell.isDisposed()) {
-			if (!display.readAndDispatch())
-				display.sleep();
-		}
-		display.dispose();
-
-			//XXX: END WIDGET CREATION :XXX\\	
 	}
 	
 	

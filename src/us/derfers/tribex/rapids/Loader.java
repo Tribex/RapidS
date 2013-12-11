@@ -11,18 +11,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.swt.widgets.Widget;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -33,6 +21,7 @@ import org.w3c.dom.NodeList;
 
 import static us.derfers.tribex.rapids.Utilities.debugMsg;
 import us.derfers.tribex.rapids.GUI.*;
+import us.derfers.tribex.rapids.parsers.CSSParser;
 
 public class Loader {
 	//Javascript engine initialization
@@ -49,12 +38,12 @@ public class Loader {
 		private static final long serialVersionUID = 1L;
 
 		{
-			put("onmouseup", SWT.MouseUp);
+			/*put("onmouseup", SWT.MouseUp);
 			put("onmousedown", SWT.MouseDown);
 			put("onselection", SWT.Selection);
 			put("onclick", SWT.Selection);
 			put("onmouseover", SWT.MouseEnter);
-			put("onmouseout", SWT.MouseExit);
+			put("onmouseout", SWT.MouseExit);*/
 		}
 	};
 	
@@ -91,7 +80,7 @@ public class Loader {
 	
 	//XXX: Function for determining GUI type and loading appropriate GUI engine :XXX\\
 	public void loadAll(String filePath, final Object parent, Boolean clearWidgets, ScriptEngine engine) {
-		
+
 		//Attempt to load .lcm file filePath
 		try {
 			File file = new File(filePath);
@@ -144,21 +133,7 @@ public class Loader {
 					
 					
 					//Determine GUI type and load appropriate GUI toolkit
-					if (temp_GUI_type.equals("Auto")) {
-						//TODO: detect whether SWT works on platform or not and use it appropriately
-						GUI_Swing.loadGUI(filePath, engine, null, false);
-						debugMsg("Loading Swing GUI", 3);
-
-					} else if (temp_GUI_type.equals("Swing")) {
-						//Load the Swing GUI system
-						GUI_Swing.loadGUI(filePath, engine, null, false);
-						debugMsg("Loading Swing GUI.", 3);
-
-					} else if (temp_GUI_type.equals("SWT")) {
-						//Load the SWT GUI system
-						GUI_SWT.loadGUI(filePath, engine, null, false);
-						debugMsg("Loading SWT GUI.", 3);
-					}
+					GUI_Swing.loadGUI(filePath, engine, parent, false);
 					
 					//Load the JavaScript Interpereter and run <script> tags
 				}
@@ -270,7 +245,7 @@ public class Loader {
 				debugMsg("Loading Linked File: "+((Element) scriptElement).getAttributeNode("href").getNodeValue());
 				try {
 					Main.loader.loadAll((((Element) scriptElement).getAttributeNode("href").getNodeValue()), 
-							(Composite) Main.loader.XMLWidgets.get("__SHELL__").get("__SHELL__"), false, engine);
+							Main.loader.XMLWidgets.get("__WINDOW__").get("__WINDOW__"), false, engine);
 
 				} catch (DOMException e) {
 					// TODO Auto-generated catch block

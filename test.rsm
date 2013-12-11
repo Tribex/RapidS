@@ -5,8 +5,6 @@
 	
 	</head>
 	<script type="text/javascript">
-			importClass(Packages.org.eclipse.swt.widgets.Widget);
-			importClass(Packages.org.eclipse.swt.widgets.Button);
 			importPackage(java.lang);
 	
 		//Use JavaScript to print the text of the button "clickable"
