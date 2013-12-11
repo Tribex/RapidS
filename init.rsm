@@ -1,7 +1,7 @@
-<lcm>
+<rsm>
 	<head>
 		<!-- TODO: Implement Types: Auto, SWT, and Swing--> 
-		<title>Lace: Test init file</title>
+		<title>RapidS: Test init file</title>
 		<style>
 	#body {
 		margin-left: 20px;
@@ -52,4 +52,4 @@
 		
 	</body>
 
-</lcm>
+</rsm>
