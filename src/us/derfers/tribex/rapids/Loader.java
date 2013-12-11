@@ -34,18 +34,7 @@ public class Loader {
 		public Integer XMLWidgets__NO__ID = 0;
 				
 	//Listener types, eg. onclick, onmouseover, onmouoseout, etc.
-	public  HashMap<String, Integer> listenerTypesMap = new HashMap<String, Integer>() {
-		private static final long serialVersionUID = 1L;
-
-		{
-			/*put("onmouseup", SWT.MouseUp);
-			put("onmousedown", SWT.MouseDown);
-			put("onselection", SWT.Selection);
-			put("onclick", SWT.Selection);
-			put("onmouseover", SWT.MouseEnter);
-			put("onmouseout", SWT.MouseExit);*/
-		}
-	};
+	public String[] listenerTypesArray = {"onmouseup", "onmousedown", "onmouseover", "onmouseout", "onselected", "onclick"};
 	
 
 	
@@ -132,10 +121,10 @@ public class Loader {
 					 }
 					
 					
-					//Determine GUI type and load appropriate GUI toolkit
-					GUI_Swing.loadGUI(filePath, engine, parent, false);
+					//Create a new GUI instance and initialize it.
+					GUI_Swing GUI = new GUI_Swing();
+					GUI.loadGUI(filePath, engine, parent, false);
 					
-					//Load the JavaScript Interpereter and run <script> tags
 				}
 				
 			} else { //There was more than one body tag, or 0 body tags
@@ -189,7 +178,7 @@ public class Loader {
 		
 	}
 	
-	public void loadJS(String filePath, ScriptEngine engine) {
+	public boolean loadJS(String filePath, ScriptEngine engine) {
 		Utilities.debugMsg("Loading JavaScript from <script> tags.");
 		//XXX: JAVASCRIPT HANDLING SECTION :XXX\\
 		try {
@@ -207,20 +196,16 @@ public class Loader {
 		//Execute anything in script tags. JavaScript
 		//Load all <script> tags
 		
-		NodeList linkNodes = doc.getElementsByTagName("link");
-		
-		JSIterator(linkNodes, engine);
-		
 		NodeList scriptNodes = doc.getElementsByTagName("script");
 		
 		JSIterator(scriptNodes, engine);
 
-		//Iterate through all script tags and run the code in them
-		
+		return true;
 		//XXX: END JAVASCRIPT HANDLING :XXX\\
 		} catch (Exception e) {
 			e.printStackTrace();
 			Utilities.showError("Error loading Javascripts from '"+filePath+"'. Please check their validity.");
+			return false;
 		}
 	}
 	
@@ -240,17 +225,6 @@ public class Loader {
 					e.printStackTrace();
 				}
 				
-			//Load code in <link> tags
-			} else if (scriptElement.getNodeName().equals("link")) {
-				debugMsg("Loading Linked File: "+((Element) scriptElement).getAttributeNode("href").getNodeValue());
-				try {
-					Main.loader.loadAll((((Element) scriptElement).getAttributeNode("href").getNodeValue()), 
-							Main.loader.XMLWidgets.get("__WINDOW__").get("__WINDOW__"), false, engine);
-
-				} catch (DOMException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 		}
 	}

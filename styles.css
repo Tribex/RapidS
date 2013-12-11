@@ -1,0 +1,10 @@
+.rsm {
+	window-width: 200px;
+	window-height: 200px;
+	window-alwaysontop: false;
+}
+
+#clickable {
+	width: 10px;
+	height: 3px;
+}

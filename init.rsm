@@ -1,20 +1,22 @@
 <rsm>
-	<head>
-		<!-- TODO: Implement Types: Auto, SWT, and Swing--> 
-		<title>RapidS: Test init file</title>
-		<style>
-	#body {
-		margin-left: 20px;
-		margin-right: 10px;
-		margin-bottom: 2800px;
-	}
-	
-	#clickable{onclick: doStuff();color:#fff;}
-	
-	</style>
-	</head>
+<head>
+<title>RapidS: Test init file</title>
+<link rel="stylesheet" href="styles.css"></link>
+<style type="text/css">
+#body {
+	margin-left: 20px;
+	margin-right: 10px;
+	margin-bottom: 2800px;
+}
 
-	<script type="text/javascript">
+#clickable {
+	onclick: doStuff();
+	color: #fff;
+}
+</style>
+</head>
+
+<script type="text/javascript">
 			importPackage(java.lang);
 	
 		//Use JavaScript to print the text of the button "clickable"
@@ -40,16 +42,15 @@
 				}
 			}
 
-	</script>
-	<!-- GUI code -->
-	<!-- <link href="test.rsm"></link> -->
-	<body layout="gridBag" gui_type="SWT" theme="camo">
+	</script> <!-- GUI code --> <!-- <link href="test.rsm"></link> -->
+<body layout="gridBag" gui_type="SWT" theme="camo">
 
-		<!-- <label class="label" onmouseup="runBtnEvt('Click', 0)" onmouseover="runBtnEvt('Mouse Over', 0)" onmouseout="runBtnEvt('Mouse Out', 0)">label changes on mouseover, mouseout, and click.</label>-->
-		<button id="clickable2" class="label" onclick="runBtnEvt('Click', 1)" onmouseover="runBtnEvt('Mouse Over', 1)" onmouseout="runBtnEvt('Mouse Out', 1)">Changes the status of the label1</button>
-		<button id="clickable3" class="label" onclick="runBtnEvt('Click', 1)" onmouseover="runBtnEvt('Mouse Over', 1)" onmouseout="runBtnEvt('Mouse Out', 1)">Changes the status of the label2</button>
-		<!-- <spinner id="spinner" value="10" max="20" min="-1" onclick="runBtnEvt('Spinner: '+$spinner.getSelection(), 1)"/> -->
-		
-	</body>
+	<label class="label" onmouseup="runBtnEvt('Click', 0)" onmouseover="runBtnEvt('Mouse Over', 0)" onmouseout="runBtnEvt('Mouse Out', 0)">label changes on mouseover, mouseout, and click.</label>
+	<button id="clickable2" class="label" onclick="runBtnEvt('Click', 1)"
+		onmouseover="runBtnEvt('Mouse Over', 1)"
+		onmouseout="runBtnEvt('Mouse Out', 1)">Changes the status of the label1</button>
+	<spinner id="spinner" value="10" max="20" min="-1" onclick="runBtnEvt('Spinner: '+$spinner.getSelection(), 1)"/>
+
+</body>
 
 </rsm>
