@@ -1,5 +1,9 @@
 package us.derfers.tribex.rapids;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +56,9 @@ public class Loader {
 			debugMsg("Imported JavaScript Standard Library (Java-based)", 4);
 
 			// TODO Add JS-based functions
-			engine.eval("");
+			debugMsg(this.getClass().toString());
+			engine.eval((Reader) new InputStreamReader(this.getClass().getResourceAsStream("stdJS/timers.js")));
+
 			debugMsg("Imported JavaScript Standard Library (JavaScript-based)", 4);
 
 		} catch (ScriptException e1) {
@@ -60,7 +66,6 @@ public class Loader {
 			Utilities.showError("Error initializing JavaScript engine, please make sure you have Java 6+\n\n"
 					+ "If you do, please report this error:\n"+e1.getMessage());
 		}
-		//---------------------------------------------------------------------------//
 		
 		//Begin loading the XML file(s)
 		debugMsg("Loading "+filePath+"", 2);

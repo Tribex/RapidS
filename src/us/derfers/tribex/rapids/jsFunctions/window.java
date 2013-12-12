@@ -3,11 +3,16 @@ package us.derfers.tribex.rapids.jsFunctions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.script.ScriptException;
 
 import us.derfers.tribex.rapids.Main;
+import us.derfers.tribex.rapids.Utilities;
 
 public class window {	
- 
+
 	//XXX: ELEMENT GETTERS :XXX\\
 	//getElementById('string')
 	public static Object getElementById(String id) {
@@ -36,7 +41,7 @@ public class window {
 	}
 	
 	
-	//XXX: WINDOW OPERATION :XXX\\
+	//XXX: WINDOW OPERATIONS :XXX\\
 	
 	//Easy reference to shell
 	public static javax.swing.JFrame window = (javax.swing.JFrame) Main.loader.XMLWidgets.get("__WINDOW__").get("__WINDOW__");
@@ -46,5 +51,21 @@ public class window {
 		window.setTitle(title);
 	}
 	
+	//XXX: TIMER OPERATION :XXX\\
+	static Timer timer = new Timer();
+	public static void setTimeout(final String function, int seconds) {
+        timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+        	public void run() {
+        		try {
+					Main.loader.engine.eval(function);
+				} catch (ScriptException e) {
+					Utilities.showError("Bad JavaScript setTimeout call: "+function);
+					Utilities.debugMsg("Bad JavaScript setTimeout call: "+function);
+				}
+        	}
+        };
+        timer.schedule(timerTask, seconds*1000);
+	}
+	
 }
-

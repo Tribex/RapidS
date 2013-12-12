@@ -2,7 +2,9 @@ package us.derfers.tribex.rapids.GUI;
 
 import static us.derfers.tribex.rapids.Utilities.debugMsg;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -27,6 +30,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.Border;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -215,15 +219,14 @@ public class GUI_Swing {
 
 					//LABEL CODE
 				} else if (widgetElement.getNodeName().equals("label")) {
-					final Element labelElement = (Element) widgetNode;
 
 					JLabel widget = new JLabel();
-
-					widget.setText(labelElement.getTextContent());
+					widget = (JLabel) getWidgetStyles(widget, widgetElement);
+					widget.setText(widgetElement.getTextContent());
 
 					parentComposite.add(widget, getWidgetConstraint(widgetElement));
 
-					Loader.addWidgetToMaps(labelElement, widget, engine);
+					Loader.addWidgetToMaps(widgetElement, widget, engine);
 					for (String listenerType : Main.loader.listenerTypesArray) {
 						//Add a listener for listenerType if specified
 						if (widgetElement.getAttributeNode(listenerType) != null) {
@@ -521,6 +524,58 @@ public class GUI_Swing {
 
 		}
 	}
+	
+	//Widget styles
+	private JComponent getWidgetStyles(JComponent widget, Element widgetElement) {
+
+		if (widgetElement.getNodeName() != null) {
+			Map<String, String> styles = stylesMap.get(widgetElement.getNodeName());
+			widget = loadWidgetStyles(widget, widgetElement, styles);
+		}
+
+		if (widgetElement.getAttributeNode("class") != null) {
+			Map<String, String> styles = stylesMap.get("."+widgetElement.getAttributeNode("class").getTextContent());
+			widget = loadWidgetStyles(widget, widgetElement, styles);
+		}
+		
+		if (widgetElement.getAttributeNode("id") != null) {
+			Map<String, String> styles = stylesMap.get("#"+widgetElement.getAttributeNode("id").getTextContent());
+			widget = loadWidgetStyles(widget, widgetElement, styles);
+		} 
+		
+		return widget;
+	}
+	private JComponent loadWidgetStyles(JComponent widget, Element widgetElement, Map<String, String> styles) {
+		
+		//Make sure that there are styles to apply
+		if (styles != null && !styles.isEmpty()) {
+			//Set background color
+			if (styles.get("background-color") != null) {
+				//Set the background color of the widget
+				widget.setBackground(Color.decode(styles.get("background-color")));
+				
+				//Necessarry for some widgets to display the background, no adverse effects afaik.
+				widget.setOpaque(true);
+			}
+			
+			//Set foregound color
+			if (styles.get("foreground-color") != null) {
+				//Set the foreground color of the widget
+				widget.setForeground(Color.decode(styles.get("foreground-color")));
+			}
+			
+			if (styles.get("border") != null) {
+				//Set the background of the widget
+				String[] borderinfo = styles.get("border").split(" ");
+				Border border = BorderFactory.createLineBorder(Color.decode(borderinfo[1]), Integer.valueOf(borderinfo[0]));
+				widget.setBorder(border);
+			}
+		}
+		
+		debugMsg(widget.toString());
+		return widget;
+	}
+	
 	//Event listeners
 	private boolean addMethodListener(String type, Component widget, final String value, final ScriptEngine engine) {		
 		//Add event listener
