@@ -9,9 +9,11 @@
 	margin-bottom: 2800px;
 }
 
-#clickable {
-	onclick: doStuff();
-	color: #fff;
+#clickable2 {
+	position-x: rel;
+	position-y: rel;
+	anchor: southeast;
+	fill: none;
 }
 </style>
 </head>
