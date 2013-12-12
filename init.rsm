@@ -10,11 +10,37 @@
 }
 
 #clickable2 {
-	position-x: rel;
+	margin-left: 20;
+	margin-right: 20;
+	position-x: 0;
 	position-y: rel;
-	weight-x: 1.0;
-	anchor: southeast;
+	anchor: west;
+	padding-y: 40;
+	padding-x: 20;
+}
+
+#onButton {
+	margin:0 30 -30 0;
+	anchor: center;
+	fill: horizontal;
+}
+
+label {
 	fill: none;
+	weight-y: 0.0;
+	margin-left: 20;
+	margin-right: 20;
+}
+
+spinner {
+	padding-y: 10;
+	margin-left: 20;
+	margin-right: 20;
+	margin-bottom: 20;
+}
+
+button {
+	margin-left: 20;
 }
 </style>
 </head>
@@ -49,9 +75,10 @@
 <body layout="gridBag" gui_type="SWT" theme="camo">
 
 	<label class="label" onmouseup="runBtnEvt('Click', 0)" onmouseover="runBtnEvt('Mouse Over', 0)" onmouseout="runBtnEvt('Mouse Out', 0)">label changes on mouseover, mouseout, and click.</label>
+	<label id="onButton">&lt;html&gt; &lt;font color="red"&gt;Label &lt;/font color&gt; on a Button &lt;/html&gt;</label>
 	<button id="clickable2" class="label" onclick="runBtnEvt('Click', 1)"
 		onmouseover="runBtnEvt('Mouse Over', 1)"
-		onmouseout="runBtnEvt('Mouse Out', 1)">Changes the status of the label1</button>
+		onmouseout="runBtnEvt('Mouse Out', 1)">&lt;html&gt; &lt;font color="red"&gt;Changes&lt;/font color&gt; the status of the label1&lt;/html&gt;</button>
 	<spinner id="spinner" value="10" max="20" min="-1" onclick="runBtnEvt('Spinner: '+$spinner.getSelection(), 1)"/>
 
 </body>

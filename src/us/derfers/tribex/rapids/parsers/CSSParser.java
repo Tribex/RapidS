@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import us.derfers.tribex.rapids.Utilities;
+
 public class CSSParser {
 	private String toParse;
 	public CSSParser(String ParseString) {
@@ -26,25 +28,23 @@ public class CSSParser {
 		
 		//Look for properties
 		while (idMatcher.find()) {
-			valueMap = this.getIdValues(idMatcher.group(1).trim());
+			valueMap = this.getIdValues(idMatcher.group(1).trim(), "");
 			idMap.put(idMatcher.group(1).trim(), valueMap);
 		}
 		
 		return idMap;
 		
 	}
-	public Map<String, String> getIdValues(String idTag) {
+	public Map<String, String> getIdValues(String idTag, String prefix) {
 		
 		//The map that will eventually be returned
 		Map<String, String> idMap = new HashMap<String, String>();
 
-		//Pattern to get String inside of idTags
-		if (!idTag.startsWith(".") && !idTag.startsWith("#")) {
-			idTag = "#"+idTag;
-		}
+		//Add prefix to tag, to match classes, xml objects, or ids
+		idTag = prefix+idTag;
 
 		//Regex for matching the id
-		Pattern idPattern = Pattern.compile(idTag+".*?\\{(.*?)}", Pattern.DOTALL);
+		Pattern idPattern = Pattern.compile(""+idTag+".*?\\{(.*?)}", Pattern.DOTALL);
 		Matcher idMatcher = idPattern.matcher(toParse);
 		
 		//Initialize properties for further searching
@@ -69,7 +69,7 @@ public class CSSParser {
 	
 	public Map<String, String> getClassValues(String classTag) {
 		
-		return getIdValues("."+classTag);
+		return getIdValues(classTag, ".");
 		
 	}
 	
