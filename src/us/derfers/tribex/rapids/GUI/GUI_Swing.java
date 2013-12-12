@@ -24,6 +24,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -324,7 +326,21 @@ public class GUI_Swing {
 	}
 
 	private GridBagConstraints getWidgetConstraint(Element widgetElement) {
-		
+		try {
+			UIManager.setLookAndFeel ("com.alee.laf.WebLookAndFeel");
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		//Default Styles for widgetConstraint
 		GridBagConstraints widgetConstraint = new GridBagConstraints(){
 
@@ -335,8 +351,8 @@ public class GUI_Swing {
 				fill = BOTH;
 				ipadx = 5;
 				ipadx = 5;
-				weightx = 1.0;
-				weighty = 1.0;
+				weightx = 0.1;
+				weighty = 0.1;
 				gridx = 0;
 				gridy = GridBagConstraints.RELATIVE;
 			}
@@ -388,12 +404,12 @@ public class GUI_Swing {
 				
 				//Set the x weight
 				if (styles.get("weight-x") != null) {
-					widgetConstraint.weightx = Integer.valueOf(styles.get("weight-x"));
+					widgetConstraint.weightx = Float.valueOf(styles.get("weight-x"));
 				}
 				
 				//Set the y weight
 				if (styles.get("weight-y") != null) {
-					widgetConstraint.weighty = Integer.valueOf(styles.get("weight-y"));
+					widgetConstraint.weighty = Float.valueOf(styles.get("weight-y"));
 				}
 				
 				//Set the occupied cells x-dir

@@ -12,6 +12,7 @@
 #clickable2 {
 	position-x: rel;
 	position-y: rel;
+	weight-x: 1.0;
 	anchor: southeast;
 	fill: none;
 }
