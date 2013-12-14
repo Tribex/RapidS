@@ -49,8 +49,11 @@ public class Loader {
 		
 		//Import standard functions:
 		try {
-			engine.eval("importPackage(Packages.us.derfers.tribex.rapids.jsFunctions);");
-			debugMsg("Imported JavaScript Standard Library (Java-based)", 4);
+			for (String toImport: Globals.SystemPackages) {
+				engine.eval("importPackage(Packages."+toImport+");");
+				debugMsg("Imported Java Class: "+toImport);
+			}
+			debugMsg("Finished importing JavaScript Standard Library (Java-based)", 4);
 
 			// TODO Add JS-based functions
 			engine.eval("");
