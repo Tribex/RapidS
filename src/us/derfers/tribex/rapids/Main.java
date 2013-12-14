@@ -1,7 +1,6 @@
 package us.derfers.tribex.rapids;
 
 import us.derfers.tribex.rapids.Loader;
-
 public class Main {
 	//DEBUG_LEVEL - Turn on only for debugging
 	public static Integer DEBUG_LEVEL = 4;

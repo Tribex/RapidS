@@ -7,14 +7,15 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import us.derfers.tribex.rapids.ScriptEngine;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -29,17 +30,14 @@ import us.derfers.tribex.rapids.parsers.CSSParser;
 
 public class Loader {
 	//Javascript engine initialization
-		public ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
+		public ScriptEngine engine = new ScriptEngine();
 
 	//What the widgets are stored in when loaded
 		public Map<String, Map<String, Object>> XMLWidgets = new HashMap<String, Map<String, Object>>();
 	
 		//Counter for ID-less XML Elements
 		public Integer XMLWidgets__NO__ID = 0;
-				
-	//Listener types, eg. onclick, onmouseover, onmouoseout, etc.
-	public String[] listenerTypesArray = {"onmouseup", "onmousedown", "onmouseover", "onmouseout", "onselected", "onclick"};
-	
+
 
 	
 	//XXX: Overload for maintaining a ScriptEngine :XXX\\
@@ -47,7 +45,6 @@ public class Loader {
 		//JavaScript Engine Initialization
 		//---------------------------------------------------------------------------//
 		//Start Engine:
-		engine.put("engine", engine);
 		debugMsg("JavaScript Engine Started", 4);
 		
 		//Import standard functions:
@@ -56,12 +53,10 @@ public class Loader {
 			debugMsg("Imported JavaScript Standard Library (Java-based)", 4);
 
 			// TODO Add JS-based functions
-			debugMsg(this.getClass().toString());
-			engine.eval((Reader) new InputStreamReader(this.getClass().getResourceAsStream("stdJS/timers.js")));
-
+			engine.eval("");
 			debugMsg("Imported JavaScript Standard Library (JavaScript-based)", 4);
 
-		} catch (ScriptException e1) {
+		} catch (Exception e1) {
 			e1.printStackTrace();
 			Utilities.showError("Error initializing JavaScript engine, please make sure you have Java 6+\n\n"
 					+ "If you do, please report this error:\n"+e1.getMessage());
@@ -97,10 +92,9 @@ public class Loader {
 				debugMsg("Parsing Body Element", 4);
 				//Get body Element
 				Element bodyElement = (Element) bodyNodeList.item(0);
-
-				if (bodyElement.getAttributeNode("gui_type") != null) {
-					//Get the value of attribute gui_type for the body element
-					String temp_GUI_type = bodyElement.getAttributeNode("gui_type").getNodeValue();
+					
+				//If the bodyelement has the attribute "theme"
+				if (bodyElement.getAttributeNode("theme") != null) {
 					
 					//Get the value of the attribute theme for the body element
 					Attr swing_Theme = bodyElement.getAttributeNode("theme");

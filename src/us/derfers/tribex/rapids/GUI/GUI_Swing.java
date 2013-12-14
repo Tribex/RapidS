@@ -8,9 +8,14 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyVetoException;
+import java.beans.VetoableChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,8 +23,8 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
+import us.derfers.tribex.rapids.ScriptEngine;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -31,6 +36,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -54,14 +61,13 @@ public class GUI_Swing {
 
 	//Stylesheet information
 	private Map<String, Map<String, String>> stylesMap = new HashMap<String, Map<String, String>>();
+	
+	//CSS Listener types
+	public String[] listenerTypesArray = {"onmouseup", "onmousedown", "onmouseover", "onmouseout", "onselection", "onclick"};
+
 
 	public void loadGUI(String filePath, ScriptEngine engine, Object parent, Boolean clearWidgets) {
 		//XXX: Initialization :XXX\\
-		/*
-		 * Basically: Port the following code to Swing, nothing hard. :P   
-		 */
-		//If this is the initial run, and therefore there is no shell or display, initialize them
-
 		//Create ParentComposite variable
 		JPanel parentComposite = null;
 
@@ -184,7 +190,7 @@ public class GUI_Swing {
 
 
 					//Iterate through listener types and set listeners if they exist
-					for (String listenerType : Main.loader.listenerTypesArray) {
+					for (String listenerType : listenerTypesArray) {
 						//Add a listener for listenerType if specified
 						if (widgetElement.getAttributeNode(listenerType) != null) {
 							addMethodListener(listenerType, widget, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
@@ -214,7 +220,16 @@ public class GUI_Swing {
 					//Add widget to maps
 					JSpinner widget = new JSpinner(model);
 					parentComposite.add(widget, getWidgetConstraint(widgetElement));
+					
+					
+					for (String listenerType : listenerTypesArray) {
+						//Add a listener for listenerType if specified
+						if (widgetElement.getAttributeNode(listenerType) != null) {
+							System.out.println("TEST");
+							addMethodListener(listenerType, widget, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
+						}
 
+					}
 					Loader.addWidgetToMaps(spinnerElement, widget, engine);
 
 					//LABEL CODE
@@ -227,10 +242,10 @@ public class GUI_Swing {
 					parentComposite.add(widget, getWidgetConstraint(widgetElement));
 
 					Loader.addWidgetToMaps(widgetElement, widget, engine);
-					for (String listenerType : Main.loader.listenerTypesArray) {
+					for (String listenerType : listenerTypesArray) {
 						//Add a listener for listenerType if specified
 						if (widgetElement.getAttributeNode(listenerType) != null) {
-							addMethodListener(listenerType, (Component) widget, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
+							addMethodListener(listenerType, widget, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
 						}
 
 					}
@@ -277,7 +292,7 @@ public class GUI_Swing {
 					Utilities.debugMsg("Error: Improperly formatted XML");
 					e.printStackTrace();
 					return false;
-				} catch (ScriptException e) {
+				} catch (Exception e) {
 					Utilities.debugMsg("Error: invalid script in file "+linkElement.getAttributeNode("href").getTextContent());
 					e.printStackTrace();
 					return false;
@@ -545,6 +560,9 @@ public class GUI_Swing {
 		
 		return widget;
 	}
+	
+	
+	
 	private JComponent loadWidgetStyles(JComponent widget, Element widgetElement, Map<String, String> styles) {
 		
 		//Make sure that there are styles to apply
@@ -577,16 +595,16 @@ public class GUI_Swing {
 	}
 	
 	//Event listeners
-	private boolean addMethodListener(String type, Component widget, final String value, final ScriptEngine engine) {		
+	private boolean addMethodListener(String type, final JComponent widget, final String value, final ScriptEngine engine) {		
 		//Add event listener
 		try {
 			if (type.equals("onclick")) {
-				((JComponent) widget).addMouseListener(new MouseAdapter(){
+				widget.addMouseListener(new MouseAdapter(){
 					@Override
 					public void mouseClicked(MouseEvent arg0) {
 						try {
 							engine.eval(value);
-						} catch (ScriptException e1) {
+						} catch (Exception e1) {
 							Utilities.showError("Bad JavaScript: "+value);
 							e1.printStackTrace();
 						}
@@ -595,12 +613,12 @@ public class GUI_Swing {
 
 				});
 			} else if (type.equals("onmouseover")) {
-				((JComponent) widget).addMouseListener(new MouseAdapter(){
+				widget.addMouseListener(new MouseAdapter(){
 					@Override
 					public void mouseEntered(MouseEvent arg0) {
 						try {
 							engine.eval(value);
-						} catch (ScriptException e1) {
+						} catch (Exception e1) {
 							Utilities.showError("Bad JavaScript: "+value);
 							e1.printStackTrace();
 						}
@@ -609,12 +627,12 @@ public class GUI_Swing {
 
 				});
 			} else if (type.equals("onmouseout")) {
-				((JComponent) widget).addMouseListener(new MouseAdapter(){
+				widget.addMouseListener(new MouseAdapter(){
 					@Override
 					public void mouseExited(MouseEvent arg0) {
 						try {
 							engine.eval(value);
-						} catch (ScriptException e1) {
+						} catch (Exception e1) {
 							Utilities.showError("Bad JavaScript: "+value);
 							e1.printStackTrace();
 						}
@@ -623,12 +641,12 @@ public class GUI_Swing {
 
 				});
 			} else if (type.equals("onmousedown")) {
-				((JComponent) widget).addMouseListener(new MouseAdapter(){
+				widget.addMouseListener(new MouseAdapter(){
 					@Override
 					public void mousePressed(MouseEvent arg0) {
 						try {
 							engine.eval(value);
-						} catch (ScriptException e1) {
+						} catch (Exception e1) {
 							Utilities.showError("Bad JavaScript: "+value);
 							e1.printStackTrace();
 						}
@@ -637,18 +655,26 @@ public class GUI_Swing {
 
 				});
 			} else if (type.equals("onmouseup")) {
-				((JComponent) widget).addMouseListener(new MouseAdapter(){
+				widget.addMouseListener(new MouseAdapter(){
 					@Override
 					public void mouseReleased(MouseEvent arg0) {
 						try {
 							engine.eval(value);
-						} catch (ScriptException e1) {
+						} catch (Exception e1) {
 							Utilities.showError("Bad JavaScript: "+value);
 							e1.printStackTrace();
 						}
 
 					}
 
+				});
+			} else if (type.equals("onselection")) {
+				((JSpinner) widget).addChangeListener(new ChangeListener(){
+					@Override
+					public void stateChanged(ChangeEvent arg0) {
+						engine.eval(value);
+						
+					}
 				});
 			}
 		} catch (Exception e) {

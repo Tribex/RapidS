@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.script.ScriptException;
+import us.derfers.tribex.rapids.ScriptEngine;
 
 import us.derfers.tribex.rapids.Main;
 import us.derfers.tribex.rapids.Utilities;
@@ -51,21 +51,24 @@ public class window {
 		window.setTitle(title);
 	}
 	
+	//Easy static reference to the engine
+	static ScriptEngine engine = Main.loader.engine;
+	
+	
 	//XXX: TIMER OPERATION :XXX\\
 	static Timer timer = new Timer();
+	
+	//
 	public static void setTimeout(final String function, int seconds) {
         timer = new Timer();
         TimerTask timerTask = new TimerTask() {
+        	@Override
         	public void run() {
-        		try {
-					Main.loader.engine.eval(function);
-				} catch (ScriptException e) {
-					Utilities.showError("Bad JavaScript setTimeout call: "+function);
-					Utilities.debugMsg("Bad JavaScript setTimeout call: "+function);
-				}
+    			engine.eval(function);
+
         	}
         };
-        timer.schedule(timerTask, seconds*1000);
+        timer.schedule(timerTask, seconds);
 	}
 	
 }
