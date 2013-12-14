@@ -26,6 +26,7 @@ import org.w3c.dom.NodeList;
 
 import static us.derfers.tribex.rapids.Utilities.debugMsg;
 import us.derfers.tribex.rapids.GUI.*;
+import us.derfers.tribex.rapids.jsFunctions.sys;
 import us.derfers.tribex.rapids.parsers.CSSParser;
 
 public class Loader {
@@ -105,14 +106,21 @@ public class Loader {
 					//See if the lcm file specifies a theme other than camo
 					if (swing_Theme != null && !swing_Theme.getNodeValue().equalsIgnoreCase("camo")) {
 						try {
-							//Attempt to set the look'n'feel to the theme specified by the .lcm
-							UIManager.setLookAndFeel(swing_Theme.getNodeValue());
-							debugMsg("Look and Feel (Swing) set to "+swing_Theme.getNodeValue(), 3);
+							//Split the theme into the jarfile and the classname (JARFILE.jar : com.stuff.stuff.theme)
+							String[] splitTheme = swing_Theme.getNodeValue().split(":");
+							
+							//Attempt to dynamically load the specified jarfile
+							sys.addJarToClasspath(splitTheme[0].trim());
+							
+							//Attempt to set the look'n'feel to the theme specified by the file
+							UIManager.setLookAndFeel(splitTheme[1].trim());
+							
+							debugMsg("Look and Feel set to '"+swing_Theme.getNodeValue()+"'.", 3);
 
-						} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+						} catch (Exception e) {
 							//If unable to set to .lcm's theme, use the system look'n'feel
 							UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-							debugMsg("Look and Feel (Swing) set to System", 3);
+							Utilities.showError("Error loading Look and Feel Specified, Look and Feel set to System");
 
 						}
 					 } else {
