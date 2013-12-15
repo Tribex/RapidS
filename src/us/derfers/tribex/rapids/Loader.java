@@ -1,33 +1,22 @@
 package us.derfers.tribex.rapids;
+import static us.derfers.tribex.rapids.Utilities.debugMsg;
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-import us.derfers.tribex.rapids.ScriptEngine;
-
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
 import org.w3c.dom.Attr;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import static us.derfers.tribex.rapids.Utilities.debugMsg;
-import us.derfers.tribex.rapids.GUI.*;
+import us.derfers.tribex.rapids.GUI.GUI_Swing;
 import us.derfers.tribex.rapids.jsFunctions.sys;
-import us.derfers.tribex.rapids.parsers.CSSParser;
 
 public class Loader {
 	//Javascript engine initialization
@@ -152,42 +141,6 @@ public class Loader {
 
 	}
 
-	public static void addWidgetToMaps(Element widgetElement, Object widget, ScriptEngine engine) {
-		debugMsg("Mapping Widgets to XMLWidgets variable", 3);
-		//Create a HashMap to hold Button ID and class, as well as other parameters.
-		Map<String, Object> widgetMap = new HashMap<String, Object>();
-		
-		//Define the ID of the button
-		String widgetID = null;
-		if (widgetElement.getAttributeNode("id") != null) {
-			widgetID = widgetElement.getAttributeNode("id").getNodeValue();
-		
-		//If not, assign an incremental id: __ID__#
-		} else {
-			widgetID = "__ID__"+Integer.toString(Main.loader.XMLWidgets__NO__ID+1);
-			Main.loader.XMLWidgets__NO__ID += 1;
-		}
-		Utilities.debugMsg("Adding widget "+widgetID+" to XMLWidgets.", 3);
-
-		//Add the widget to the widgetMap
-		widgetMap.put(widgetID, widget);
-		
-		//If the ID is set, add it to the Object list so that we can get it later.
-		NamedNodeMap widgetAttributes = widgetElement.getAttributes();
-		
-		//Iterate through all the attributes of the widget and add them to the widgetMap
-		for (int i=0; i < widgetAttributes.getLength(); i++) {
-			widgetMap.put(widgetAttributes.item(i).getNodeName(), widgetAttributes.item(i).getTextContent());
-		}
-		
-		widgetMap.put("id", widgetID);
-		
-		//Add the temporary widgetMap to the XMLWidgets array.
-		Main.loader.XMLWidgets.put(widgetID, widgetMap);
-		engine.put("$"+widgetID, widget);
-		
-	}
-	
 	public boolean loadJS(String filePath, ScriptEngine engine) {
 		Utilities.debugMsg("Loading JavaScript from <script> tags.");
 		//XXX: JAVASCRIPT HANDLING SECTION :XXX\\

@@ -55,7 +55,7 @@ public class ScriptEngine {
 	}
 	
 	public void put(String var, Object property) {
-		Context jsContext = Context.enter();
+		Context.enter();
 
 		ScriptableObject.putProperty(scope, var, property);
 		Context.exit();
