@@ -9,7 +9,6 @@ import java.util.TimerTask;
 import us.derfers.tribex.rapids.ScriptEngine;
 
 import us.derfers.tribex.rapids.Main;
-import us.derfers.tribex.rapids.Utilities;
 
 public class window {	
 

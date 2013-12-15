@@ -84,14 +84,20 @@ button {
 	</script> <!-- GUI code --> <!-- <link href="test.rsm"></link> -->
 <body layout="gridBag" theme="camo">
 
-	<label class="label" onmouseup="runBtnEvt('Click', 0)" onmouseover="runBtnEvt('Mouse Over', 0)" onmouseout="runBtnEvt('Mouse Out', 0)">label changes on mouseover, mouseout, and click.</label>
+	<label class="label" onmouseup="runBtnEvt('Click', 0)"
+		onmouseover="runBtnEvt('Mouse Over', 0)"
+		onmouseout="runBtnEvt('Mouse Out', 0)">label changes on
+		mouseover, mouseout, and click.</label>
 	<label id="onButton" onclick="changeBackground('onButton', 'click')"
-		onmouseover="changeBackground('onButton', 'over')" 
-		onmouseout="changeBackground('onButton', 'out')">Clickable label on Button</label>
+		onmouseover="changeBackground('onButton', 'over')"
+		onmouseout="changeBackground('onButton', 'out')">Clickable
+		label on Button</label>
 	<button id="clickable2" class="label" onclick="runBtnEvt('Click', 1)"
 		onmouseover="runBtnEvt('Mouse Over', 1)"
-		onmouseout="runBtnEvt('Mouse Out', 1)">Changes the status of the label.</button>
-	<spinner id="spinner" value="10" max="20" min="-1" onselection="runBtnEvt('Spinner: '+$spinner.getValue(), 1)"/>
+		onmouseout="runBtnEvt('Mouse Out', 1)">Changes the status of
+		the label.</button>
+	<spinner id="spinner" value="10" max="20" min="-1"
+		onselection="runBtnEvt('Spinner: '+$spinner.getValue(), 1)" />
 
 </body>
 
