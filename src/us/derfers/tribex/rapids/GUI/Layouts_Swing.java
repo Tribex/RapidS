@@ -181,7 +181,7 @@ public class Layouts_Swing {
 				widgetConstraint.gridheight = Integer.valueOf(styles.get("occupied-cells-y"));
 			}
 
-			//Set the occupied cells y-dir
+			//Set the anchor
 			if (styles.get("anchor") != null) {
 				Field f = null;
 				try {

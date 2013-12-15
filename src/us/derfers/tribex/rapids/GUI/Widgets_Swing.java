@@ -1,9 +1,14 @@
 package us.derfers.tribex.rapids.GUI;
 
+import java.awt.Dimension;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 import org.w3c.dom.Element;
@@ -15,6 +20,8 @@ import us.derfers.tribex.rapids.GUI.Layouts_Swing;
 import us.derfers.tribex.rapids.GUI.WidgetOps_Swing;
 
 public class Widgets_Swing {
+	//TODO: Comment widgets!!!!!!!!!		
+	
 	//Get global JavaScript engine
 	private static ScriptEngine engine = Main.loader.engine;
 	
@@ -57,6 +64,7 @@ public class Widgets_Swing {
 		}
 	}
 	
+	
 	//XXX: SPINNERS :XXX\\\
 	public static void createSpinner(JPanel parentComposite, Element widgetElement) {
 		//Create a new composite for sub-elements
@@ -88,6 +96,60 @@ public class Widgets_Swing {
 		}
 		WidgetOps_Swing.addWidgetToMaps(widgetElement, widget, engine);
 	}
+	
+	
+	//XXX: TEXTAREAS :XXX\\
+	public static void createTextArea(JPanel parentComposite, Element widgetElement) {
+		
+		//Create a new textarea
+		JTextArea widget  = (JTextArea) WidgetOps_Swing.getWidgetStyles(new JTextArea(), widgetElement);
 
+		//Create a new scrollpane and add the textarea to it
+		JScrollPane scrollPane = new JScrollPane(widget);  
+
+		//Set the text of the textArea
+		widget.setText(widgetElement.getTextContent());
+		
+		//Add the scrollpane to the parentComposite
+		parentComposite.add(scrollPane, Layouts_Swing.getWidgetConstraint(widgetElement));
+		
+		//Add event listeners for the textarea
+		for (String listenerType : Globals.listenerTypesArray) {
+			//Add a listener for listenerType if specified
+			if (widgetElement.getAttributeNode(listenerType) != null) {
+				WidgetOps_Swing.addMethodListener(listenerType, widget, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
+			}
+
+		}
+		
+		//Add the widget to the maps
+		WidgetOps_Swing.addWidgetToMaps(widgetElement, widget, engine);
+	}
+	
+	
+	//XXX: TEXTFIELDS :XXX\\
+		public static void createTextField(JPanel parentComposite, Element widgetElement) {
+			
+			//Create a new textarea
+			JTextField widget  = (JTextField) WidgetOps_Swing.getWidgetStyles(new JTextField(), widgetElement);
+
+			//Set the text of the textArea
+			widget.setText(widgetElement.getTextContent());
+			
+			//Add the scrollpane to the parentComposite
+			parentComposite.add(widget, Layouts_Swing.getWidgetConstraint(widgetElement));
+			
+			//Add event listeners for the textarea
+			for (String listenerType : Globals.listenerTypesArray) {
+				//Add a listener for listenerType if specified
+				if (widgetElement.getAttributeNode(listenerType) != null) {
+					WidgetOps_Swing.addMethodListener(listenerType, widget, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
+				}
+
+			}
+			
+			//Add the widget to the maps
+			WidgetOps_Swing.addWidgetToMaps(widgetElement, widget, engine);
+		}
 	
 }

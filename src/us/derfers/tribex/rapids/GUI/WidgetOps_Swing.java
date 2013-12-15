@@ -1,6 +1,7 @@
 package us.derfers.tribex.rapids.GUI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
@@ -64,13 +65,27 @@ public class WidgetOps_Swing {
 				widget.setForeground(Color.decode(styles.get("foreground-color")));
 			}
 			
+			//Create a border TODO: make more flexible and advanced
 			if (styles.get("border") != null) {
-				//Set the background of the widget
+				//Split the border string between color and width
 				String[] borderinfo = styles.get("border").split(" ");
+				
+				//Create a new border
 				Border border = BorderFactory.createLineBorder(Color.decode(borderinfo[1]), Integer.valueOf(borderinfo[0]));
 				widget.setBorder(border);
 			}
+			
+			if (styles.get("width") != null) {
+				//Set the width of the widget
+				widget.setPreferredSize(new Dimension(Integer.valueOf(styles.get("width")), widget.getPreferredSize().height));
+			}
+			
+			if (styles.get("height") != null) {
+				//Set the height of the widget
+				widget.setPreferredSize(new Dimension(widget.getPreferredSize().width, Integer.valueOf(styles.get("height"))));
+			}
 		}
+		Utilities.debugMsg(widget.getPreferredSize().toString());
 		
 		return widget;
 	}
