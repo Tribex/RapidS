@@ -17,9 +17,6 @@ import us.derfers.tribex.rapids.Main;
 public class window {	
 
 	//XXX: ELEMENT GETTERS :XXX\\
-	//XXX Why are element getters in class window? And why is window lower-case? (Conventionally they start upper-case)
-	//for that matter, why is the timer method in window.java?
-	//getElementById('string')
 	
 	/**
 	 * A clone of the JavaScript function getElementByID()
