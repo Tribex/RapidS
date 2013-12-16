@@ -10,10 +10,22 @@ import us.derfers.tribex.rapids.ScriptEngine;
 
 import us.derfers.tribex.rapids.Main;
 
+/**
+ * Provides static functions for dealing with windows, getting widgets by ID or class,
+ * or set a JavaScript function to run after a given number of milliseconds.
+ */
 public class window {	
 
 	//XXX: ELEMENT GETTERS :XXX\\
+	//XXX Why are element getters in class window? And why is window lower-case? (Conventionally they start upper-case)
+	//for that matter, why is the timer method in window.java?
 	//getElementById('string')
+	
+	/**
+	 * A clone of the JavaScript function getElementByID()
+	 * @param id The ID of the object to return
+	 * @return The object associated with the given ID
+	 */
 	public static Object getElementById(String id) {
 		if (Main.loader.XMLWidgets.get(id) != null) {
 			return Main.loader.XMLWidgets.get(id).get(id);
@@ -23,7 +35,11 @@ public class window {
 		
 	}
 	
-	//Returns A List of Elements
+	/**
+	 * Collects all elements of a given class into an Object array
+	 * @param class_identifier The name of the class to work with
+	 * @return An Object array of the elements that are of the given class
+	 */
 	public static Object[] getElementsByClass(String class_identifier) {
 		
 		List<Object> elementList = new ArrayList<Object>();
@@ -45,7 +61,10 @@ public class window {
 	//Easy reference to shell
 	public static javax.swing.JFrame window = (javax.swing.JFrame) Main.loader.XMLWidgets.get("__WINDOW__").get("__WINDOW__");
 	
-	//Easy title changing without direct access to shell
+	/**
+	 * Sets the title of the window
+	 * @param title The new title for the window
+	 */
 	public static void setTitle(String title) {
 		window.setTitle(title);
 	}
@@ -57,8 +76,13 @@ public class window {
 	//XXX: TIMER OPERATION :XXX\\
 	static Timer timer = new Timer();
 	
-	//
-	public static void setTimeout(final String function, int seconds) {
+	/**
+	 * Schedules a JavaScript function to run after a given number of milliseconds
+	 * @param function The name of the JavaScript function to run
+	 * @param milliseconds The number of milliseconds to delay before calling the
+	 * JavaScript function
+	 */
+	public static void setTimeout(final String function, int milliseconds) {
         timer = new Timer();
         TimerTask timerTask = new TimerTask() {
         	@Override
@@ -67,7 +91,7 @@ public class window {
 
         	}
         };
-        timer.schedule(timerTask, seconds);
+        timer.schedule(timerTask, milliseconds);
 	}
 	
 }
