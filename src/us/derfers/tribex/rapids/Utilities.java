@@ -20,8 +20,7 @@ public class Utilities {
 		//Show a cross-platform error message.
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+		} catch (Exception e) {
 			debugMsg("Unable to mimic System Look and feel, falling back to Ocean");
 			e.printStackTrace();
 		}

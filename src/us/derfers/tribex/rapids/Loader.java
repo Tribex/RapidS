@@ -1,7 +1,11 @@
 package us.derfers.tribex.rapids;
 import static us.derfers.tribex.rapids.Utilities.debugMsg;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,16 +47,19 @@ public class Loader {
 				engine.eval("importPackage(Packages."+toImport+");");
 				debugMsg("Imported Java Class: "+toImport);
 			}
-			debugMsg("Finished importing JavaScript Standard Library (Java-based)", 4);
+			debugMsg("Imported JavaScript Standard Library (Java-based)", 4);
 
 			// TODO Add JS-based functions
+			//FIXME: Find a way to load files in the jar System.out.println(Main.class.getClassLoader().getResourceAsStream("import.js"));
 			engine.eval("");
+
 			debugMsg("Imported JavaScript Standard Library (JavaScript-based)", 4);
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			Utilities.showError("Error initializing JavaScript engine, please make sure you have Java 6+\n\n"
 					+ "If you do, please report this error:\n"+e1.getMessage());
+			System.exit(1);
 		}
 		
 		//Begin loading the XML file(s)
