@@ -56,7 +56,7 @@
             <classpath refid="RapidS.classpath"/>
         </java>
     </target>
-    <target name="RapidS - Main">
+    <target name="main">
         <java classname="us.derfers.tribex.rapids.Main" failonerror="true" fork="yes">
             <classpath refid="RapidS.classpath"/>
         </java>
