@@ -9,7 +9,7 @@
 	margin-bottom: 2800px;
 }
 
-#clickable2 {
+#clickableButton {
 	margin-left: 20;
 	margin-right: 20;
 	position-x: 0;
@@ -26,6 +26,25 @@
 	foreground-color: #222222;
 }
 
+.standardPosition {
+	margin: 0 20 0 20;
+	background-color: #FaFaFa;
+	foreground-color: #335599;
+	fill: NONE;
+	anchor: west;
+}
+
+#rightSide {
+	position-x: rel;
+	occupied-cells-x: 1;
+	occupied-cells-y: 5;
+	position-y: 0;
+	fill: HORIZONTAL;
+	margin: 20 10 20 20;
+	width: 400;
+	height: 200;
+}
+
 label {
 	fill: none;
 	weight-y: 0.0;
@@ -36,15 +55,15 @@ label {
 }
 
 spinner {
-	padding-y: 10;
+	fill: HORIZONTAL;
 	margin-left: 20;
 	margin-right: 20;
-	margin-bottom: 20;
 }
 
 button {
 	margin-left: 20;
 }
+
 </style>
 </head>
 
@@ -54,7 +73,7 @@ button {
 
 		//Button Clicking System
 			function runBtnEvt(text, sourceID) {
-				var label_list = window.getElementsByClass("label");
+				var label_list = window.getElementsByClass("changesOnHover");
 				for (index = 0; index &lt; label_list.length; ++index) {
 					if (sourceID == 0) {
 						label_list[index].setText(text+" from Label");
@@ -81,23 +100,27 @@ button {
 				widgetID.setBackground(color);
 			}
 
-	</script> <!-- GUI code --> <!-- <link href="test.rsm"></link> -->
+	</script> 
 <body layout="gridBag" theme="camo">
 
-	<label class="label" onmouseup="runBtnEvt('Click', 0)"
+	<label class="changesOnHover" onmouseup="runBtnEvt('Click', 0)"
 		onmouseover="runBtnEvt('Mouse Over', 0)"
-		onmouseout="runBtnEvt('Mouse Out', 0)">label changes on
-		mouseover, mouseout, and click.</label>
+		onmouseout="runBtnEvt('Mouse Out', 0)">label changes on	mouseover, mouseout, and click.</label>
+		
 	<label id="onButton" onclick="changeBackground('onButton', 'click')"
 		onmouseover="changeBackground('onButton', 'over')"
-		onmouseout="changeBackground('onButton', 'out')">Clickable
-		label on Button</label>
-	<button id="clickable2" class="label" onclick="runBtnEvt('Click', 1)"
+		onmouseout="changeBackground('onButton', 'out')">Clickable label on Button</label>
+		
+	<button id="clickableButton" class="changesOnHover" onclick="runBtnEvt('Click', 1)"
 		onmouseover="runBtnEvt('Mouse Over', 1)"
-		onmouseout="runBtnEvt('Mouse Out', 1)">Changes the status of
-		the label.</button>
+		onmouseout="runBtnEvt('Mouse Out', 1)">Changes the status of the label.</button>
+		
 	<spinner id="spinner" value="10" max="20" min="-1"
 		onselection="runBtnEvt('Spinner: '+$spinner.getValue(), 1)" />
+	
+	<textfield class="standardPosition">Enter a single line of text here!</textfield>
+	
+	<textarea id="rightSide">Enter multiple lines of text here!</textarea>
 
 </body>
 

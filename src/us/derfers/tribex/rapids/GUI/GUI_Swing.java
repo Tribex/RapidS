@@ -150,16 +150,20 @@ public class GUI_Swing {
 					}
 
 				//Being loading widgets TODO: Add more widget types.
+				} else if (widgetElement.getNodeName().equals("label")) {
+					Widgets_Swing.createLabel(parentComposite, widgetElement);
+
 				} else if (widgetElement.getNodeName().equals("button")) {
 					Widgets_Swing.createButton(parentComposite, widgetElement);
 
 				} else if (widgetElement.getNodeName().equals("spinner")) {
 					Widgets_Swing.createSpinner(parentComposite, widgetElement);
 
-
-				} else if (widgetElement.getNodeName().equals("label")) {
-					Widgets_Swing.createLabel(parentComposite, widgetElement);
-
+				} else if (widgetElement.getNodeName().equals("textarea")) {
+					Widgets_Swing.createTextArea(parentComposite, widgetElement);
+					
+				} else if (widgetElement.getNodeName().equals("textfield")) {
+					Widgets_Swing.createTextField(parentComposite, widgetElement);
 				}
 
 			}
