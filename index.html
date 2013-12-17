@@ -32,26 +32,73 @@
       
       <section>
 		<div id="main">
-			<h1 id="a-first-level-header">A First Level Header</h1>
+			<h1 id="rapids-simple-software-development-for-the-masses">RapidS: Simple software development for the masses</h1>
 
-<h2 id="a-second-level-header">A Second Level Header</h2>
+<p>A Java toolkit for creating cross-platform programs using just XML (.rsm) and JavaScript.</p>
 
-<p>Now is the time for all good men to come to
-the aid of their country. This is just a
-regular paragraph.</p>
+<h1 id="progress">Progress</h1>
+<p><em>20%</em></p>
 
-<p>The quick brown fox jumped over the lazy
-dog’s back.</p>
+<ul>
+  <li>Initial Loader - 50%</li>
+  <li>CSS Parser - 30%</li>
+  <li>JavaScript Parsing System - 80%</li>
+  <li>XML Widget JavaScript Callbacks - Need to Re-implement from SWT - TODO</li>
+  <li>JavaScript-Java Standard Library - 2%</li>
+  <li>Linking and relative file support - 5%</li>
+  <li>Swing GUI XML Loader - 1% MAJOR TODO</li>
+  <li>Swing layout support - TODO</li>
+  <li>File format specification - TODO</li>
+</ul>
 
-<h3 id="header-3">Header 3</h3>
+<h1 id="what-a-rsm-file-should-look-like---current-version">What a .rsm file should look like - Current Version</h1>
 
-<blockquote>
-  <p>This is a blockquote.</p>
+<p>```</p>
+<rsm>
+	<head>
+		<title>RapidS: Test .rsm file</title>
+		<style>
+    <!--TODO-->
+  	</style>
+	</head>
 
-  <p>This is the second paragraph in the blockquote.</p>
+	<script type="text/javascript">
+			importPackage(java.lang);
+	
+		//Use JavaScript to print the text of the button "clickable"
+			var button = window.getElementById("clickable2");
+			print(button.getText());
+			
+		//Use Java from JavaScript
+			var label = window.getElementById("label");
+			if (label != null) {
+				System.out.println(label.getText());
+			}
+			
+		//Button Clicking System
+			function runBtnEvt(text, sourceID) {
+				var label_list = window.getElementsByClass("label");
+				for (index = 0; index &lt; label_list.length; ++index) {
+					if (sourceID == 0) {
+						label_list[index].setText(text+" from Label");
+						window.setTitle(text);
+					} else {
+						label_list[index].setText(text+" from Button");
+					}
+				}
+			}
 
-  <h2 id="this-is-an-h2-in-a-blockquote">This is an H2 in a blockquote</h2>
-</blockquote>
+	</script>
+	<!-- FIXME <link href="test.rsm"></link> -->
+	<body layout="gridBag" gui_type="SWT" theme="camo">
+    <label class="label" onmouseup="runBtnEvt('Click', 0)" onmouseover="runBtnEvt('Mouse Over', 0)" onmouseout="runBtnEvt('Mouse Out', 0)">label changes on mouseover, mouseout, and click.</label>
+		<button id="clickable2" class="label" onclick="runBtnEvt('Click', 1)" onmouseover="runBtnEvt('Mouse Over', 1)" onmouseout="runBtnEvt('Mouse Out', 1)">Changes the status of the label1</button>
+		<spinner id="spinner" value="10" max="20" min="-1" onclick="runBtnEvt('Spinner: '+$spinner.getSelection(), 1)" />
+	</body>
+
+</rsm>
+
+<p>```</p>
 
 		</div>
 	  </section>
