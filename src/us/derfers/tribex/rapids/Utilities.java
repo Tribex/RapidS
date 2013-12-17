@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 public class Utilities {
 	
@@ -20,8 +19,7 @@ public class Utilities {
 		//Show a cross-platform error message.
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+		} catch (Exception e) {
 			debugMsg("Unable to mimic System Look and feel, falling back to Ocean");
 			e.printStackTrace();
 		}
