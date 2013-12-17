@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Rapids by Tribex</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Rapids</h1>
+        <p class="header">A Java toolkit for creating cross-platform programs using just XML (.rsm), CSS, and JavaScript.</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/Tribex/RapidS/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/Tribex/RapidS/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/Tribex/RapidS">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/Tribex">Tribex</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a name="rapids" class="anchor" href="#rapids"><span class="octicon octicon-link"></span></a>RapidS</h1>
+
+<p>A Java toolkit for creating cross-platform programs using just XML (.rsm) and JavaScript.</p>
+
+<h1>
+<a name="progress" class="anchor" href="#progress"><span class="octicon octicon-link"></span></a>Progress</h1>
+
+<p><em>20%</em></p>
+
+<ul>
+<li>Initial Loader - 50%</li>
+<li>CSS Parser - 30%</li>
+<li>JavaScript Parsing System - 80%</li>
+<li>XML Widget JavaScript Callbacks - Need to Re-implement from SWT - TODO</li>
+<li>JavaScript-Java Standard Library - 2%</li>
+<li>Linking and relative file support - 5%</li>
+<li>Swing GUI XML Loader - 1% MAJOR TODO</li>
+<li>Swing layout support - TODO</li>
+<li>File format specification - TODO</li>
+</ul><h1>
+<a name="what-a-rsm-file-should-look-like---current-version" class="anchor" href="#what-a-rsm-file-should-look-like---current-version"><span class="octicon octicon-link"></span></a>What a .rsm file should look like - Current Version</h1>
+
+<pre><code>&lt;rsm&gt;
+    &lt;head&gt;
+        &lt;title&gt;RapidS: Test .rsm file&lt;/title&gt;
+        &lt;style&gt;
+    &lt;!--TODO--&gt;
+    &lt;/style&gt;
+    &lt;/head&gt;
+
+    &lt;script type="text/javascript"&gt;
+            importPackage(java.lang);
+
+        //Use JavaScript to print the text of the button "clickable"
+            var button = window.getElementById("clickable2");
+            print(button.getText());
+
+        //Use Java from JavaScript
+            var label = window.getElementById("label");
+            if (label != null) {
+                System.out.println(label.getText());
+            }
+
+        //Button Clicking System
+            function runBtnEvt(text, sourceID) {
+                var label_list = window.getElementsByClass("label");
+                for (index = 0; index &amp;lt; label_list.length; ++index) {
+                    if (sourceID == 0) {
+                        label_list[index].setText(text+" from Label");
+                        window.setTitle(text);
+                    } else {
+                        label_list[index].setText(text+" from Button");
+                    }
+                }
+            }
+
+    &lt;/script&gt;
+    &lt;!-- FIXME &lt;link href="test.rsm"&gt;&lt;/link&gt; --&gt;
+    &lt;body layout="gridBag" gui_type="SWT" theme="camo"&gt;
+    &lt;label class="label" onmouseup="runBtnEvt('Click', 0)" onmouseover="runBtnEvt('Mouse Over', 0)" onmouseout="runBtnEvt('Mouse Out', 0)"&gt;label changes on mouseover, mouseout, and click.&lt;/label&gt;
+        &lt;button id="clickable2" class="label" onclick="runBtnEvt('Click', 1)" onmouseover="runBtnEvt('Mouse Over', 1)" onmouseout="runBtnEvt('Mouse Out', 1)"&gt;Changes the status of the label1&lt;/button&gt;
+        &lt;spinner id="spinner" value="10" max="20" min="-1" onclick="runBtnEvt('Spinner: '+$spinner.getSelection(), 1)"/&gt;
+    &lt;/body&gt;
+
+&lt;/rsm&gt;
+
+</code></pre>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
