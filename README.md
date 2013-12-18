@@ -1,8 +1,8 @@
-RapidS
+RapidS - [![Build Status](https://travis-ci.org/Tribex/RapidS.png?branch=master)](https://travis-ci.org/Tribex/RapidS)
+
 ======
 
 A Java toolkit for creating cross-platform programs using just XML (.rsm) and JavaScript.
-[![Build Status](https://travis-ci.org/Tribex/RapidS.png?branch=master)](https://travis-ci.org/Tribex/RapidS)
 
 Progress
 ========
