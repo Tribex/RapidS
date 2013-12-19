@@ -1,6 +1,10 @@
 package us.derfers.tribex.rapids;
 
 import us.derfers.tribex.rapids.Loader;
+
+/**
+ * Class main is the start of the program.
+ */
 public class Main {
 	//DEBUG_LEVEL - Turn on only for debugging
 	public static Integer DEBUG_LEVEL = 4;
@@ -8,7 +12,10 @@ public class Main {
 	//All scripts need access to the loader, and its child variables
 	public static Loader loader = new Loader();
 	
-	//Main function
+	/**
+	 * The main method for this program. Program execution starts here
+	 * @param args The command line arguments
+	 */
 	public static void main(String[] args) {
 		
 		//Iterate through the arguments and check for debug level

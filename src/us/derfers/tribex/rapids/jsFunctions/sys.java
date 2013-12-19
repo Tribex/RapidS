@@ -9,9 +9,15 @@ import java.net.URLClassLoader;
 
 import us.derfers.tribex.rapids.Utilities;
 
+/**
+ * Provides a static method for adding JARs to a class path before execution
+ */
 public class sys {
 	
-	//Method for adding jars to classpath before execution
+	/**
+	 * Adds the specified JAR to the class path
+	 * @param fileString The name of the JAR to add to the class path
+	 */
 	public static void addJarToClasspath(String fileString) {
 		try {
 			File file = new File(Utilities.getJarDirectory()+fileString);

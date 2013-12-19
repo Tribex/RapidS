@@ -9,9 +9,15 @@ import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+/**
+ *Provides static functions for displaying an error dialog or printing a debug message
+ */
 public class Utilities {
 	
-	
+	/**
+	 * Shows an error message dialog to the user
+	 * @param errMsg The error message to display
+	 */
 	public static void showError(String errMsg) { //Shows a swing dialog box with an error message
 		//Log to command line
 		debugMsg(errMsg);
@@ -26,6 +32,10 @@ public class Utilities {
 		JOptionPane.showMessageDialog(null, errMsg);
 	}
 	
+	/**
+	 * Finds the directory the JAR is running in
+	 * @return The URL of the current directory
+	 */
 	public static String getJarDirectory() {
 		//Gets current directory relative to the JarFile, 
 		//Necessarry on Linux/OSX, as Java runs jar files in the home directory
@@ -44,11 +54,22 @@ public class Utilities {
 	}
 	
 	
-	//Always last method, for organization
+	//Always last method, for organisation
+	/**
+	 * Prints a debug message at debug if the current debug level is 2 or greater.
+	 * The format is [RapidS] DEBUG MESSAGE - DATE/TIME  DEBUG LEVEL.
+	 * @param msg The debug message to print
+	 */
 	public static void debugMsg(Object msg) { //Method for printing debug messages in the format: [RapidS] MESSAGE - DATE
 		debugMsg(msg, 2);
 	}
 	
+	/**
+	 * Prints a debug message in the form of [RapidS] DEBUG MESSAGE - DATE/TIME  DEBUG LEVEL 
+	 * only if lvl is less than or equal to the current debug level the program is running at. 
+	 * @param msg The debug message to print
+	 * @param lvl The debug level for this message
+	 */
 	public static void debugMsg(Object msg, int lvl) { //Method for printing debug messages in the format: [RapidS] MESSAGE - LEVEL - DATE
 		
 		//Format the current date to hour:minute:second-millisecond
