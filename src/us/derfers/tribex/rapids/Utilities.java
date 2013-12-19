@@ -27,20 +27,15 @@ public class Utilities {
 	}
 	
 	public static String getJarDirectory() {
-		//Gets current directory relative to the JarFile, 
-		//Necessarry on Linux/OSX, as Java runs jar files in the home directory
-		
-		//Create a file
-		File file = new File(".");
+	    String absolutePath = null;
 		try {
-			//Attempt to get the folder of the Jar and set the file location to it
-			file = new File(URLDecoder.decode(ClassLoader.getSystemClassLoader().getResource(".").getPath(), "UTF-8"));
+			absolutePath = URLDecoder.decode(ClassLoader.getSystemClassLoader().getResource(".").getPath(), "UTF-8");
+
 		} catch (UnsupportedEncodingException e) {
-			showError("Error: Unable to get current directory relative to RapidS, exiting.");
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.exit(1);
 		}
-		return file.toString()+"/";
+		return absolutePath;
 	}
 	
 	
