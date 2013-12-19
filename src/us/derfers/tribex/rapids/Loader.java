@@ -1,7 +1,11 @@
 package us.derfers.tribex.rapids;
 import static us.derfers.tribex.rapids.Utilities.debugMsg;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +20,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import us.derfers.tribex.rapids.GUI.GUI_Swing;
-import us.derfers.tribex.rapids.jsFunctions.sys;
+import us.derfers.tribex.rapids.jsFunctions.Sys;
 
 public class Loader {
 	//Javascript engine initialization
@@ -39,20 +43,25 @@ public class Loader {
 		
 		//Import standard functions:
 		try {
-			for (String toImport: Globals.SystemPackages) {
+			//Loop through Java standard library for JavaScript and import all of the packages
+			for (String toImport: Globals.jvStdLib) {
 				engine.eval("importPackage(Packages."+toImport+");");
 				debugMsg("Imported Java Class: "+toImport);
 			}
-			debugMsg("Finished importing JavaScript Standard Library (Java-based)", 4);
+			debugMsg("Imported JavaScript Standard Library (Java-based)", 4);
 
-			// TODO Add JS-based functions
-			engine.eval("");
+			//Loop through the JavaScript standard library in JavaScript and import all .js files.
+			for (String toImport: Globals.jsStdLib) {
+				engine.eval(new InputStreamReader(Main.class.getResourceAsStream("/jsStdLib/import.js")));
+				debugMsg("Imported JavaScript Standard Library File: "+toImport);
+			}
 			debugMsg("Imported JavaScript Standard Library (JavaScript-based)", 4);
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			Utilities.showError("Error initializing JavaScript engine, please make sure you have Java 6+\n\n"
 					+ "If you do, please report this error:\n"+e1.getMessage());
+			System.exit(1);
 		}
 		
 		//Begin loading the XML file(s)
@@ -99,7 +108,7 @@ public class Loader {
 							String[] splitTheme = swing_Theme.getNodeValue().split(":");
 							
 							//Attempt to dynamically load the specified jarfile
-							sys.addJarToClasspath(splitTheme[0].trim());
+							Sys.addJarToClasspath(splitTheme[0].trim());
 							
 							//Attempt to set the look'n'feel to the theme specified by the file
 							UIManager.setLookAndFeel(splitTheme[1].trim());

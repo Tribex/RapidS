@@ -70,14 +70,20 @@ button {
 <script type="text/javascript">
 			importClass(java.awt.Color);
 			importClass(java.lang.System);
+			importClass(java.lang.Class);
+					
 
+		require(Packages.us.derfers.tribex.rapids);
+		require("test.js");
+		rapids.Utilities.showError("TEST");
+		
 		//Button Clicking System
 			function runBtnEvt(text, sourceID) {
-				var label_list = window.getElementsByClass("changesOnHover");
+				var label_list = Window.getElementsByClass("changesOnHover");
 				for (index = 0; index &lt; label_list.length; ++index) {
 					if (sourceID == 0) {
 						label_list[index].setText(text+" from Label");
-						window.setTitle(text);
+						Window.setTitle(text);
 					} else {
 						label_list[index].setText(text+" from Button");
 					}
@@ -85,12 +91,12 @@ button {
 			}
 		
 			function changeBackground(widget, state) {
-				var widgetID = window.getElementById(widget);
+				var widgetID = Window.getElementById(widget);
 				var color;
 				if (state == 'click') {
 					var color = Color.decode("#666666");
 					//TODO: FixSetTimeout
-					window.setTimeout('changeBackground("onButton", "over")', 300);
+					Window.setTimeout('changeBackground("onButton", "over")', 300);
 					
 				} else if (state == 'over') {
 					var color = Color.decode("#EEEEEE");
@@ -99,7 +105,7 @@ button {
 				}
 				widgetID.setBackground(color);
 			}
-
+			
 	</script> 
 <body layout="gridBag" theme="camo">
 
