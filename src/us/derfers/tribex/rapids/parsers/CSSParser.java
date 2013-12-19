@@ -5,8 +5,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class CSSParser {
 	private String toParse;
+	
 	public CSSParser(String ParseString) {
 	    toParse = ParseString;
 	}
