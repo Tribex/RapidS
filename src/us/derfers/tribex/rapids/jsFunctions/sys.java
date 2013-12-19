@@ -10,7 +10,7 @@ import java.net.URLClassLoader;
 import us.derfers.tribex.rapids.Utilities;
 
 /**
- * Provides a static method for adding JARs to a class path before execution
+ * Provides a static method for adding JARs to a class path before execution of program
  */
 public class sys {
 	
