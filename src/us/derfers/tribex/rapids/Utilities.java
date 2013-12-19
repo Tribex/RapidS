@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 public class Utilities {
 	
@@ -28,15 +27,20 @@ public class Utilities {
 	}
 	
 	public static String getJarDirectory() {
-	    String absolutePath = null;
+		//Gets current directory relative to the JarFile, 
+		//Necessarry on Linux/OSX, as Java runs jar files in the home directory
+		
+		//Create a file
+		File file = new File(".");
 		try {
-			absolutePath = URLDecoder.decode(ClassLoader.getSystemClassLoader().getResource(".").getPath(), "UTF-8");
-
+			//Attempt to get the folder of the Jar and set the file location to it
+			file = new File(URLDecoder.decode(ClassLoader.getSystemClassLoader().getResource(".").getPath(), "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
+			showError("Error: Unable to get current directory relative to RapidS, exiting.");
 			e.printStackTrace();
+			System.exit(1);
 		}
-		return absolutePath;
+		return file.toString()+"/";
 	}
 	
 	
