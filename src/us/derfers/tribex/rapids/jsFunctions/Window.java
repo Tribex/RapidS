@@ -10,7 +10,7 @@ import us.derfers.tribex.rapids.ScriptEngine;
 
 import us.derfers.tribex.rapids.Main;
 
-public class window {	
+public class Window {	
 
 	//XXX: ELEMENT GETTERS :XXX\\
 	//getElementById('string')

@@ -1,6 +1,8 @@
 package us.derfers.tribex.rapids.GUI;
 
 import java.awt.GridBagLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -39,6 +41,16 @@ public class GUI_Swing {
 	public void loadGUI(String filePath, ScriptEngine engine, Object parent, Boolean clearWidgets) {
 		//XXX: Initialization :XXX\\
 		//Create ParentComposite variable
+		
+		//Make sure the window closes the program TODO: Make configurable.
+		window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		window.addWindowListener(new WindowAdapter() {
+		    public void windowClosing(WindowEvent e) {
+		         System.exit(0);
+		    }
+		});
+		
+		
 		JPanel parentComposite = null;
 
 		//Check to see if the parent exists

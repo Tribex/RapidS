@@ -20,7 +20,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import us.derfers.tribex.rapids.GUI.GUI_Swing;
-import us.derfers.tribex.rapids.jsFunctions.sys;
+import us.derfers.tribex.rapids.jsFunctions.Sys;
 
 public class Loader {
 	//Javascript engine initialization
@@ -43,16 +43,18 @@ public class Loader {
 		
 		//Import standard functions:
 		try {
-			for (String toImport: Globals.SystemPackages) {
+			//Loop through Java standard library for JavaScript and import all of the packages
+			for (String toImport: Globals.jvStdLib) {
 				engine.eval("importPackage(Packages."+toImport+");");
 				debugMsg("Imported Java Class: "+toImport);
 			}
 			debugMsg("Imported JavaScript Standard Library (Java-based)", 4);
 
-			// TODO Add JS-based functions
-			//FIXME: Find a way to load files in the jar System.out.println(Main.class.getClassLoader().getResourceAsStream("import.js"));
-			engine.eval("");
-
+			//Loop through the JavaScript standard library in JavaScript and import all .js files.
+			for (String toImport: Globals.jsStdLib) {
+				engine.eval(new InputStreamReader(Main.class.getResourceAsStream("/jsStdLib/import.js")));
+				debugMsg("Imported JavaScript Standard Library File: "+toImport);
+			}
 			debugMsg("Imported JavaScript Standard Library (JavaScript-based)", 4);
 
 		} catch (Exception e1) {
@@ -106,7 +108,7 @@ public class Loader {
 							String[] splitTheme = swing_Theme.getNodeValue().split(":");
 							
 							//Attempt to dynamically load the specified jarfile
-							sys.addJarToClasspath(splitTheme[0].trim());
+							Sys.addJarToClasspath(splitTheme[0].trim());
 							
 							//Attempt to set the look'n'feel to the theme specified by the file
 							UIManager.setLookAndFeel(splitTheme[1].trim());

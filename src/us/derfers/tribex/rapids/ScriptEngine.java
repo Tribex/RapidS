@@ -2,9 +2,6 @@ package us.derfers.tribex.rapids;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Script;
-import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.*;
 
 public class ScriptEngine {
@@ -18,7 +15,6 @@ public class ScriptEngine {
 		
 		//Populate the scope with importertoplevel TODO: Replace this
 		scope = new org.mozilla.javascript.ImporterTopLevel(jsContext);
-		
 		//Delete the context
 		Context.exit();
 	}

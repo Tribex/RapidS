@@ -1,7 +1,5 @@
 package us.derfers.tribex.rapids.GUI;
 
-import java.awt.Dimension;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
