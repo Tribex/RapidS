@@ -13,10 +13,16 @@ import us.derfers.tribex.rapids.Globals;
 import us.derfers.tribex.rapids.Main;
 import us.derfers.tribex.rapids.Utilities;
 
-public class Sys {
 
-	//TODO: Document properly.
-	//Method for adding jars to classpath before execution
+/**
+* Provides static methods for adding JARs to a class path before execution and running JavaScript from files.
+*/
+public class Sys {
+	
+	/**
+	* Adds the specified JAR to the class path
+	* @param fileString The name of the JAR to add to the class path
+	*/
 	public static void addJarToClasspath(String fileString) {
 		try {
 			File file = new File(Utilities.getJarDirectory()+fileString);
@@ -44,7 +50,10 @@ public class Sys {
 	}
 
 
-	//Method for running Javascript from a file.
+	/**
+	* Runs the specified JavaScript file.
+	* @param fileString The name of the JavaScript file to run
+	*/
 	public static void importJS(String fileString) {
 		try {
 			//Load file from root directory.
