@@ -1,4 +1,4 @@
-package us.derfers.tribex.rapids.jsFunctions;
+package us.derfers.tribex.rapids.jvStdLib;
 
 import java.util.ArrayList;
 import java.util.List;

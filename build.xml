@@ -57,4 +57,20 @@
             <classpath refid="RapidS.classpath"/>
         </java>
     </target>
+    
+    <target name="create_run_jar">
+        <jar destfile="../../../RapidS.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="us.derfers.tribex.rapids.Main"/>
+                <attribute name="Class-Path" value="."/>
+                <attribute name="Rsrc-Class-Path" value="./ commons-io-2.4.jar weblaf-1.25.jar rhino.jar"/>
+            </manifest>
+            <zipfileset src="../jar-in-jar-loader.zip"/>
+            <fileset dir="bin"/>
+            <zipfileset dir="lib" includes="commons-io-2.4.jar"/>
+            <zipfileset dir="lib" includes="weblaf-1.25.jar"/>
+            <zipfileset dir="lib" includes="rhino.jar"/>
+        </jar>
+    </target>
 </project>

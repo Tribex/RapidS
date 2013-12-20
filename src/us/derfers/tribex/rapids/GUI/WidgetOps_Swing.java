@@ -38,9 +38,13 @@ public class WidgetOps_Swing {
 		
 		if (widgetElement.getAttributeNode("id") != null) {
 			Map<String, String> styles = Globals.stylesMap.get("#"+widgetElement.getAttributeNode("id").getTextContent());
+			
 			widget = loadWidgetStyles(widget, widgetElement, styles);
+			
+			widget.setName(widgetElement.getAttributeNode("id").getTextContent());
+			Utilities.debugMsg(widget.getName());
 		} 
-		
+
 		return widget;
 	}
 	
@@ -85,7 +89,6 @@ public class WidgetOps_Swing {
 				widget.setPreferredSize(new Dimension(widget.getPreferredSize().width, Integer.valueOf(styles.get("height"))));
 			}
 		}
-		Utilities.debugMsg(widget.getPreferredSize().toString());
 		
 		return widget;
 	}

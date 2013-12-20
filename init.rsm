@@ -68,35 +68,29 @@ button {
 </head>
 
 <script type="text/javascript">
-			importClass(java.awt.Color);
-			importClass(java.lang.System);
-			importClass(java.lang.Class);
-					
-
+		require(java.awt.Color);
+		require(java.lang.System);
+		require(java.lang.Class);
 		require(Packages.us.derfers.tribex.rapids);
-		require("test.js");
+
 		rapids.Utilities.showError("TEST");
 		
 		//Button Clicking System
-			function runBtnEvt(text, sourceID) {
+			function runBtnEvt(text, message) {
 				var label_list = Window.getElementsByClass("changesOnHover");
 				for (index = 0; index &lt; label_list.length; ++index) {
-					if (sourceID == 0) {
-						label_list[index].setText(text+" from Label");
-						Window.setTitle(text);
-					} else {
-						label_list[index].setText(text+" from Button");
-					}
+					Window.setTitle(text);
+					label_list[index].setText(text+" from "+message);
 				}
 			}
-		
-			function changeBackground(widget, state) {
-				var widgetID = Window.getElementById(widget);
+
+		function changeBackground(widget, state) {
+				var widgetID = getElementById(widget);
 				var color;
 				if (state == 'click') {
 					var color = Color.decode("#666666");
 					//TODO: FixSetTimeout
-					Window.setTimeout('changeBackground("onButton", "over")', 300);
+					Window.setTimeout('changeBackground("onButton", "over")', 200);
 					
 				} else if (state == 'over') {
 					var color = Color.decode("#EEEEEE");
@@ -109,7 +103,7 @@ button {
 	</script> 
 <body layout="gridBag" theme="camo">
 
-	<label class="changesOnHover" onmouseup="runBtnEvt('Click', 0)"
+	<label class="changesOnHover" onmouseup="runBtnEvt('Click', 'null id')"
 		onmouseover="runBtnEvt('Mouse Over', 0)"
 		onmouseout="runBtnEvt('Mouse Out', 0)">label changes on	mouseover, mouseout, and click.</label>
 		
@@ -117,12 +111,13 @@ button {
 		onmouseover="changeBackground('onButton', 'over')"
 		onmouseout="changeBackground('onButton', 'out')">Clickable label on Button</label>
 		
-	<button id="clickableButton" class="changesOnHover" onclick="runBtnEvt('Click', 1)"
-		onmouseover="runBtnEvt('Mouse Over', 1)"
-		onmouseout="runBtnEvt('Mouse Out', 1)">Changes the status of the label.</button>
+	<button id="clickableButton" class="changesOnHover" onclick="runBtnEvt('Click', $clickableButton.getName())"
+		onmouseover="runBtnEvt('Mouse Over', $clickableButton.getName())"
+		onmouseout="runBtnEvt('Mouse Out', $clickableButton.getName())">
+		Changes the status of the label.</button>
 		
 	<spinner id="spinner" value="10" max="20" min="-1"
-		onselection="runBtnEvt('Spinner: '+$spinner.getValue(), 1)" />
+		onselection="runBtnEvt($spinner.getValue(), $spinner.getName())" />
 	
 	<textfield class="standardPosition">Enter a single line of text here!</textfield>
 	

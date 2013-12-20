@@ -1,9 +1,15 @@
 package us.derfers.tribex.rapids;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JOptionPane;
@@ -56,6 +62,36 @@ public class Utilities {
 			//Print the message
 			System.out.println("[RapidS] "+(String) msg+" - "+debugDate+" ["+lvl+"]");
 			
+		}
+	}
+	
+	/* listFilesInJar(String folder)
+	 * 	Returns a String[] with the names of all files in @folder.
+	 * 
+	 * @folder - The folder to list files in.
+	 */
+	public static ArrayList<String> listFilesInJar(String folder) {
+		Enumeration<URL> en;
+		try {
+			en = Main.class.getClassLoader().getResources(folder);
+		
+		ArrayList<String> filenames = new ArrayList<String>();
+		if (en.hasMoreElements()) {
+		    URL metaInf=en.nextElement();
+		    File fileMetaInf=new File(metaInf.toURI());
+
+		    File[] files=fileMetaInf.listFiles();
+		    //or 
+		    for (String item : fileMetaInf.list()) {
+		    	filenames.add(item);
+		    }
+		} 
+		//rootFolder here represents a File Object pointing the root forlder of your search 
+
+		return filenames;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }
