@@ -15,6 +15,7 @@ import us.derfers.tribex.rapids.Utilities;
 
 public class Sys {
 
+	//TODO: Document properly.
 	//Method for adding jars to classpath before execution
 	public static void addJarToClasspath(String fileString) {
 		try {
