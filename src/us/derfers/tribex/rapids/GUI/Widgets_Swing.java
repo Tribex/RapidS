@@ -25,7 +25,7 @@ public class Widgets_Swing {
 	
 	//XXX: BUTTONS - Will be added on to, this is basic. :XXX\\
 	public static void createButton(JPanel parentComposite, Element widgetElement) {
-		JButton widget = new JButton();
+		JButton widget = (JButton) WidgetOps_Swing.getWidgetStyles(new JButton(), widgetElement);
 
 		parentComposite.add(widget, Layouts_Swing.getWidgetConstraint(widgetElement));
 		//Set button text with the content of the <button></button> tags
@@ -81,7 +81,7 @@ public class Widgets_Swing {
 		}
 
 		//Add widget to maps
-		JSpinner widget = new JSpinner(model);
+		JSpinner widget = (JSpinner) WidgetOps_Swing.getWidgetStyles(new JSpinner(model), widgetElement);
 		parentComposite.add(widget, Layouts_Swing.getWidgetConstraint(widgetElement));
 		
 		

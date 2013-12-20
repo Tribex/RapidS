@@ -26,7 +26,8 @@ public class Main {
 			if (arg.contains("-d") || arg.contains("--debug-level")) {
 				DEBUG_LEVEL = Integer.valueOf(arg.split(":")[1]);
 				Utilities.debugMsg("Debug Level: "+DEBUG_LEVEL);
-				
+			
+			//If the dynamic flag is set, look in the Java CWD instead of the RapidS Jar Parent folder
 			} else if (arg.contains("-l") || arg.contains("--load-from-cwd")) {
 				useDynamic = true;
 				
@@ -35,12 +36,21 @@ public class Main {
 		
 		//Run the file. Second loop to prevent the file from being loaded before all arguments are parsed.
 		for (String arg : args) {
+			//If the argument is the file
 			if (!arg.startsWith("-")){
+				
+				//If useDynamic is true,
 				if (useDynamic == true) {
+					//Tell the loader to set the working directory to the Java CWD
 					runLoader(arg, true);
+					
+				
 				} else {
+					//Tell the loader to set the working directory to the directory of the RapidS jarfile (DEFAULT)
 					runLoader(Utilities.getJarDirectory()+arg, false);
 				}
+				
+				//Do not attempt to load init.rsm later on
 				hasLoaded = true;
 			}
 		}
@@ -50,7 +60,7 @@ public class Main {
 			//If the user is running RapidS in the directory for a reason,
 			if (DEBUG_LEVEL == 5 || DEBUG_LEVEL == 0) {
 				//Load from the java CWD instead of the Jar Location
-				runLoader("init.rsm", true);
+				runLoader("init.rsm", false);
 			
 			//Load from package directory if in debug mode
 			} else {
@@ -62,11 +72,10 @@ public class Main {
 	
 	private static void runLoader(String fileName, Boolean dynamic) {
 		if (dynamic == true) {
-			Globals.selCWD = new File(fileName).getParent();
+			Globals.selCWD = new File(".").getAbsolutePath().replaceAll(".", "");
 		} else {
 			Globals.selCWD = Utilities.getJarDirectory();
 		}
-		System.out.println(Globals.selCWD);
 		loader.loadAll(fileName, false);
 	}
 

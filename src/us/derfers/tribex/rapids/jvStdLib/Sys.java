@@ -1,9 +1,8 @@
-package us.derfers.tribex.rapids.jsFunctions;
+package us.derfers.tribex.rapids.jvStdLib;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
