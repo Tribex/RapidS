@@ -12,7 +12,6 @@
 	anchor: west;
 	padding-y: 40;
 	padding-x: 20;
-	z-index: 1;
 }
 
 #onButton {
@@ -20,7 +19,6 @@
 	anchor: west;
 	fill: none;
 	foreground-color: #222222;
-	z-index: 0;
 }
 
 .standardPosition {
@@ -61,12 +59,6 @@ button {
 	margin-left: 20;
 }
 
-#tt {
-fill: BOTH;
-anchor: CENTER;
-border: 2 #990000;
-background-color: #0000FF;
-}
 
 </style>
 </head>

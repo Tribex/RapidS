@@ -114,8 +114,21 @@ public class WidgetOps {
 			}
 
 			if (styles.get("z-index") != null) {
+				//Get the parent of the widget
 				Container parent = widget.getParent();
-				parent.setComponentZOrder(widget, parent.getComponentCount()-1);
+				
+				//Get the value set by CSS for the z-index
+				int ZIndex = Integer.valueOf(styles.get("z-index"));
+				
+				//If ZIndex is larger than the amount of widgets in the parent, decrease it to avoid a NPE.
+				if (ZIndex > parent.getComponentCount()-1) {
+					ZIndex = parent.getComponentCount()-1;
+					
+				//If ZIndex is less than 0, set it to 0 to avoid a NPE or IVE
+				} else if (ZIndex < 0) {
+					ZIndex = 0;
+				}
+				parent.setComponentZOrder(widget, ZIndex);
 			}
 		}
 
