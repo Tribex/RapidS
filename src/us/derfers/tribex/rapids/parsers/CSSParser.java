@@ -5,14 +5,27 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+/**
+ * A custom-made parser for CSS type files. Uses regexes.
+ * 
+ * @author TribeX
+ *
+ */
 public class CSSParser {
 	private String toParse;
 	
+	/**
+	 * Creates a new CSSParser with the CSS to parse.
+	 * @param ParseString The CSS to parse
+	 */
 	public CSSParser(String ParseString) {
 	    toParse = ParseString;
 	}
 	
+	/**
+	 * Parses everything in the private field toParse, which is initialized by the CSSParser constructor.
+	 * @return A Map[String, Map[String, String]] containing the parsed CSS
+	 */
 	public Map<String, Map<String, String>> parseAll() {
 		
 		//The map that will eventually be returned
@@ -35,6 +48,13 @@ public class CSSParser {
 		return idMap;
 		
 	}
+	
+	/**
+	 * Takes a identifier and prefix, and returns a Map[String, String] containing each property and its values.
+	 * @param idTag The identifier (eg, class, element, or id). Gets appended to the prefix.
+	 * @param prefix The prefix for the identifier: #, ., or null.
+	 * @return A Map[String, String] of the seperated identifiers and values. eg, {"bgcolor" : "#FFF", "padding" : "200"}
+	 */
 	public Map<String, String> getIdValues(String idTag, String prefix) {
 		
 		//The map that will eventually be returned
@@ -67,12 +87,18 @@ public class CSSParser {
 		
 	}
 	
+	/**
+	 * Runs getIdValues with the prefix '.', for extracting classes.
+	 * @param classTag The string identifying the class.
+	 * @return A Map[String, String] of the seperated identifiers and values. eg, {"bgcolor" : "#FFF", "padding" : "200"}
+	 */
 	public Map<String, String> getClassValues(String classTag) {
 		
 		return getIdValues(classTag, ".");
 		
 	}
 	
+	/**TODO: Implement*/
 	public Map<String, Object> getByAttr(String attrTag) {
 		return null;
 		

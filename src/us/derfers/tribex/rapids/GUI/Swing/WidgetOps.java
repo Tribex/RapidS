@@ -1,7 +1,6 @@
 package us.derfers.tribex.rapids.GUI.Swing;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -25,7 +24,7 @@ import us.derfers.tribex.rapids.ScriptEngine;
 import us.derfers.tribex.rapids.Utilities;
 
 /**
- * Provides Swing Widget Operations
+ * Provides Swing Widget Operations: Style loading and event listeners
  * @author TribeX
  *
  */
@@ -73,7 +72,12 @@ public class WidgetOps {
 	}
 
 
-
+	/**
+	 * Loads and applies styles for widgets.
+	 * @param widget The widget to apply styles to.
+	 * @param styles A Map of styles for that widget
+	 * @return The widget with all the styles applied.
+	 */
 	public static JComponent loadWidgetStyles(JComponent widget, Map<String, String> styles) {
 
 		//Make sure that there are styles to apply
@@ -114,15 +118,36 @@ public class WidgetOps {
 			}
 
 			if (styles.get("z-index") != null) {
+				//Get the parent of the widget
 				Container parent = widget.getParent();
-				parent.setComponentZOrder(widget, parent.getComponentCount()-1);
+				
+				//Get the value set by CSS for the z-index
+				int ZIndex = Integer.valueOf(styles.get("z-index"));
+				
+				//If ZIndex is larger than the amount of widgets in the parent, decrease it to avoid a NPE.
+				if (ZIndex > parent.getComponentCount()-1) {
+					ZIndex = parent.getComponentCount()-1;
+					
+				//If ZIndex is less than 0, set it to 0 to avoid a NPE or IVE
+				} else if (ZIndex < 0) {
+					ZIndex = 0;
+				}
+				parent.setComponentZOrder(widget, ZIndex);
 			}
 		}
 
 		return widget;
 	}
+	
 
-	//Event listeners
+	/**
+	 * Facilitates adding of event listeners to XML Widgets.
+	 * @param type The type of event listener to add
+	 * @param widget The widget to bind the listener to.
+	 * @param value The function to be evaluated by JavaScript.
+	 * @param engine The JavaScript engine.
+	 * @return True on success, False on failure.
+	 */
 	public static boolean addMethodListener(String type, final JComponent widget, final String value, final ScriptEngine engine) {		
 		//Add event listener
 		try {
@@ -140,6 +165,7 @@ public class WidgetOps {
 					}
 
 				});
+				
 			} else if (type.equals("onmouseover")) {
 				widget.addMouseListener(new MouseAdapter(){
 					@Override
@@ -154,6 +180,7 @@ public class WidgetOps {
 					}
 
 				});
+				
 			} else if (type.equals("onmouseout")) {
 				widget.addMouseListener(new MouseAdapter(){
 					@Override
@@ -168,6 +195,7 @@ public class WidgetOps {
 					}
 
 				});
+				
 			} else if (type.equals("onmousedown")) {
 				widget.addMouseListener(new MouseAdapter(){
 					@Override
@@ -182,6 +210,7 @@ public class WidgetOps {
 					}
 
 				});
+				
 			} else if (type.equals("onmouseup")) {
 				widget.addMouseListener(new MouseAdapter(){
 					@Override
@@ -196,6 +225,7 @@ public class WidgetOps {
 					}
 
 				});
+				
 			} else if (type.equals("onselection")) {
 				((JSpinner) widget).addChangeListener(new ChangeListener(){
 					@Override
@@ -204,8 +234,11 @@ public class WidgetOps {
 
 					}
 				});
+				
 			}
+			
 		} catch (Exception e) {
+			Utilities.debugMsg("Error adding a "+type+" event listener to "+widget.getName()+" with the value of '"+value+"'.");
 			e.printStackTrace();
 			return false;
 		}

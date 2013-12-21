@@ -4,11 +4,17 @@ import java.io.Reader;
 
 import org.mozilla.javascript.*;
 
+/**
+ * Provides a basic javax.scriptengine style interface for Mozilla's Rhino JavaScript Engine.
+ * 
+ * @author TribeX
+ *
+ */
 public class ScriptEngine {
-	//Have a global scope for each ScriptEngine
+	/** The global scope for the engine, contains information about the execution enviornment.*/
 	public Scriptable scope;
 	
-	//Constructor to populate the scope
+	/** Populates the scope with the ImporterTopLevel variables. Possibly will be deprecated.*/
 	public ScriptEngine() {
 		//Create the context
 		Context jsContext = Context.enter();
@@ -19,6 +25,10 @@ public class ScriptEngine {
 		Context.exit();
 	}
 	
+	/**
+	 * Run a JavaScript string through the engine.
+	 * @param script The script to run.
+	 */
 	public void eval(String script) {
 		//Create the thread's context
 		Context jsContext = Context.enter();
@@ -33,6 +43,10 @@ public class ScriptEngine {
 		Context.exit();
 	}
 
+	/**
+	 * Run a JavaScript reader (normally a file) through the engine.
+	 * @param script The script (reader) to run.
+	 */
 	public void eval(Reader script) {
 		Context jsContext = Context.enter();
 
@@ -50,6 +64,11 @@ public class ScriptEngine {
 		Context.exit();
 	}
 	
+	/**
+	 * Insert a variable into the JavaScript global scope
+	 * @param var The name of the variable to insert.
+	 * @param property The value of the variable to insert.
+	 */
 	public void put(String var, Object property) {
 		Context.enter();
 

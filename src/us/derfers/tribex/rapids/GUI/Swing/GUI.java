@@ -28,6 +28,11 @@ import us.derfers.tribex.rapids.ScriptEngine;
 import us.derfers.tribex.rapids.Utilities;
 import us.derfers.tribex.rapids.parsers.CSSParser;
 
+/**
+ * The Main Swing GUI creator. 
+ * Delegates the creation of widgets, their layout, creating widget interactivity, and styling of widgets.
+ * @author Nateowami, TribeX
+ */
 public class GUI {
 
 	//Constants that need to be defined to keep the GUI in one frame system.
