@@ -1,6 +1,8 @@
-package us.derfers.tribex.rapids.GUI;
+package us.derfers.tribex.rapids.GUI.Swing;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -22,77 +24,104 @@ import us.derfers.tribex.rapids.Main;
 import us.derfers.tribex.rapids.ScriptEngine;
 import us.derfers.tribex.rapids.Utilities;
 
-public class WidgetOps_Swing {
+/**
+ * Provides Swing Widget Operations
+ * @author TribeX
+ *
+ */
+public class WidgetOps {
 	//Widget styles
-	public static JComponent getWidgetStyles(JComponent widget, Element widgetElement) {
+	/**
+	 * Returns a widget styled with all the styles specified in its element, class.
+	 * @param widget The original widget
+	 * @param id The ID of the original widget
+	 * @return The styled widget
+	 */
+	public static JComponent getWidgetStyles(JComponent widget, String id) {
+		//Get the widget data for the id of the widget.
+		Map<String, Object> widgetData = Main.loader.XMLWidgets.get(id);
 
-		if (widgetElement.getNodeName() != null) {
-			Map<String, String> styles = Globals.stylesMap.get(widgetElement.getNodeName());
-			widget = loadWidgetStyles(widget, widgetElement, styles);
+		//If the element is specified (should be, but just to make sure)
+		if (Globals.stylesMap.get(widgetData.get("element"))!= null) {
+			//Get the styles for the element
+			Map<String, String> styles = Globals.stylesMap.get(Main.loader.XMLWidgets.get(id).get("element"));
+
+			//Load the widget styles.
+			widget = loadWidgetStyles(widget, styles);
 		}
 
-		if (widgetElement.getAttributeNode("class") != null) {
-			Map<String, String> styles = Globals.stylesMap.get("."+widgetElement.getAttributeNode("class").getTextContent());
-			widget = loadWidgetStyles(widget, widgetElement, styles);
+		//If the class is specified
+		if (Globals.stylesMap.get("."+widgetData.get("class"))!= null) {
+			//Get the styles for the class
+			Map<String, String> styles = Globals.stylesMap.get("."+Main.loader.XMLWidgets.get(id).get("class"));
+
+			//Load the widget styles.
+			widget = loadWidgetStyles(widget, styles);
 		}
-		
-		if (widgetElement.getAttributeNode("id") != null) {
-			Map<String, String> styles = Globals.stylesMap.get("#"+widgetElement.getAttributeNode("id").getTextContent());
-			
-			widget = loadWidgetStyles(widget, widgetElement, styles);
-			
-			widget.setName(widgetElement.getAttributeNode("id").getTextContent());
-			Utilities.debugMsg(widget.getName());
-		} 
+
+		//If the id is specified (It ought to be, but just to be sure)
+		if (Globals.stylesMap.get("#"+id)!= null) {
+			//Get the styles for the ids
+			Map<String, String> styles = Globals.stylesMap.get("#"+id);
+            widget.setName(id);
+
+			//Load the widget styles.
+			widget = loadWidgetStyles(widget, styles);
+		}
 
 		return widget;
 	}
-	
-	
-	
-	public static JComponent loadWidgetStyles(JComponent widget, Element widgetElement, Map<String, String> styles) {
-		
+
+
+
+	public static JComponent loadWidgetStyles(JComponent widget, Map<String, String> styles) {
+
 		//Make sure that there are styles to apply
 		if (styles != null && !styles.isEmpty()) {
 			//Set background color
 			if (styles.get("background-color") != null) {
 				//Set the background color of the widget
 				widget.setBackground(Color.decode(styles.get("background-color")));
-				
+
 				//Necessarry for some widgets to display the background, no adverse effects afaik.
 				widget.setOpaque(true);
 			}
-			
+
 			//Set foregound color
 			if (styles.get("foreground-color") != null) {
 				//Set the foreground color of the widget
 				widget.setForeground(Color.decode(styles.get("foreground-color")));
 			}
-			
+
 			//Create a border TODO: make more flexible and advanced
 			if (styles.get("border") != null) {
 				//Split the border string between color and width
 				String[] borderinfo = styles.get("border").split(" ");
-				
+
 				//Create a new border
 				Border border = BorderFactory.createLineBorder(Color.decode(borderinfo[1]), Integer.valueOf(borderinfo[0]));
 				widget.setBorder(border);
 			}
-			
+
 			if (styles.get("width") != null) {
 				//Set the width of the widget
 				widget.setPreferredSize(new Dimension(Integer.valueOf(styles.get("width")), widget.getPreferredSize().height));
 			}
-			
+
 			if (styles.get("height") != null) {
 				//Set the height of the widget
 				widget.setPreferredSize(new Dimension(widget.getPreferredSize().width, Integer.valueOf(styles.get("height"))));
 			}
+
+			if (styles.get("z-index") != null) {
+				Container parent = widget.getParent();
+				parent.setComponentZOrder(widget, parent.getComponentCount()-1);
+			}
 		}
-		
+
 		return widget;
 	}
-	
+
 	//Event listeners
 	public static boolean addMethodListener(String type, final JComponent widget, final String value, final ScriptEngine engine) {		
 		//Add event listener
@@ -172,7 +201,7 @@ public class WidgetOps_Swing {
 					@Override
 					public void stateChanged(ChangeEvent arg0) {
 						engine.eval(value);
-						
+
 					}
 				});
 			}
@@ -182,20 +211,20 @@ public class WidgetOps_Swing {
 		}
 		return true;
 	}
-	
-	
+
+
 	//XXX: Map setup :XXX\\
 
 	public static void addWidgetToMaps(Element widgetElement, Object widget, ScriptEngine engine) {
 		//Create a HashMap to hold Button ID and class, as well as other parameters.
 		Map<String, Object> widgetMap = new HashMap<String, Object>();
-		
+
 		//Define the ID of the button
 		String widgetID = null;
 		if (widgetElement.getAttributeNode("id") != null) {
 			widgetID = widgetElement.getAttributeNode("id").getNodeValue();
-		
-		//If not, assign an incremental id: __ID__#
+
+			//If not, assign an incremental id: __ID__#
 		} else {
 			widgetID = "__ID__"+Integer.toString(Main.loader.XMLWidgets__NO__ID+1);
 			Main.loader.XMLWidgets__NO__ID += 1;
@@ -204,20 +233,21 @@ public class WidgetOps_Swing {
 
 		//Add the widget to the widgetMap
 		widgetMap.put(widgetID, widget);
-		
+
 		//If the ID is set, add it to the Object list so that we can get it later.
 		NamedNodeMap widgetAttributes = widgetElement.getAttributes();
-		
+
 		//Iterate through all the attributes of the widget and add them to the widgetMap
 		for (int i=0; i < widgetAttributes.getLength(); i++) {
 			widgetMap.put(widgetAttributes.item(i).getNodeName(), widgetAttributes.item(i).getTextContent());
 		}
-		
+
+		widgetMap.put("element", widgetElement.getNodeName());
 		widgetMap.put("id", widgetID);
-		
+
 		//Add the temporary widgetMap to the XMLWidgets array.
 		Main.loader.XMLWidgets.put(widgetID, widgetMap);
 		engine.put("$"+widgetID, widget);
-		
+
 	}
 }
