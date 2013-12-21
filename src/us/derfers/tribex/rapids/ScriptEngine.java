@@ -5,7 +5,7 @@ import java.io.Reader;
 import org.mozilla.javascript.*;
 
 /**
- * Provides a basic javax.scriptengine type interface for Mozilla's Rhino JavaScript Engine.
+ * Provides a basic javax.scriptengine style interface for Mozilla's Rhino JavaScript Engine.
  * 
  * @author TribeX
  *
