@@ -5,17 +5,22 @@ import java.io.File;
 import us.derfers.tribex.rapids.Loader;
 
 /**
- * Class main is the start of the program.
+ * Main class. Parses arguments, delegates loading of files, debug handling, and widget creation.
+ * @author TribeX, Nateowami
  */
 public class Main {
-	//DEBUG_LEVEL - Turn on only for debugging
+	/**
+	 * Global Debug Level, used to control the amount of data printed during logging.
+	 */
 	public static Integer DEBUG_LEVEL = 1;
 	
-	//All scripts need access to the loader, and its child variables
+	/**
+	 * Global Loader.  All classes need access to it.
+	 */
 	public static Loader loader = new Loader();
 	
 	/**
-	 * The main method for this program. Program execution starts here
+	 * The main method for RapidS. Program execution starts here
 	 * @param args The command line arguments
 	 */
 	public static void main(String[] args) {

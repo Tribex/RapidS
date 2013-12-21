@@ -11,8 +11,19 @@ import org.w3c.dom.Element;
 import us.derfers.tribex.rapids.Utilities;
 import us.derfers.tribex.rapids.Globals;
 
+/**
+ * Provides layout constructors and styles.
+ * 
+ * @author TribeX
+ *
+ */
 public class Layouts {
 
+	/**
+	 * Loads the CSS layout styles for a given widget.
+	 * @param widgetElement The widgetElement to process.
+	 * @return A GridBagConstraints containing all the styles.
+	 */
 	public static GridBagConstraints getWidgetConstraint(Element widgetElement) {
 		//Default Styles for widgetConstraint
 		GridBagConstraints widgetConstraint = new GridBagConstraints(){
@@ -36,17 +47,17 @@ public class Layouts {
 		try {
 			if (widgetElement.getNodeName() != null) {
 				Map<String, String> styles = Globals.stylesMap.get(widgetElement.getNodeName());
-				loadConstraintStyles(widgetConstraint, widgetElement, styles);
+				loadConstraintStyles(widgetConstraint, styles);
 			}
 
 			if (widgetElement.getAttributeNode("class") != null) {
 				Map<String, String> styles = Globals.stylesMap.get("."+widgetElement.getAttributeNode("class").getTextContent());
-				loadConstraintStyles(widgetConstraint, widgetElement, styles);
+				loadConstraintStyles(widgetConstraint, styles);
 			}
 			
 			if (widgetElement.getAttributeNode("id") != null) {
 				Map<String, String> styles = Globals.stylesMap.get("#"+widgetElement.getAttributeNode("id").getTextContent());
-				loadConstraintStyles(widgetConstraint, widgetElement, styles);
+				loadConstraintStyles(widgetConstraint, styles);
 			} 
 
 
@@ -56,7 +67,12 @@ public class Layouts {
 		return widgetConstraint;
 	}
 	
-	private static void loadConstraintStyles(GridBagConstraints widgetConstraint, Element widgetElement, Map<String, String> styles) {
+	/**
+	 * Applies the styles for a widget constraint.
+	 * @param widgetConstraint The constraint to operate on.
+	 * @param styles The styles to apply.
+	 */
+	private static void loadConstraintStyles(GridBagConstraints widgetConstraint, Map<String, String> styles) {
 
 		//Margins, so that we can use multiple styles to accomplish the same thing
 		Map<String, Integer> margins = new HashMap<String, Integer>(){

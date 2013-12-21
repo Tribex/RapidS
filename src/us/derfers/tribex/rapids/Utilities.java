@@ -1,27 +1,25 @@
 package us.derfers.tribex.rapids;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.List;
-import java.text.SimpleDateFormat;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 /**
- *Provides static functions for displaying an error dialog or printing a debug message
+ * Provides static functions for displaying an error dialog or printing a debug message
+ * @author Nateowami, TribeX
  */
 public class Utilities {
 	
 	/**
-	 * Shows an error message dialog to the user
+	 * Shows an error message dialog to the user. Uses Swing
 	 * @param errMsg The error message to display
 	 */
 	public static void showError(String errMsg) { //Shows a swing dialog box with an error message
@@ -54,6 +52,35 @@ public class Utilities {
 		return absolutePath;
 	}
 	
+	/**
+	 * Returns a String[] with the names of all files in the folder.
+	 * @param folder - The folder to list files in.
+	 * @return a String[] with the names of all files in the specified folder.
+	 */
+	public static ArrayList<String> listFilesInJar(String folder) {
+		Enumeration<URL> en;
+		try {
+			en = Main.class.getClassLoader().getResources(folder);
+		
+		ArrayList<String> filenames = new ArrayList<String>();
+		if (en.hasMoreElements()) {
+		    URL metaInf=en.nextElement();
+		    File fileMetaInf=new File(metaInf.toURI());
+
+		    for (String item : fileMetaInf.list()) {
+		    	filenames.add(item);
+		    }
+		} 
+
+		return filenames;
+		} catch (Exception e) {
+			showError("Error getting file list (inside jar) from "+folder+"\n\n"
+					+ "Does "+folder+" exist inside the jarfile?");
+			
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	//Always last method, for organisation
 	/**
@@ -83,36 +110,6 @@ public class Utilities {
 			//Print the message
 			System.out.println("[RapidS] "+(String) msg+" - "+debugDate+" ["+lvl+"]");
 			
-		}
-	}
-	
-	/* listFilesInJar(String folder)
-	 * 	Returns a String[] with the names of all files in @folder.
-	 * 
-	 * @folder - The folder to list files in.
-	 */
-	public static ArrayList<String> listFilesInJar(String folder) {
-		Enumeration<URL> en;
-		try {
-			en = Main.class.getClassLoader().getResources(folder);
-		
-		ArrayList<String> filenames = new ArrayList<String>();
-		if (en.hasMoreElements()) {
-		    URL metaInf=en.nextElement();
-		    File fileMetaInf=new File(metaInf.toURI());
-
-		    File[] files=fileMetaInf.listFiles();
-		    //or 
-		    for (String item : fileMetaInf.list()) {
-		    	filenames.add(item);
-		    }
-		} 
-		//rootFolder here represents a File Object pointing the root forlder of your search 
-
-		return filenames;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
 		}
 	}
 }

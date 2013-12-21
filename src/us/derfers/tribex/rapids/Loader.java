@@ -19,6 +19,12 @@ import org.w3c.dom.NodeList;
 import us.derfers.tribex.rapids.GUI.Swing.GUI;
 import us.derfers.tribex.rapids.jvStdLib.Sys;
 
+/**
+ * Starts the JavaScript engine and begins loading XML for widgets and layout information.
+ * 
+ * @author TribeX, Nateowami
+ *
+ */
 public class Loader {
 	//Javascript engine initialization
 	/** The initial JavaScript engine */

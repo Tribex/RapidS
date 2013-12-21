@@ -16,6 +16,8 @@ import us.derfers.tribex.rapids.Utilities;
 
 /**
 * Provides static methods for adding JARs to a class path before execution and running JavaScript from files.
+* 
+* @author TribeX, Nateowami
 */
 public class Sys {
 	

@@ -20,12 +20,17 @@ import us.derfers.tribex.rapids.ScriptEngine;
 import us.derfers.tribex.rapids.GUI.Swing.Layouts;
 import us.derfers.tribex.rapids.GUI.Swing.WidgetOps;
 
+/**
+ * Provides methods for creating widgets inside composites. 
+ * Might be better written as seperate classes that extend their respective widgets
+ * @author TribeX
+ */
 public class Widgets {
 	//TODO: Comment widgets!!!!!!!!!		
-	
+
 	//Get global JavaScript engine
 	private static ScriptEngine engine = Main.loader.engine;
-	
+
 	/**
 	 * Creates a Composite (JPanel) and populates any widgets inside of it.
 	 * @param parentComposite The parent JPanel to place the new JPanel in.
@@ -34,13 +39,13 @@ public class Widgets {
 	public static void createComposite(JPanel parentComposite, Element widgetElement) {
 		//Create a new Panel
 		JPanel widget = new JPanel();
-		
+
 		//Set the layout of the panel to GridBagLayout TODO: Add more layout types
 		widget.setLayout(new GridBagLayout());
-		
+
 		//Add the panel to the window with all of its constraints.
 		parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
-		
+
 		//Load all elements inside of the composite/widget.  INFINITE NESTING!
 		GUI.loadInComposite(widget, (Node) widgetElement, engine);
 
@@ -52,11 +57,11 @@ public class Widgets {
 			}
 
 		}
-		
+
 		//Add the panel to the maps. child widgets will still be toplevel.  There is no concept of a widget 'scope' TODO?
 		WidgetOps.addWidgetToMaps(widgetElement, widget, engine);
 	}
-	
+
 
 	/**
 	 * Creates a Basic JButton
@@ -81,17 +86,17 @@ public class Widgets {
 		}
 		WidgetOps.addWidgetToMaps(widgetElement, widget, engine);
 	}
-	
-	
+
+
 	/**
 	 * Creates a Basic JLabel
-	 * @param parentComposite The parent JPanel to place the new JButton in.
+	 * @param parentComposite The parent JPanel to place the new JLabel in.
 	 * @param widgetElement The element to get the widget from.
 	 */
 	public static void createLabel(JPanel parentComposite, Element widgetElement) {
 		JLabel widget = new JLabel();
 		parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
-		
+
 		widget.setText(widgetElement.getTextContent());
 
 		WidgetOps.addWidgetToMaps(widgetElement, widget, engine);
@@ -103,9 +108,13 @@ public class Widgets {
 
 		}
 	}
-	
-	
-	//XXX: SPINNERS :XXX\\\
+
+
+	/**
+	 * Creates a Basic JSpinner
+	 * @param parentComposite The parent JPanel to place the new JSpinner in.
+	 * @param widgetElement The element to get the widget from.
+	 */
 	public static void createSpinner(JPanel parentComposite, Element widgetElement) {
 		//Create a new composite for sub-elements
 		SpinnerNumberModel model = new SpinnerNumberModel();
@@ -125,8 +134,8 @@ public class Widgets {
 		//Add widget to maps
 		JSpinner widget = new JSpinner(model);
 		parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
-		
-		
+
+
 		for (String listenerType : Globals.listenerTypesArray) {
 			//Add a listener for listenerType if specified
 			if (widgetElement.getAttributeNode(listenerType) != null) {
@@ -136,11 +145,15 @@ public class Widgets {
 		}
 		WidgetOps.addWidgetToMaps(widgetElement, widget, engine);
 	}
-	
-	
-	//XXX: TEXTAREAS :XXX\\
+
+
+	/**
+	 * Creates a Basic JTextArea
+	 * @param parentComposite The parent JPanel to place the new JTextArea in.
+	 * @param widgetElement The element to get the widget from.
+	 */
 	public static void createTextArea(JPanel parentComposite, Element widgetElement) {
-		
+
 		//Create a new textarea
 		JTextArea widget  = new JTextArea();
 
@@ -149,10 +162,10 @@ public class Widgets {
 
 		//Set the text of the textArea
 		widget.setText(widgetElement.getTextContent());
-		
+
 		//Add the scrollpane to the parentComposite
 		parentComposite.add(scrollPane, Layouts.getWidgetConstraint(widgetElement));
-		
+
 		//Add event listeners for the textarea
 		for (String listenerType : Globals.listenerTypesArray) {
 			//Add a listener for listenerType if specified
@@ -161,35 +174,39 @@ public class Widgets {
 			}
 
 		}
-		
+
 		//Add the widget to the maps
 		WidgetOps.addWidgetToMaps(widgetElement, widget, engine);
 	}
-	
-	
-	//XXX: TEXTFIELDS :XXX\\
-		public static void createTextField(JPanel parentComposite, Element widgetElement) {
-			
-			//Create a new textarea
-			JTextField widget  = new JTextField();
 
-			//Set the text of the textArea
-			widget.setText(widgetElement.getTextContent());
-			
-			//Add the scrollpane to the parentComposite
-			parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
-			
-			//Add event listeners for the textarea
-			for (String listenerType : Globals.listenerTypesArray) {
-				//Add a listener for listenerType if specified
-				if (widgetElement.getAttributeNode(listenerType) != null) {
-					WidgetOps.addMethodListener(listenerType, widget, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
-				}
 
+	/**
+	 * Creates a Basic JTextField
+	 * @param parentComposite The parent JPanel to place the new JTextField in.
+	 * @param widgetElement The element to get the widget from.
+	 */
+	public static void createTextField(JPanel parentComposite, Element widgetElement) {
+
+		//Create a new textarea
+		JTextField widget  = new JTextField();
+
+		//Set the text of the textArea
+		widget.setText(widgetElement.getTextContent());
+
+		//Add the scrollpane to the parentComposite
+		parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
+
+		//Add event listeners for the textarea
+		for (String listenerType : Globals.listenerTypesArray) {
+			//Add a listener for listenerType if specified
+			if (widgetElement.getAttributeNode(listenerType) != null) {
+				WidgetOps.addMethodListener(listenerType, widget, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
 			}
-			
-			//Add the widget to the maps
-			WidgetOps.addWidgetToMaps(widgetElement, widget, engine);
+
 		}
-	
+
+		//Add the widget to the maps
+		WidgetOps.addWidgetToMaps(widgetElement, widget, engine);
+	}
+
 }
