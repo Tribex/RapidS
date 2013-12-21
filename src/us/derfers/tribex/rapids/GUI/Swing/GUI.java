@@ -1,4 +1,4 @@
-package us.derfers.tribex.rapids.GUI;
+package us.derfers.tribex.rapids.GUI.Swing;
 
 import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.xml.parsers.DocumentBuilder;
@@ -27,17 +28,25 @@ import us.derfers.tribex.rapids.ScriptEngine;
 import us.derfers.tribex.rapids.Utilities;
 import us.derfers.tribex.rapids.parsers.CSSParser;
 
-public class GUI_Swing {
+public class GUI {
 
 	//Constants that need to be defined to keep the GUI in one frame system.
+	/** The Main Window. Needs to be made more modular to support opening new windows.*/
 	private static JFrame window = new JFrame();
+	
+	/** The Main Panel.  Will be set to window.getContentPane() */
 	private static JPanel windowPanel = new JPanel();
 
-	//Stylesheet information
-	
-	//CSS Listener types
 
-
+	/**
+	 * Starts the JFrame, sets a GridBagLayout TODO: allow layouts to be configurable, Sets the Window Title, 
+	 * loads Styles, and runs loadInComposite to load widgets.
+	 * 
+	 * @param filePath The path of the file to load from.
+	 * @param engine The JavaScript engine to run scripts in.
+	 * @param parent Optional parent JFrame or Composite. Will be elaborated on soon.
+	 * @param clearWidgets Wether or not to clear all widgets out of the parent before loading more into it.
+	 */
 	public void loadGUI(String filePath, ScriptEngine engine, Object parent, Boolean clearWidgets) {
 		//XXX: Initialization :XXX\\
 		//Create ParentComposite variable
@@ -128,7 +137,7 @@ public class GUI_Swing {
 
 		Main.loader.XMLWidgets.put("__WINDOW__", shellMap);
 
-		//Loading the JS must be done ABSOLUTELY LAST before the open call, or some properties will be missed.
+		//Loading the JS must be done ABSOLUTELY LAST before the setVisible() call, or some properties will be missed.
 		Main.loader.loadJS(filePath, engine);
 
 		//Open the window
@@ -137,12 +146,15 @@ public class GUI_Swing {
 		//XXX: END WIDGET CREATION :XXX\\	
 	}
 
-	//TODO: Comment
-	private void loadInComposite(JPanel parentComposite, Node node, ScriptEngine engine) {
+	/**
+	 * Loads all XML widgets into the parent composite.
+	 * @param parentComposite A JPanel, at the moment, only the window.getContentPane() really works
+	 * @param node The body or any other composite node.
+	 * @param engine The JavaScript engine
+	 */
+	public static void loadInComposite(JPanel parentComposite, Node node, ScriptEngine engine) {
 
-		//XXX: BODY : XXX\\
-
-		//Get Widgets from the Body Element
+		//Get Widgets from the parent Element
 		NodeList bodyElementList = node.getChildNodes();
 		//Loop through all children of the root element.
 		for (int counter=0; counter < bodyElementList.getLength(); counter++) {
@@ -155,35 +167,45 @@ public class GUI_Swing {
 				//Load all link tags
 				if (widgetElement.getNodeName().equals("link")) {
 					if (widgetElement.getAttributeNode("href") != null) {
-						Main.loader.loadAll((widgetElement.getAttributeNode("href").getNodeValue()), parentComposite, false, engine);
+						Main.loader.loadAll((widgetElement.getAttributeNode("href").getNodeValue()), parentComposite, engine);
 
 					} else {
 						Utilities.showError("Warning: <link> tags must contain a href attribute.");
 					}
 
 				//Being loading widgets TODO: Add more widget types.
+				} else if (widgetElement.getNodeName().equals("composite")) {
+					Widgets.createComposite(parentComposite, widgetElement);
+
 				} else if (widgetElement.getNodeName().equals("label")) {
-					Widgets_Swing.createLabel(parentComposite, widgetElement);
+					Widgets.createLabel(parentComposite, widgetElement);
 
 				} else if (widgetElement.getNodeName().equals("button")) {
-					Widgets_Swing.createButton(parentComposite, widgetElement);
+					Widgets.createButton(parentComposite, widgetElement);
 
 				} else if (widgetElement.getNodeName().equals("spinner")) {
-					Widgets_Swing.createSpinner(parentComposite, widgetElement);
+					Widgets.createSpinner(parentComposite, widgetElement);
 
 				} else if (widgetElement.getNodeName().equals("textarea")) {
-					Widgets_Swing.createTextArea(parentComposite, widgetElement);
+					Widgets.createTextArea(parentComposite, widgetElement);
 					
 				} else if (widgetElement.getNodeName().equals("textfield")) {
-					Widgets_Swing.createTextField(parentComposite, widgetElement);
+					Widgets.createTextField(parentComposite, widgetElement);
+					
 				}
 
 			}
 
 		}
+		for (Map <String, Object> item : Main.loader.XMLWidgets.values()) {
+			
+			//I know this is confusing, working on splitting it up. TODO: Split this up to make it readable
+			item.put((String) item.get("id"), (Object) WidgetOps.getWidgetStyles((JComponent) item.get(item.get("id")), (String) item.get("id")));
+		}
+		
 		//position and draw the widgets
-		//parentComposite.doLayout();
-		//window.pack();
+		parentComposite.doLayout();
+		window.pack();
 
 	}
 
@@ -226,7 +248,7 @@ public class GUI_Swing {
 			} else {
 				//Attempt to load as a .rsm file
 				Main.loader.loadAll((linkElement.getAttributeNode("href").getNodeValue()), 
-						Main.loader.XMLWidgets.get("__WINDOW__").get("__WINDOW__"), false, engine);
+						Main.loader.XMLWidgets.get("__WINDOW__").get("__WINDOW__"), engine);
 			}
 
 		} else {

@@ -16,23 +16,27 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import us.derfers.tribex.rapids.GUI.GUI_Swing;
+import us.derfers.tribex.rapids.GUI.Swing.GUI;
 import us.derfers.tribex.rapids.jvStdLib.Sys;
 
 public class Loader {
 	//Javascript engine initialization
+	/** The initial JavaScript engine */
 	public ScriptEngine engine = new ScriptEngine();
 
-	//What the widgets are stored in when loaded
+	/**
+	 * Where widget variables are stored.  Format: WIDGETID {WIDGETID {WIDGET}, class {CLASSNAME}, And so on for the rest of the parameters}
+	 */
 	public Map<String, Map<String, Object>> XMLWidgets = new HashMap<String, Map<String, Object>>();
 
-	//Counter for ID-less XML Elements
+	/** Counts Taken ID's for ID-less widgets */
 	public Integer XMLWidgets__NO__ID = 0;
 
-
-
-	//XXX: Overload for maintaining a ScriptEngine :XXX\\
-	public void loadAll(String filePath, Boolean clearWidgets) {
+	/**
+	 * The startup method. Starts the JavaScript engine and runs loadAll.
+	 * @param filePath The file to load initially.
+	 */
+	public void startLoader(String filePath) {
 		//JavaScript Engine Initialization
 		//---------------------------------------------------------------------------//
 		//Start Engine:
@@ -61,13 +65,18 @@ public class Loader {
 
 		//Begin loading the XML file(s)
 		debugMsg("Loading "+filePath+"", 2);
-		loadAll(filePath, null, clearWidgets, engine);
+		loadAll(filePath, null, engine);
 	}
 
-	//XXX: Function for determining GUI type and loading appropriate GUI engine :XXX\\
-	public void loadAll(String filePath, final Object parent, Boolean clearWidgets, ScriptEngine engine) {
+	/**
+	 * Starts loading the GUI. Sets Swing look and feel, then loads the GUI using the GUI_Swing object.
+	 * @param filePath The path of the .rsm file to load UI elements from.
+	 * @param parent The (optional) parent Object, Eg, a JFrame or JPanel.
+	 * @param engine The JavaScript engine to pass to GUI_Swing
+	 */
+	public void loadAll(String filePath, final Object parent, ScriptEngine engine) {
 
-		//Attempt to load .lcm file filePath
+		//Attempt to load .rsm file filePath
 		try {
 			File file = new File(filePath);
 
@@ -125,7 +134,7 @@ public class Loader {
 
 
 					//Create a new GUI instance and initialize it.
-					GUI_Swing GUI = new GUI_Swing();
+					GUI GUI = new GUI();
 					GUI.loadGUI(filePath, engine, parent, false);
 
 				}
@@ -145,6 +154,12 @@ public class Loader {
 
 	}
 
+	/**
+	 * Discovers any script tags in the document and sends them to JSIterator to be parsed.
+	 * @param filePath The file containing script(s) to run.
+	 * @param engine the JavaScript engine to load the script tags into.
+	 * @return Boolean telling whether or not it completed
+	 */
 	public boolean loadJS(String filePath, ScriptEngine engine) {
 		Utilities.debugMsg("Loading JavaScript from <script> tags.");
 		//XXX: JAVASCRIPT HANDLING SECTION :XXX\\
@@ -176,6 +191,11 @@ public class Loader {
 		}
 	}
 
+	/**
+	 * Iterates through a nodelist of script tags and parses them into the JavaScript engine.
+	 * @param scriptNodes A NodeList of all script tags.
+	 * @param engine The engine to run the scripts in.
+	 */
 	private void JSIterator(NodeList scriptNodes, ScriptEngine engine) {
 		for (int i=0; i < scriptNodes.getLength(); i++) {
 			//Get the specific <script> tag for this loop

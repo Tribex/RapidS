@@ -3,11 +3,6 @@
 <title>RapidS: Test init file</title>
 <link rel="stylesheet" href="styles.css"></link>
 <style type="text/css">
-#body {
-	margin-left: 20px;
-	margin-right: 10px;
-	margin-bottom: 2800px;
-}
 
 #clickableButton {
 	margin-left: 20;
@@ -17,6 +12,7 @@
 	anchor: west;
 	padding-y: 40;
 	padding-x: 20;
+	z-index: 1;
 }
 
 #onButton {
@@ -24,6 +20,7 @@
 	anchor: west;
 	fill: none;
 	foreground-color: #222222;
+	z-index: 0;
 }
 
 .standardPosition {
@@ -64,6 +61,13 @@ button {
 	margin-left: 20;
 }
 
+#tt {
+fill: BOTH;
+anchor: CENTER;
+border: 2 #990000;
+background-color: #0000FF;
+}
+
 </style>
 </head>
 
@@ -72,15 +76,13 @@ button {
 		require(java.lang.System);
 		require(java.lang.Class);
 		require(Packages.us.derfers.tribex.rapids);
-
-		rapids.Utilities.showError("TEST");
 		
-		//Button Clicking System
+		//Button Clicking System 
 			function runBtnEvt(text, message) {
 				var label_list = Window.getElementsByClass("changesOnHover");
 				for (index = 0; index &lt; label_list.length; ++index) {
 					Window.setTitle(text);
-					label_list[index].setText(text+" from "+message);
+					label_list[index].setText(text+" - "+message);
 				}
 			}
 
@@ -106,22 +108,23 @@ button {
 	<label class="changesOnHover" onmouseup="runBtnEvt('Click', 'null id')"
 		onmouseover="runBtnEvt('Mouse Over', 0)"
 		onmouseout="runBtnEvt('Mouse Out', 0)">label changes on	mouseover, mouseout, and click.</label>
-		
+	<composite id="tt">
 	<label id="onButton" onclick="changeBackground('onButton', 'click')"
 		onmouseover="changeBackground('onButton', 'over')"
 		onmouseout="changeBackground('onButton', 'out')">Clickable label on Button</label>
 		
-	<button id="clickableButton" class="changesOnHover" onclick="runBtnEvt('Click', $clickableButton.getName())"
+	<composite><button id="clickableButton" class="changesOnHover" onclick="runBtnEvt('Click', $clickableButton.getName())"
 		onmouseover="runBtnEvt('Mouse Over', $clickableButton.getName())"
 		onmouseout="runBtnEvt('Mouse Out', $clickableButton.getName())">
 		Changes the status of the label.</button>
-		
 	<spinner id="spinner" value="10" max="20" min="-1"
-		onselection="runBtnEvt($spinner.getValue(), $spinner.getName())" />
+		onselection="runBtnEvt($spinner.getValue(), $spinner.getName())" /></composite>
 	
 	<textfield class="standardPosition">Enter a single line of text here!</textfield>
 	
 	<textarea id="rightSide">Enter multiple lines of text here!</textarea>
+		<label id="b">TEST</label>
+	</composite>
 
 </body>
 

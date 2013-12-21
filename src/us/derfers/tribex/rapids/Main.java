@@ -77,13 +77,18 @@ public class Main {
 		
 	}
 	
+	/**
+	 * Runs the loadAll method of loader and sets the selected Current working directory.
+	 * @param fileName The name of the file to be run, normally init.rsm
+	 * @param dynamic Whether or not to use the Java Current Working Directory instead of the location of the Jarfile as the Current Working Directory.
+	 */
 	private static void runLoader(String fileName, Boolean dynamic) {
 		if (dynamic == true) {
 			Globals.selCWD = new File(".").getAbsolutePath().replaceAll(".", "");
 		} else {
 			Globals.selCWD = Utilities.getJarDirectory();
 		}
-		loader.loadAll(fileName, false);
+		loader.startLoader(fileName);
 	}
 
 }

@@ -1,4 +1,4 @@
-package us.derfers.tribex.rapids.GUI;
+package us.derfers.tribex.rapids.GUI.Swing;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -11,7 +11,7 @@ import org.w3c.dom.Element;
 import us.derfers.tribex.rapids.Utilities;
 import us.derfers.tribex.rapids.Globals;
 
-public class Layouts_Swing {
+public class Layouts {
 
 	public static GridBagConstraints getWidgetConstraint(Element widgetElement) {
 		//Default Styles for widgetConstraint
