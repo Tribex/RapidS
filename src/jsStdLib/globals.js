@@ -1,1 +1,0 @@
-var getElementById = Window.getElementById;

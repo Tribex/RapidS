@@ -3,6 +3,7 @@ import static us.derfers.tribex.rapids.Utilities.debugMsg;
 
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,19 +49,12 @@ public class Loader {
 		//Start Engine:
 		debugMsg("JavaScript Engine Started", 4);
 
-		//Import standard functions:
+		//Import standard functions. Runs before the file loads
 		try {
-			//Import 
+			//Import the standard JavaScript library (Java section)
 			engine.eval("importPackage(Packages.us.derfers.tribex.rapids.jvStdLib);");
 
 			debugMsg("Imported JavaScript Standard Library (Java-based)", 3);
-
-			//Loop through the JavaScript standard library for JavaScript and import all .js files.
-			for (String toImport : Utilities.listFilesInJar("jsStdLib")) {
-				engine.eval(new InputStreamReader(Main.class.getResourceAsStream("/jsStdLib/"+toImport)));
-				debugMsg("Imported JavaScript File: "+toImport, 4);
-			}
-			debugMsg("Imported JavaScript Standard Library (JavaScript-based)", 3);
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -69,9 +63,24 @@ public class Loader {
 			System.exit(1);
 		}
 
-		//Begin loading the XML file(s)
-		debugMsg("Loading "+filePath+"", 2);
-		loadAll(filePath, null, engine);
+
+		//XXX: Loader section :XXX\\
+			//PRELOAD:
+				//Loop through the JavaScript standard library for JavaScript and import all .js files in the preload folder.
+				recursiveLoadJS(engine, "jsStdLib/preload");
+				debugMsg("Imported JavaScript Standard Library (PreLoad)", 3);
+
+			//LOAD:
+				//Begin loading the XML file(s)
+				debugMsg("Loading "+filePath+"", 2);
+				loadAll(filePath, null, engine);
+				
+			//POSTLOAD:
+				//Loop through the JavaScript standard library for JavaScript and import all .js files in the postload folder.
+				recursiveLoadJS(engine, "jsStdLib/postload");
+				debugMsg("Imported JavaScript Standard Library (PostLoad)", 3);
+				
+		//XXX: End loader :XXX\\
 	}
 
 	/**
@@ -221,6 +230,27 @@ public class Loader {
 			}
 		}
 	}
-
-
+	
+	/**
+	 * Loads all JavaScript files under 'folder' into 'engine'
+	 * @param engine The ScriptEngine to run all files in folder in.
+	 * @param folder The folder to load .js files from.
+	 */
+	private static void recursiveLoadJS(ScriptEngine engine, String folder) {
+		//Loop through the files in the folder
+		for (String toImport : Utilities.listFilesInJar(folder)) {
+			
+			//If toImport does not have a '.' in it...
+			if (!toImport.contains(".")) {
+				//Attempt to recursively load it as a folder.
+				recursiveLoadJS(engine, folder+"/"+toImport);
+				
+			} else {
+				//Run the file
+				engine.eval(new InputStreamReader(Main.class.getResourceAsStream("/"+folder+"/"+toImport)));
+				debugMsg("Imported JavaScript File: "+toImport, 4);
+				
+			}
+		}
+	}
 }

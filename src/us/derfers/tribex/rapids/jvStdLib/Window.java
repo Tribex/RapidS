@@ -55,7 +55,7 @@ public class Window {
 	//XXX: WINDOW OPERATIONS :XXX\\
 
 	/**An easy reference to the top-level JFrame*/
-	public static javax.swing.JFrame window = (javax.swing.JFrame) Main.loader.XMLWidgets.get("__WINDOW__").get("__WINDOW__");
+	public static javax.swing.JFrame shell = (javax.swing.JFrame) Main.loader.XMLWidgets.get("__WINDOW__").get("__WINDOW__");
 
 
 	//An easy static reference to the JavaScript engine.

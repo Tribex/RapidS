@@ -65,26 +65,26 @@ button {
 
 <script type="text/javascript">
 		require(java.awt.Color);
-		require(java.lang.System);
 		require(java.lang.Class);
 		require(Packages.us.derfers.tribex.rapids);
 		
+		console.log("TEST");
 		//Button Clicking System 
 			function runBtnEvt(text, message) {
-				var label_list = Window.getElementsByClass("changesOnHover");
+				var label_list = window.getElementsByClass("changesOnHover");
 				for (index = 0; index &lt; label_list.length; ++index) {
-					Window.setTitle(text);
+					window.shell.setTitle(text);
 					label_list[index].setText(text+" - "+message);
 				}
 			}
 
 		function changeBackground(widget, state) {
-				var widgetID = getElementById(widget);
+				var widgetID = window.getElementById(widget);
 				var color;
 				if (state == 'click') {
 					var color = Color.decode("#666666");
 					
-					Window.setTimeout('changeBackground("clickLabel", "over")', 200);
+					window.setTimeout('changeBackground("clickLabel", "over")', 200);
 					
 				} else if (state == 'over') {
 					var color = Color.decode("#EEEEEE");
