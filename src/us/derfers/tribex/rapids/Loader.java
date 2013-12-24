@@ -65,6 +65,11 @@ public class Loader {
 
 
 		//XXX: Loader section :XXX\\
+			//JAVASCRIPT INITIALIZATION:
+				//Run JavaScript that must be run before preload. Mainly provides require() and similar routines.
+				recursiveLoadJS(engine, "jsStdLib/init");
+				debugMsg("Imported JavaScript Initialization Library (Init)", 4);
+				
 			//PRELOAD:
 				//Loop through the JavaScript standard library for JavaScript and import all .js files in the preload folder.
 				recursiveLoadJS(engine, "jsStdLib/preload");
@@ -240,12 +245,12 @@ public class Loader {
 		//Loop through the files in the folder
 		for (String toImport : Utilities.listFilesInJar(folder)) {
 			
-			//If toImport does not have a '.' in it...
+			//If toImport does not have a '.' in it, assume it is a folder
 			if (!toImport.contains(".")) {
 				//Attempt to recursively load it as a folder.
 				recursiveLoadJS(engine, folder+"/"+toImport);
 				
-			} else {
+			} else if (toImport.endsWith(".js")) {
 				//Run the file
 				engine.eval(new InputStreamReader(Main.class.getResourceAsStream("/"+folder+"/"+toImport)));
 				debugMsg("Imported JavaScript File: "+toImport, 4);

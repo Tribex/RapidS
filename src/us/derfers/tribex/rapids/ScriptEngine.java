@@ -90,9 +90,26 @@ public class ScriptEngine {
 		//Set optimization to max.
 		jsContext.setOptimizationLevel(2);
 		
-		//Create a new function with the values passed to call.
-		Function fct = (Function)scope.get(func, scope);
+		//Split the function into objects.
+		String[] splitObjs = func.split("\\.");
 		
+		//If func is referencing an object,
+		Scriptable object = null;
+		
+		//If there is a reference to an object
+		if (splitObjs.length > 0) {
+			object = (Scriptable) scope.get(splitObjs[0], scope);
+		}
+		//Create a new function with the values passed to call.
+		Function fct;
+		
+		if (object != null) {
+			//Get and run the function from the object
+			fct = (Function)object.get(splitObjs[1], object);
+		} else {
+			//Get and run the function from the global scope
+			fct = (Function)scope.get(func, scope);
+		}
 		//Call the function with the arguments passed to call.
 	    Object result = fct.call(jsContext, scope, scope, args);
 	    

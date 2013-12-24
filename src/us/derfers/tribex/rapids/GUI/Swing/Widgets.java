@@ -24,6 +24,7 @@ import us.derfers.tribex.rapids.GUI.Swing.WidgetOps;
  * Provides methods for creating widgets inside composites. 
  * Might be better written as seperate classes that extend their respective widgets
  * @author TribeX
+ * @deprecated In favor of a widgets.js based solution. see createButton for an example.
  */
 public class Widgets {
 	//TODO: Comment widgets!!!!!!!!!		
@@ -68,27 +69,8 @@ public class Widgets {
 	 * @param parentComposite The parent JPanel to place the new JButton in.
 	 * @param widgetElement The element to get the widget from.
 	 */
-	/*public static void createButton(JPanel parentComposite, Element widgetElement) {
-		JButton widget = new JButton();
-		parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
-
-		//Set button text with the content of the <button></button> tags
-		widget.setText(widgetElement.getTextContent());
-
-
-		//Iterate through listener types and set listeners if they exist
-		for (String listenerType : Globals.listenerTypesArray) {
-			//Add a listener for listenerType if specified
-			if (widgetElement.getAttributeNode(listenerType) != null) {
-				WidgetOps.addMethodListener(listenerType, widget, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
-			}
-
-		}
-		WidgetOps.addWidgetToMaps(widgetElement, widget, engine);
-	}*/
 	public static void createButton(JPanel parentComposite, Element widgetElement) {
-		
-		engine.call("createButton", parentComposite, widgetElement, engine);
+		engine.call("widgets.button", parentComposite, widgetElement, engine);
 	}
 
 
