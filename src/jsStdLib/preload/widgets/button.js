@@ -1,15 +1,9 @@
-require(Packages.javax.swing.JButton);
+importClass(Packages.javax.swing.JButton);
 
-require(Packages.org.w3c.dom.Element);
-require(Packages.org.w3c.dom.Node);
 
-require(Packages.us.derfers.tribex.rapids.Globals);
-require(Packages.us.derfers.tribex.rapids.Main);
-require(Packages.us.derfers.tribex.rapids.ScriptEngine);
-require(Packages.us.derfers.tribex.rapids.GUI.Swing.Layouts);
-require(Packages.us.derfers.tribex.rapids.GUI.Swing.WidgetOps);
 
-function createButton(parentComposite, widgetElement, engine) {
+
+widgets.addWidget("button", function (parentComposite, widgetElement, engine) {
 		var widget = new JButton();
 		parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
@@ -26,4 +20,4 @@ function createButton(parentComposite, widgetElement, engine) {
 
 		}
 		WidgetOps.addWidgetToMaps(widgetElement, widget, engine);
-}
+});

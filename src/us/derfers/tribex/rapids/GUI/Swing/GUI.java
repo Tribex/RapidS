@@ -186,7 +186,8 @@ public class GUI {
 					Widgets.createLabel(parentComposite, widgetElement);
 
 				} else if (widgetElement.getNodeName().equals("button")) {
-					Widgets.createButton(parentComposite, widgetElement);
+					//MAJOR TODO: Make all calls like this one, move this if-else section to widgets.js
+					engine.call("widgets.button", parentComposite, widgetElement, engine);
 
 				} else if (widgetElement.getNodeName().equals("spinner")) {
 					Widgets.createSpinner(parentComposite, widgetElement);

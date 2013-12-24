@@ -1,0 +1,1 @@
+JavaScript in this package is run after the GUI loads and displays.

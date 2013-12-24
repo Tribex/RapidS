@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 
@@ -66,13 +67,21 @@ public class Utilities {
 		if (en.hasMoreElements()) {
 		    URL metaInf=en.nextElement();
 		    File fileMetaInf=new File(metaInf.toURI());
-
-		    for (String item : fileMetaInf.list()) {
+		    
+		    //List the files
+		    String[] sortedFiles = fileMetaInf.list();
+		    
+		    //Sort the files
+		    Arrays.sort(sortedFiles);
+		    
+		    //Iterate through the files.
+		    for (String item : sortedFiles) {
 		    	filenames.add(item);
 		    }
 		} 
 
 		return filenames;
+		
 		} catch (Exception e) {
 			showError("Error getting file list (inside jar) from "+folder+"\n\n"
 					+ "Does "+folder+" exist inside the jarfile?");
