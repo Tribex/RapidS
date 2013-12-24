@@ -68,7 +68,7 @@ public class Widgets {
 	 * @param parentComposite The parent JPanel to place the new JButton in.
 	 * @param widgetElement The element to get the widget from.
 	 */
-	public static void createButton(JPanel parentComposite, Element widgetElement) {
+	/*public static void createButton(JPanel parentComposite, Element widgetElement) {
 		JButton widget = new JButton();
 		parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
@@ -85,6 +85,10 @@ public class Widgets {
 
 		}
 		WidgetOps.addWidgetToMaps(widgetElement, widget, engine);
+	}*/
+	public static void createButton(JPanel parentComposite, Element widgetElement) {
+		
+		engine.call("createButton", parentComposite, widgetElement, engine);
 	}
 
 

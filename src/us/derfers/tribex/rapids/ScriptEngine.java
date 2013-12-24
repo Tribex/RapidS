@@ -18,6 +18,7 @@ public class ScriptEngine {
 	public ScriptEngine() {
 		//Create the context
 		Context jsContext = Context.enter();
+		jsContext.setOptimizationLevel(2);
 		
 		//Populate the scope with importertoplevel TODO: Replace this
 		scope = new org.mozilla.javascript.ImporterTopLevel(jsContext);
@@ -32,6 +33,7 @@ public class ScriptEngine {
 	public void eval(String script) {
 		//Create the thread's context
 		Context jsContext = Context.enter();
+		jsContext.setOptimizationLevel(2);
 
 		//Compile the script
 		Script scriptjs = jsContext.compileString(script, "RapidS Script", 1, null);
@@ -49,6 +51,7 @@ public class ScriptEngine {
 	 */
 	public void eval(Reader script) {
 		Context jsContext = Context.enter();
+		jsContext.setOptimizationLevel(2);
 
 		/*A Javascript JSON Object*/
 		Script scriptjs = null;
@@ -70,10 +73,31 @@ public class ScriptEngine {
 	 * @param property The value of the variable to insert.
 	 */
 	public void put(String var, Object property) {
-		Context.enter();
+		Context.enter().setOptimizationLevel(2);
 
 		ScriptableObject.putProperty(scope, var, property);
 		Context.exit();
+	}
+	
+	/**
+	 * Call a JavaScript function from java with arguments.
+	 * @param func The function to call.
+	 * @param args Varargs, the arguments to pass to the function.
+	 */
+	public Object call(String func, Object... args) {
+		//Enter the context
+		Context jsContext = Context.enter();
+		//Set optimization to max.
+		jsContext.setOptimizationLevel(2);
+		
+		//Create a new function with the values passed to call.
+		Function fct = (Function)scope.get(func, scope);
+		
+		//Call the function with the arguments passed to call.
+	    Object result = fct.call(jsContext, scope, scope, args);
+	    
+		Context.exit();
+		return result;
 	}
 
 }
