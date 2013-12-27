@@ -1,6 +1,8 @@
 package us.derfers.tribex.rapids;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.mozilla.javascript.*;
 
@@ -81,40 +83,76 @@ public class ScriptEngine {
 	
 	/**
 	 * Call a JavaScript function from java with arguments.
-	 * @param func The function to call.
+	 * @param funcPath The function to call.
 	 * @param args Varargs, the arguments to pass to the function.
 	 */
-	public Object call(String func, Object... args) {
+	//TODO: Make this flexible for multiple layers of objects.
+	public Object call(String funcPath, Object... args) {
 		//Enter the context
 		Context jsContext = Context.enter();
 		//Set optimization to max.
 		jsContext.setOptimizationLevel(2);
 		
 		//Split the function into objects.
-		String[] splitObjs = func.split("\\.");
+		String[] splitObjs = funcPath.split("\\.");
+
+		Scriptable parentScope = scope;
 		
-		//If func is referencing an object,
-		Scriptable object = null;
-		
-		//If there is a reference to an object
-		if (splitObjs.length > 0) {
-			object = (Scriptable) scope.get(splitObjs[0], scope);
+		//If the function is not global
+		for (int i = 0; i< splitObjs.length-1; i++) {
+			//Set the parent object
+			parentScope = (Scriptable) parentScope.get(splitObjs[i], scope);
 		}
 		//Create a new function with the values passed to call.
 		Function fct;
 		
-		if (object != null) {
-			//Get and run the function from the object
-			fct = (Function)object.get(splitObjs[1], object);
-		} else {
-			//Get and run the function from the global scope
-			fct = (Function)scope.get(func, scope);
-		}
+		//Get and run the function from the global scope
+		fct = (Function)parentScope.get(splitObjs[splitObjs.length-1], parentScope);
+		
 		//Call the function with the arguments passed to call.
-	    Object result = fct.call(jsContext, scope, scope, args);
+	    Object result = fct.call(jsContext, parentScope, parentScope, args);
 	    
 		Context.exit();
 		return result;
+	}
+	
+	/** Retreives an object from JavaScript (top level scope) for use in Java
+	 * @param var A string repressenting the name of the object in JavaScript
+	 * @return The value of the variable
+	 */
+	public Object get(String var) {
+		return get(var, scope);
+	}
+	
+	/** Retreives an object from JavaScript for use in Java
+	 * @param var A string repressenting the name of the object in JavaScript
+	 * @param scope The scope to get the variable from
+	 * @return The value of the variable
+	 */
+	public Object get(String var, Object inscope) {
+		
+		if (!(inscope instanceof Scriptable)) {
+			inscope = (Scriptable) get(inscope.toString());
+		}
+		//Enter the context
+		Context jsContext = Context.enter();
+		//Set optimization to max.
+		jsContext.setOptimizationLevel(2);
+
+		Object toReturn = ((Scriptable) inscope).get(var, (Scriptable) scope);
+		
+		Context.exit();
+		return toReturn;
+		
+	}
+	
+	/** Retreives an object as a HashMap from JavaScript for use in Java
+	 * @param var A string repressenting the name of the object in JavaScript
+	 * @param scope The scope to get the variable from
+	 * @return The value of the variable
+	 */
+	public HashMap<String, Object> getMap(String var, Object scope) {
+		return new HashMap<String, Object>((Map<String, Object>) get(var, scope));
 	}
 
 }
