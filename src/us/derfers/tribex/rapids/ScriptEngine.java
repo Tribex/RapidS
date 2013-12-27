@@ -1,6 +1,8 @@
 package us.derfers.tribex.rapids;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.mozilla.javascript.*;
 
@@ -84,6 +86,7 @@ public class ScriptEngine {
 	 * @param func The function to call.
 	 * @param args Varargs, the arguments to pass to the function.
 	 */
+	//TODO: Make this flexible for multiple layers of objects.
 	public Object call(String func, Object... args) {
 		//Enter the context
 		Context jsContext = Context.enter();
@@ -115,6 +118,45 @@ public class ScriptEngine {
 	    
 		Context.exit();
 		return result;
+	}
+	
+	/** Retreives an object from JavaScript (top level scope) for use in Java
+	 * @param var A string repressenting the name of the object in JavaScript
+	 * @return The value of the variable
+	 */
+	public Object get(String var) {
+		return get(var, scope);
+	}
+	
+	/** Retreives an object from JavaScript for use in Java
+	 * @param var A string repressenting the name of the object in JavaScript
+	 * @param scope The scope to get the variable from
+	 * @return The value of the variable
+	 */
+	public Object get(String var, Object inscope) {
+		
+		if (!(inscope instanceof Scriptable)) {
+			inscope = (Scriptable) get(inscope.toString());
+		}
+		//Enter the context
+		Context jsContext = Context.enter();
+		//Set optimization to max.
+		jsContext.setOptimizationLevel(2);
+
+		Object toReturn = ((Scriptable) inscope).get(var, (Scriptable) scope);
+		
+		Context.exit();
+		return toReturn;
+		
+	}
+	
+	/** Retreives an object as a HashMap from JavaScript for use in Java
+	 * @param var A string repressenting the name of the object in JavaScript
+	 * @param scope The scope to get the variable from
+	 * @return The value of the variable
+	 */
+	public HashMap<String, Object> getMap(String var, Object scope) {
+		return new HashMap<String, Object>((Map<String, Object>) get(var, scope));
 	}
 
 }

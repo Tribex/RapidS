@@ -9,9 +9,17 @@ importClass(Packages.us.derfers.tribex.rapids.GUI.Swing.Layouts);
 importClass(Packages.us.derfers.tribex.rapids.GUI.Swing.WidgetOps);
 
 var widgets = {
-	
-	//Used to add a new widget
+	widgetTypes : {
+		
+	},
+		
+	//Used to add a new widget to the GUI
 	addWidget : function(name, func) {
 		this[name] = func;
-	}
+	},
+
+	//Used to register a new widget type.
+	registerWidget : function (name, element, description, func) {
+		this.widgetTypes[name] = {element : element, description : description, loader : func} 
+	} ,
 }

@@ -16,6 +16,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.io.FileUtils;
+import org.mozilla.javascript.Scriptable;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -177,9 +178,15 @@ public class GUI {
 					} else {
 						Utilities.showError("Warning: <link> tags must contain a href attribute.");
 					}
-
+				} else {
+					HashMap<String, Object> mapParams = engine.getMap("widgetTypes", "widgets");
+					for (String widgetType : mapParams.keySet()) {
+						HashMap<String, Object> widgetDefinition = engine.getMap(widgetType, (Scriptable) engine.get("widgetTypes", "widgets"));
+						System.out.println(widgetDefinition.get("description"));
+					}
+				}
 				//Being loading widgets TODO: Add more widget types.
-				} else if (widgetElement.getNodeName().equals("composite")) {
+				/*} else if (widgetElement.getNodeName().equals("composite")) {
 					Widgets.createComposite(parentComposite, widgetElement);
 
 				} else if (widgetElement.getNodeName().equals("label")) {
@@ -187,7 +194,7 @@ public class GUI {
 
 				} else if (widgetElement.getNodeName().equals("button")) {
 					//MAJOR TODO: Make all calls like this one, move this if-else section to widgets.js
-					engine.call("widgets.button", parentComposite, widgetElement, engine);
+					engine.call("widgets.widgetTypes.button.loader", parentComposite, widgetElement, engine);
 
 				} else if (widgetElement.getNodeName().equals("spinner")) {
 					Widgets.createSpinner(parentComposite, widgetElement);
@@ -198,7 +205,7 @@ public class GUI {
 				} else if (widgetElement.getNodeName().equals("textfield")) {
 					Widgets.createTextField(parentComposite, widgetElement);
 					
-				}
+				}*/
 
 			}
 

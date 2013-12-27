@@ -24,7 +24,7 @@ import us.derfers.tribex.rapids.GUI.Swing.WidgetOps;
  * Provides methods for creating widgets inside composites. 
  * Might be better written as seperate classes that extend their respective widgets
  * @author TribeX
- * @deprecated In favor of a widgets.js based solution. see createButton for an example.
+ * @deprecated In favor of a widgets.js based solution. see createButton src for an example.
  */
 public class Widgets {
 	//TODO: Comment widgets!!!!!!!!!		
