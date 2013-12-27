@@ -25,6 +25,7 @@ import us.derfers.tribex.rapids.Utilities;
 
 /**
  * Provides Swing Widget Operations: Style loading and event listeners
+ * Major TODO: Redesign needed
  * @author TribeX
  *
  */

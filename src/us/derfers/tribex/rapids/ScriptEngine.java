@@ -126,7 +126,7 @@ public class ScriptEngine {
 	
 	/** Retreives an object from JavaScript for use in Java
 	 * @param var A string repressenting the name of the object in JavaScript
-	 * @param scope The scope to get the variable from
+	 * @param inscope The scope to get the variable from
 	 * @return The value of the variable
 	 */
 	public Object get(String var, Object inscope) {
