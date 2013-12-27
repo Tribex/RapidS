@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -130,7 +131,7 @@ public class GUI {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			Utilities.showError("Unable to properly initialize a SWT GUI. \n"+filePath+" may be corrupt or incorrectly formatted.");
+			Utilities.showError("Unable to properly initialize a Swing GUI. \n"+filePath+" may be corrupt or incorrectly formatted.");
 		}
 
 		//Fit the window to the elements in it.
@@ -159,7 +160,16 @@ public class GUI {
 	 * @param engine The JavaScript engine
 	 */
 	public static void loadInComposite(JPanel parentComposite, Node node, ScriptEngine engine) {
-
+		
+		//Create a map of widgetTypes from the JavaScript object widgets.widgetTypes
+		HashMap<String, Object> widgetTypes = engine.getMap("widgetTypes", "widgets");
+		
+		//Create and populate the list of registered widgets
+		ArrayList<String> registeredWidgets = new ArrayList<String>();
+		for (String widgetType : widgetTypes.keySet()) {
+			registeredWidgets.add(widgetType);
+		}
+		
 		//Get Widgets from the parent Element
 		NodeList bodyElementList = node.getChildNodes();
 		//Loop through all children of the root element.
@@ -179,39 +189,17 @@ public class GUI {
 						Utilities.showError("Warning: <link> tags must contain a href attribute.");
 					}
 				} else {
-					HashMap<String, Object> mapParams = engine.getMap("widgetTypes", "widgets");
-					for (String widgetType : mapParams.keySet()) {
-						HashMap<String, Object> widgetDefinition = engine.getMap(widgetType, (Scriptable) engine.get("widgetTypes", "widgets"));
-						System.out.println(widgetDefinition.get("description"));
+					//If this element exists in the list of registered widgets
+					if (registeredWidgets.contains(widgetElement.getNodeName())) {
+						//Run the JavaScript function to draw and display the widget
+						engine.call("widgets.widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, engine);
 					}
 				}
-				//Being loading widgets TODO: Add more widget types.
-				/*} else if (widgetElement.getNodeName().equals("composite")) {
-					Widgets.createComposite(parentComposite, widgetElement);
-
-				} else if (widgetElement.getNodeName().equals("label")) {
-					Widgets.createLabel(parentComposite, widgetElement);
-
-				} else if (widgetElement.getNodeName().equals("button")) {
-					//MAJOR TODO: Make all calls like this one, move this if-else section to widgets.js
-					engine.call("widgets.widgetTypes.button.loader", parentComposite, widgetElement, engine);
-
-				} else if (widgetElement.getNodeName().equals("spinner")) {
-					Widgets.createSpinner(parentComposite, widgetElement);
-
-				} else if (widgetElement.getNodeName().equals("textarea")) {
-					Widgets.createTextArea(parentComposite, widgetElement);
-					
-				} else if (widgetElement.getNodeName().equals("textfield")) {
-					Widgets.createTextField(parentComposite, widgetElement);
-					
-				}*/
-
 			}
 
 		}
 		for (Map <String, Object> item : Main.loader.XMLWidgets.values()) {
-			
+	
 			//I know this is confusing, working on splitting it up. TODO: Split this up to make it readable
 			item.put((String) item.get("id"), (Object) WidgetOps.getWidgetStyles((JComponent) item.get(item.get("id")), (String) item.get("id")));
 		}

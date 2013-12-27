@@ -37,31 +37,7 @@ public class Widgets {
 	 * @param parentComposite The parent JPanel to place the new JPanel in.
 	 * @param widgetElement The element to get the widget from.
 	 */
-	public static void createComposite(JPanel parentComposite, Element widgetElement) {
-		//Create a new Panel
-		JPanel widget = new JPanel();
-
-		//Set the layout of the panel to GridBagLayout TODO: Add more layout types
-		widget.setLayout(new GridBagLayout());
-
-		//Add the panel to the window with all of its constraints.
-		parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
-
-		//Load all elements inside of the composite/widget.  INFINITE NESTING!
-		GUI.loadInComposite(widget, (Node) widgetElement, engine);
-
-		//Iterate through listener types and set listeners if they exist
-		for (String listenerType : Globals.listenerTypesArray) {
-			//Add a listener for listenerType if specified
-			if (widgetElement.getAttributeNode(listenerType) != null) {
-				WidgetOps.addMethodListener(listenerType, widget, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
-			}
-
-		}
-
-		//Add the panel to the maps. child widgets will still be toplevel.  There is no concept of a widget 'scope' TODO?
-		WidgetOps.addWidgetToMaps(widgetElement, widget, engine);
-	}
+	
 
 
 	/**
@@ -179,7 +155,6 @@ public class Widgets {
 		//Set the text of the textArea
 		widget.setText(widgetElement.getTextContent());
 
-		//Add the scrollpane to the parentComposite
 		parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
 		//Add event listeners for the textarea
