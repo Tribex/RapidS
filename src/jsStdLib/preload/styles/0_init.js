@@ -4,6 +4,5 @@
  */
 
 var styles = {
-		
-		registerStyle : function();
-}
+		registerStyle : function(){},
+};
