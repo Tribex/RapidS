@@ -23,9 +23,7 @@
 
 .standardPosition {
 	margin: 0 20 0 20;
-	background-color: #FaFaFa;
-	foreground-color: #335599;
-	fill: NONE;
+	fill: BOTH;
 	anchor: west;
 }
 
@@ -59,6 +57,26 @@ button {
 	margin-left: 20;
 }
 
+#logo {
+	anchor: west;
+	fill: NONE;
+	position-x: rel;
+	position-y: 0;
+	visibility: hidden;
+}
+
+#logoPanel {
+	position-x: 1;
+	position-y: rel;
+	anchor: west;
+	fill: HORIZONTAL;
+}
+
+#showLogo {
+	padding-y: 60;
+	fill: VERTICAL;
+}
+
 
 </style>
 </head>
@@ -68,7 +86,7 @@ button {
 		require(java.lang.Class);
 		require(Packages.us.derfers.tribex.rapids);
 		
-		console.log("TEST");
+		console.log("Init.rsm console.log test.");
 		//Button Clicking System 
 			function runBtnEvt(text, message) {
 				var label_list = window.getElementsByClass("changesOnHover");
@@ -94,6 +112,15 @@ button {
 				widgetID.setBackground(color);
 			}
 			
+		function showLogo() {
+			if (!$logo.isVisible()) {
+				$logo.setVisible(true);
+				$showLogo.setText("Hide RapidS logo");
+			} else {
+				$logo.setVisible(false);
+				$showLogo.setText("Show RapidS logo");
+			}
+		}
 	</script> 
 <body layout="gridBag" theme="camo">
 
@@ -113,7 +140,11 @@ button {
 	<textfield class="standardPosition">Enter a single line of text here!</textfield>
 	<checkbox class="standardPosition" onclick="console.log('My Checkbox')">My Checkbox</checkbox>	
 	<textarea id="rightSide">Enter multiple lines of text here!</textarea>
-	<img src="icon.png"></img>
+	
+	<panel id="logoPanel">
+	<button class="standardPosition" id="showLogo" onclick="showLogo()">Show RapidS logo</button>
+	<img class="standardPosition" id="logo" src="icon.png"/>
+	</panel>
 
 </body>
 

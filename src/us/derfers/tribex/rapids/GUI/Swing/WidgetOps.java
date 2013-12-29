@@ -135,6 +135,19 @@ public class WidgetOps {
 				}
 				parent.setComponentZOrder(widget, ZIndex);
 			}
+			
+			if (styles.get("visibility") != null) {
+				String visibility = styles.get("visibility");
+				
+				if (visibility.equalsIgnoreCase("hidden")) {
+					widget.setVisible(false);
+					
+				} else if (visibility.equalsIgnoreCase("visible")) {
+					widget.setVisible(true);
+				} else {
+					widget.setVisible(false);
+				}
+			}
 		}
 
 		return widget;

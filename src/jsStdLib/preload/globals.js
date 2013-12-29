@@ -7,3 +7,7 @@
 
 //Proper access to the Window class. Needed to fit with both JavaScript and Java conventions at the same time.
 var window = Window;
+
+var system = {
+		showError : Packages.us.derfers.tribex.rapids.Utilities.showError,
+}
