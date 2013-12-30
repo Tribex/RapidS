@@ -1,17 +1,12 @@
 package us.derfers.tribex.rapids.GUI.Swing;
 
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
-import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -38,35 +33,40 @@ public class WidgetOps {
 	 * @return The styled widget
 	 */
 	public static JComponent getWidgetStyles(JComponent widget, String id) {
+		
 		//Get the widget data for the id of the widget.
 		Map<String, Object> widgetData = Main.loader.XMLWidgets.get(id);
 
 		//If the element is specified (should be, but just to make sure)
 		if (Globals.stylesMap.get(widgetData.get("element"))!= null) {
 			//Get the styles for the element
-			Map<String, String> styles = Globals.stylesMap.get(Main.loader.XMLWidgets.get(id).get("element"));
+			String widgetIdentifier = Main.loader.XMLWidgets.get(id).get("element").toString();
+			Map<String, String> styles = Globals.stylesMap.get(widgetIdentifier);
 
 			//Load the widget styles.
-			widget = loadWidgetStyles(widget, styles);
+			widget = loadWidgetStyles(widget, styles, widgetIdentifier);
 		}
 
 		//If the class is specified
 		if (Globals.stylesMap.get("."+widgetData.get("class"))!= null) {
 			//Get the styles for the class
-			Map<String, String> styles = Globals.stylesMap.get("."+Main.loader.XMLWidgets.get(id).get("class"));
+			String widgetIdentifier = Main.loader.XMLWidgets.get(id).get("element").toString();
+			
+			Map<String, String> styles = Globals.stylesMap.get("."+widgetIdentifier);
 
 			//Load the widget styles.
-			widget = loadWidgetStyles(widget, styles);
+			widget = loadWidgetStyles(widget, styles, widgetIdentifier);
 		}
 
 		//If the id is specified (It ought to be, but just to be sure)
 		if (Globals.stylesMap.get("#"+id)!= null) {
+			String widgetIdentifier = "#"+id;
 			//Get the styles for the ids
-			Map<String, String> styles = Globals.stylesMap.get("#"+id);
+			Map<String, String> styles = Globals.stylesMap.get(widgetIdentifier);
             widget.setName(id);
 
 			//Load the widget styles.
-			widget = loadWidgetStyles(widget, styles);
+			widget = loadWidgetStyles(widget, styles, widgetIdentifier);
 		}
 
 		return widget;
@@ -79,77 +79,38 @@ public class WidgetOps {
 	 * @param styles A Map of styles for that widget
 	 * @return The widget with all the styles applied.
 	 */
-	public static JComponent loadWidgetStyles(JComponent widget, Map<String, String> styles) {
+	public static JComponent loadWidgetStyles(JComponent widget, Map<String, String> styles, String widgetIdentifier) {
 
-		//Make sure that there are styles to apply
+		//Create a map of styles from the JavaScript object styles.widgetStyles
+		HashMap<String, Object> widgetStyleTypes = Main.loader.engine.getMap("widgetStyles", "styles");
+
+		//If there are styles for this identifier
 		if (styles != null && !styles.isEmpty()) {
-			//Set background color
-			if (styles.get("background-color") != null) {
-				//Set the background color of the widget
-				widget.setBackground(Color.decode(styles.get("background-color")));
-
-				//Necessarry for some widgets to display the background, no adverse effects afaik.
-				widget.setOpaque(true);
-			}
-
-			//Set foregound color
-			if (styles.get("foreground-color") != null) {
-				//Set the foreground color of the widget
-				widget.setForeground(Color.decode(styles.get("foreground-color")));
-			}
-
-			//Create a border TODO: make more flexible and advanced
-			if (styles.get("border") != null) {
-				//Split the border string between color and width
-				String[] borderinfo = styles.get("border").split(" ");
-
-				//Create a new border
-				Border border = BorderFactory.createLineBorder(Color.decode(borderinfo[1]), Integer.valueOf(borderinfo[0]));
-				widget.setBorder(border);
-			}
-
-			if (styles.get("width") != null) {
-				//Set the width of the widget
-				widget.setPreferredSize(new Dimension(Integer.valueOf(styles.get("width")), widget.getPreferredSize().height));
-			}
-
-			if (styles.get("height") != null) {
-				//Set the height of the widget
-				widget.setPreferredSize(new Dimension(widget.getPreferredSize().width, Integer.valueOf(styles.get("height"))));
-			}
-
-			if (styles.get("z-index") != null) {
-				//Get the parent of the widget
-				Container parent = widget.getParent();
-				
-				//Get the value set by CSS for the z-index
-				int ZIndex = Integer.valueOf(styles.get("z-index"));
-				
-				//If ZIndex is larger than the amount of widgets in the parent, decrease it to avoid a NPE.
-				if (ZIndex > parent.getComponentCount()-1) {
-					ZIndex = parent.getComponentCount()-1;
-					
-				//If ZIndex is less than 0, set it to 0 to avoid a NPE or IVE
-				} else if (ZIndex < 0) {
-					ZIndex = 0;
-				}
-				parent.setComponentZOrder(widget, ZIndex);
-			}
 			
-			if (styles.get("visibility") != null) {
-				String visibility = styles.get("visibility");
+			//Iterate through them
+			for (int i = 0; i < styles.size(); i++) {
+				//Get the style name
+				String style = (String) styles.keySet().toArray()[i];
 				
-				if (visibility.equalsIgnoreCase("hidden")) {
-					widget.setVisible(false);
+				//If there is a style by this name
+				if (widgetStyleTypes.containsKey(style)) {
 					
-				} else if (visibility.equalsIgnoreCase("visible")) {
-					widget.setVisible(true);
+					try {
+						//Attempt to apply it.
+						widget = (JComponent) Main.loader.engine.call("styles.widgetStyles."+style+".apply", widget, styles.get(style));
+					} catch (Exception e) {
+						//Show an error if it is invalid
+						Utilities.showError("Invalid CSS: '"+widgetIdentifier+" {"+style+" = "+styles.get(style)+";}'. "
+								+ "\n\n Error: "+e.getMessage()+"\n\n Program may not behave as expected.");
+					} 
+				
+				//If this style does not exist
 				} else {
-					widget.setVisible(false);
+					//FIXME: Doesn't handle layout style types correctly.
+					//Utilities.showError("CSS style '"+style+"' (from: "+widgetIdentifier+") does not exist! \nProgram may not behave as expected.");
 				}
 			}
 		}
-
 		return widget;
 	}
 	

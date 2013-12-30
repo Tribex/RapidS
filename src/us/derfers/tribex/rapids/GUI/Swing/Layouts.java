@@ -1,9 +1,6 @@
 package us.derfers.tribex.rapids.GUI.Swing;
 
 import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,7 +84,7 @@ public class Layouts {
 		HashMap<String, Object> layoutStyleTypes = Main.loader.engine.getMap("layoutStyles", "styles");
 
 		//If there are styles for this identifier
-		if (styles != null) {
+		if (styles != null && !styles.isEmpty()) {
 			
 			//Iterate through them
 			for (int i = 0; i < styles.size(); i++) {
