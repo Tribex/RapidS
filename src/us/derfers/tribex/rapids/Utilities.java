@@ -188,7 +188,6 @@ public class Utilities {
         	escaped = escaped.replace(m.group(0), m.group(0).replace(m.group(1), temp));
 
         }
-        System.out.println(escaped);
 		return escaped;
 	}
 }
