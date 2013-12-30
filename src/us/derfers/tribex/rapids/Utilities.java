@@ -167,7 +167,6 @@ public class Utilities {
 		HashMap<String, String> escapable = new HashMap<String, String>();
 		escapable.put("&&", "&amp;&amp;");
 		escapable.put("& ", "&amp; ");
-		escapable.put(" &", " &amp;");
 		escapable.put("<", "&lt;");
 		escapable.put(">", "&gt;");
 		
@@ -189,6 +188,7 @@ public class Utilities {
         	escaped = escaped.replace(m.group(0), m.group(0).replace(m.group(1), temp));
 
         }
+        System.out.println(escaped);
 		return escaped;
 	}
 }
