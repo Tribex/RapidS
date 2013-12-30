@@ -1,27 +1,17 @@
 package us.derfers.tribex.rapids;
 import static us.derfers.tribex.rapids.Utilities.debugMsg;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.UIManager;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import us.derfers.tribex.rapids.GUI.Swing.GUI;
 import us.derfers.tribex.rapids.jvStdLib.Sys;

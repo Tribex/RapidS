@@ -151,6 +151,7 @@ public class ScriptEngine {
 	 * @param scope The scope to get the variable from
 	 * @return The value of the variable
 	 */
+	@SuppressWarnings("unchecked")
 	public HashMap<String, Object> getMap(String var, Object scope) {
 		return new HashMap<String, Object>((Map<String, Object>) get(var, scope));
 	}
