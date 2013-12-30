@@ -2,20 +2,26 @@ package us.derfers.tribex.rapids;
 import static us.derfers.tribex.rapids.Utilities.debugMsg;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.UIManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import us.derfers.tribex.rapids.GUI.Swing.GUI;
 import us.derfers.tribex.rapids.jvStdLib.Sys;
@@ -44,6 +50,8 @@ public class Loader {
 	 * @param filePath The file to load initially.
 	 */
 	public void startLoader(String filePath) {
+		
+		String fileEscaped = Utilities.EscapeScriptTags(filePath);
 		//JavaScript Engine Initialization
 		//---------------------------------------------------------------------------//
 		//Start Engine:
@@ -78,7 +86,7 @@ public class Loader {
 			//LOAD:
 				//Begin loading the XML file(s)
 				debugMsg("Loading "+filePath+"", 2);
-				loadAll(filePath, null, engine);
+				loadAll(fileEscaped, null, engine);
 				
 			//POSTLOAD:
 				//Loop through the JavaScript standard library for JavaScript and import all .js files in the postload folder.
@@ -90,22 +98,17 @@ public class Loader {
 
 	/**
 	 * Starts loading the GUI. Sets Swing look and feel, then loads the GUI using the GUI_Swing object.
-	 * @param filePath The path of the .rsm file to load UI elements from.
+	 * @param escapedFile The content .rsm file to load UI elements from.
 	 * @param parent The (optional) parent Object, Eg, a JFrame or JPanel.
 	 * @param engine The JavaScript engine to pass to GUI_Swing
 	 */
-	public void loadAll(String filePath, final Object parent, ScriptEngine engine) {
+	public void loadAll(String escapedFile, final Object parent, ScriptEngine engine) {
 
 		//Attempt to load .rsm file filePath
 		try {
-			File file = new File(filePath);
-
-			//Start XML Document factory/builder
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
 
 			//Parse filePath
-			Document doc = db.parse(file);
+			Document doc = Utilities.XMLStringToDocument(escapedFile);
 
 			//Stabilize parsed document
 			doc.normalize();
@@ -155,15 +158,15 @@ public class Loader {
 
 					//Create a new GUI instance and initialize it.
 					GUI GUI = new GUI();
-					GUI.loadGUI(filePath, engine, parent, false);
+					GUI.loadGUI(escapedFile, engine, parent, false);
 
 				}
 
 			} else { //There was more than one body tag, or 0 body tags
 
 				//Display Error and quit, as we cannot recover from an abnormally formatted file
-				Utilities.showError("Error: More or less than one <body> tag in '"+filePath+"'.\n\n"
-						+ "Please add ONE body tag to '"+filePath+"'.");
+				Utilities.showError("Error: More or less than one <body> tag in '"+escapedFile+"'.\n\n"
+						+ "Please add ONE body tag to '"+escapedFile+"'.");
 				System.exit(1);
 			}
 
@@ -176,22 +179,16 @@ public class Loader {
 
 	/**
 	 * Discovers any script tags in the document and sends them to JSIterator to be parsed.
-	 * @param filePath The file containing script(s) to run.
+	 * @param escapedFile The escaped file containing script(s) to run.
 	 * @param engine the JavaScript engine to load the script tags into.
 	 * @return Boolean telling whether or not it completed
 	 */
-	public boolean loadJS(String filePath, ScriptEngine engine) {
+	public boolean loadJS(String escapedFile, ScriptEngine engine) {
 		Utilities.debugMsg("Loading JavaScript from <script> tags.");
 		//XXX: JAVASCRIPT HANDLING SECTION :XXX\\
 		try {
-			File file = new File(filePath);
-
-			//Start XML Document factory/builder
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-
 			//Parse filePath
-			Document doc = db.parse(file);
+			Document doc = Utilities.XMLStringToDocument(escapedFile);
 
 			//Stabilize parsed document
 			doc.normalize();
@@ -206,7 +203,7 @@ public class Loader {
 			//XXX: END JAVASCRIPT HANDLING :XXX\\
 		} catch (Exception e) {
 			e.printStackTrace();
-			Utilities.showError("Error loading Javascripts from '"+filePath+"'. Please check their validity.");
+			Utilities.showError("Error loading Javascripts from '"+escapedFile+"'. Please check their validity.");
 			return false;
 		}
 	}

@@ -49,12 +49,12 @@ public class GUI {
 	 * Starts the JFrame, sets a GridBagLayout TODO: allow layouts to be configurable, Sets the Window Title, 
 	 * loads Styles, and runs loadInComposite to load widgets.
 	 * 
-	 * @param filePath The path of the file to load from.
+	 * @param escapedFile The escaped file to load from.
 	 * @param engine The JavaScript engine to run scripts in.
 	 * @param parent Optional parent JFrame or Composite. Will be elaborated on soon.
 	 * @param clearWidgets Wether or not to clear all widgets out of the parent before loading more into it.
 	 */
-	public void loadGUI(String filePath, ScriptEngine engine, Object parent, Boolean clearWidgets) {
+	public void loadGUI(String escapedFile, ScriptEngine engine, Object parent, Boolean clearWidgets) {
 		//XXX: Initialization :XXX\\
 		//Create ParentComposite variable
 		
@@ -88,10 +88,8 @@ public class GUI {
 		try {
 
 			//XML File Loading
-			File file = new File(filePath);
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse(file);
+			Document doc = Utilities.XMLStringToDocument(escapedFile);
+
 			doc.getDocumentElement().normalize();
 
 			//XXX: HEAD :XXX\\
@@ -131,7 +129,7 @@ public class GUI {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			Utilities.showError("Unable to properly initialize a Swing GUI. \n"+filePath+" may be corrupt or incorrectly formatted.");
+			Utilities.showError("Unable to properly initialize a Swing GUI. \n"+escapedFile+" may be corrupt or incorrectly formatted.");
 		}
 
 		//Fit the window to the elements in it.
@@ -145,7 +143,7 @@ public class GUI {
 		Main.loader.XMLWidgets.put("__WINDOW__", shellMap);
 
 		//Loading the JS must be done ABSOLUTELY LAST before the setVisible() call, or some properties will be missed.
-		Main.loader.loadJS(filePath, engine);
+		Main.loader.loadJS(escapedFile, engine);
 
 		//Open the window
 		window.setVisible(true);

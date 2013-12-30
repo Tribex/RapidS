@@ -44,28 +44,34 @@ public class Layouts {
 			}
 		};
 
-
 		//Load styles from ID
 		try {
 			if (widgetElement.getNodeName() != null) {
-				Map<String, String> styles = Globals.stylesMap.get(widgetElement.getNodeName());
-				loadConstraintStyles(widgetConstraint, styles);
+				
+				String widgetIdentifier = widgetElement.getNodeName();
+				Map<String, String> styles = Globals.stylesMap.get(widgetIdentifier);
+				loadConstraintStyles(widgetConstraint, styles, widgetIdentifier);
 			}
 
 			if (widgetElement.getAttributeNode("class") != null) {
-				Map<String, String> styles = Globals.stylesMap.get("."+widgetElement.getAttributeNode("class").getTextContent());
-				loadConstraintStyles(widgetConstraint, styles);
+				
+				String widgetIdentifier = widgetElement.getAttributeNode("class").getTextContent();
+				Map<String, String> styles = Globals.stylesMap.get("."+widgetIdentifier);
+				loadConstraintStyles(widgetConstraint, styles, widgetIdentifier);
 			}
 
 			if (widgetElement.getAttributeNode("id") != null) {
-				Map<String, String> styles = Globals.stylesMap.get("#"+widgetElement.getAttributeNode("id").getTextContent());
-				loadConstraintStyles(widgetConstraint, styles);
+				
+				String widgetIdentifier = widgetElement.getAttributeNode("id").getTextContent();
+				Map<String, String> styles = Globals.stylesMap.get("#"+widgetIdentifier);
+				loadConstraintStyles(widgetConstraint, styles, widgetIdentifier);
 			} 
 
 
 		} catch (Exception e) {
+			//Show a general error
 			e.printStackTrace();
-			Utilities.showError("Bad CSS for "+widgetElement.getNodeName()+".");
+			Utilities.showError("Invalid CSS for "+widgetElement.getNodeName()+".");
 		}
 		return widgetConstraint;
 	}
@@ -75,23 +81,35 @@ public class Layouts {
 	 * @param widgetConstraint The constraint to operate on.
 	 * @param styles The styles to apply.
 	 */
-	private static void loadConstraintStyles(GridBagConstraints widgetConstraint, Map<String, String> styles) {
+	private static void loadConstraintStyles(GridBagConstraints widgetConstraint, Map<String, String> styles, String widgetIdentifier) {
 
 		//Create a map of styles from the JavaScript object styles.layoutStyles
 		HashMap<String, Object> layoutStyleTypes = Main.loader.engine.getMap("layoutStyles", "styles");
 
-		//Create and populate the list of registered widgets
-		ArrayList<String> registeredLayoutStyles = new ArrayList<String>();
-		for (String styleType : layoutStyleTypes.keySet()) {
-			registeredLayoutStyles.add(styleType);
-		}
-
-		//NEW CODE
+		//If there are styles for this identifier
 		if (styles != null) {
+			
+			//Iterate through them
 			for (int i = 0; i < styles.size(); i++) {
+				//Get the style name
 				String style = (String) styles.keySet().toArray()[i];
+				
+				//If there is a style by this name
 				if (layoutStyleTypes.containsKey(style)) {
-					Main.loader.engine.call("styles.layoutStyles."+style+".apply", widgetConstraint, styles.get(style));
+					
+					try {
+						//Attempt to apply it.
+						Main.loader.engine.call("styles.layoutStyles."+style+".apply", widgetConstraint, styles.get(style));
+					} catch (Exception e) {
+						//Show an error if it is invalid
+						Utilities.showError("Invalid CSS: '"+widgetIdentifier+" {"+style+" = "+styles.get(style)+";}'. "
+								+ "\n\n Error: "+e.getMessage()+"\n\n Program may not behave as expected.");
+					} 
+				
+				//If this style does not exist
+				} else {
+					//FIXME: Doesn't handle widget style types correctly.
+					//Utilities.showError("CSS style '"+style+"' (from: "+widgetIdentifier+") does not exist! \nProgram may not behave as expected.");
 				}
 			}
 		}

@@ -95,6 +95,18 @@ button {
 					label_list[index].setText(text+" - "+message);
 				}
 			}
+		
+		for (var i = 0; i < 10; i++) {
+			console.log(i);
+		}
+		
+		for (var i = 100; i > 10; i--) {
+			console.log(i);
+		}
+		
+		if ("bacon" == "bacon" || "f" == "f") {
+			console.log("ASDF");
+		}
 
 		function changeBackground(widget, state) {
 				var widgetID = window.getElementById(widget);

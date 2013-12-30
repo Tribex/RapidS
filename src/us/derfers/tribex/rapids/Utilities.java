@@ -1,6 +1,8 @@
 package us.derfers.tribex.rapids;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -9,9 +11,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.commons.io.FileUtils;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Provides static functions for displaying an error dialog or printing a debug message
@@ -120,5 +133,62 @@ public class Utilities {
 			System.out.println("[RapidS] "+(String) msg+" - "+debugDate+" ["+lvl+"]");
 			
 		}
+	}
+	
+	/**
+	 * Parse a string into an XML document.
+	 * @param string The string to parse
+	 * @return An XML DOM document
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
+	public static Document XMLStringToDocument(String string) throws ParserConfigurationException, SAXException, IOException {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db = dbf.newDocumentBuilder();
+
+		//Parse filePath
+		Document doc = db.parse(new InputSource(new StringReader(string)));
+
+		//Stabilize parsed document
+		doc.normalize();
+		return doc;
+	}
+	
+	/**
+	 * Escapes all script tags in the file 'filePath'.
+	 * @param filePath The file to escape from.
+	 * @return A string containing the escaped text.
+	 */
+	public static String EscapeScriptTags(String filePath) {
+		String escaped = null;
+		
+		//Put all the escapable items in the map
+		HashMap<String, String> escapable = new HashMap<String, String>();
+		escapable.put("&&", "&amp;&amp;");
+		escapable.put("& ", "&amp; ");
+		escapable.put(" &", " &amp;");
+		escapable.put("<", "&lt;");
+		escapable.put(">", "&gt;");
+		
+		//Attempt to escape the file
+		try {
+			escaped = FileUtils.readFileToString(new File(filePath));
+		} catch (IOException e) {
+			e.printStackTrace();
+			Utilities.debugMsg("ERROR: File not found for script escaping: "+filePath);
+		}
+
+		Pattern pat = Pattern.compile("<script .+?>(.+?)</script>", Pattern.DOTALL);
+        Matcher m = pat.matcher(escaped);
+        while (m.find()) {
+        	String temp = m.group(1);
+        	for (int i = 0; i < escapable.size(); i++) {
+        		temp = temp.replaceAll((String) escapable.keySet().toArray()[i], (String) escapable.values().toArray()[i]);
+        	}
+        	escaped = escaped.replace(m.group(0), m.group(0).replace(m.group(1), temp));
+
+        }
+		return escaped;
 	}
 }
