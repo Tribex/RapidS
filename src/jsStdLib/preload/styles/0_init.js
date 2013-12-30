@@ -17,4 +17,8 @@ var styles = {
 		registerLayoutStyle : function (name, description, func) {
 			this.layoutStyles[name] = {name : name, description : description, apply : func} 
 		},
+		
+		registerWidgetStyle : function (name, description, func) {
+			this.widgetStyles[name] = {name : name, description : description, apply : func} 
+		},
 };
