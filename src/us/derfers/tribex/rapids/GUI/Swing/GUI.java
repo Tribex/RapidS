@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
 import org.apache.commons.io.FileUtils;
@@ -82,6 +83,21 @@ public class GUI {
 		//Create a gridbaglayout
 		windowPanel.setLayout(new GridBagLayout());
 
+		
+		//TODO: Create a better menubar
+		JMenuBar menuBar = new JMenuBar();
+		window.setJMenuBar(menuBar);
+		
+
+
+		//Create a subMap for holding the Window and any properties of it
+		Map<String, Object> shellMap = new HashMap<String, Object>();
+
+		shellMap.put("__WINDOW__", window);
+
+		Main.loader.XMLWidgets.put("__WINDOW__", shellMap);
+		
+		
 		try {
 
 			//XML File Loading
@@ -122,23 +138,16 @@ public class GUI {
 			}
 			//XXX: BODY : XXX\\
 			//Loop through all children of the body element and add them
+
 			loadInComposite(parentComposite, doc.getElementsByTagName("body").item(0), engine); 
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			Utilities.showError("Unable to properly initialize a Swing GUI. \n"+escapedFile+" may be corrupt or incorrectly formatted.");
+			Utilities.showError("Unable to properly initialize a Swing GUI. File may be corrupt or incorrectly formatted.");
 		}
-
 		//Fit the window to the elements in it.
 		window.pack();
-
-		//Create a subMap for holding the Window and any properties of it
-		Map<String, Object> shellMap = new HashMap<String, Object>();
-
-		shellMap.put("__WINDOW__", window);
-
-		Main.loader.XMLWidgets.put("__WINDOW__", shellMap);
-
+		
 		//Loading the JS must be done ABSOLUTELY LAST before the setVisible() call, or some properties will be missed.
 		Main.loader.loadJS(escapedFile, engine);
 
@@ -154,7 +163,7 @@ public class GUI {
 	 * @param node The body or any other composite node.
 	 * @param engine The JavaScript engine
 	 */
-	public static void loadInComposite(JPanel parentComposite, Node node, ScriptEngine engine) {
+	public static void loadInComposite(JComponent parentComposite, Node node, ScriptEngine engine) {
 		
 		//Create a map of widgetTypes from the JavaScript object widgets.widgetTypes
 		HashMap<String, Object> widgetTypes = engine.getMap("widgetTypes", "widgets");
@@ -196,7 +205,10 @@ public class GUI {
 		for (Map <String, Object> item : Main.loader.XMLWidgets.values()) {
 	
 			//I know this is confusing, working on splitting it up. TODO: Split this up to make it readable
-			item.put((String) item.get("id"), (Object) WidgetOps.getWidgetStyles((JComponent) item.get(item.get("id")), (String) item.get("id")));
+			//TODO: Make windows flexible
+			if (item.containsKey("id")) {
+				item.put((String) item.get("id"), (Object) WidgetOps.getWidgetStyles((JComponent) item.get(item.get("id")), (String) item.get("id")));
+			}
 		}
 		
 		//position and draw the widgets

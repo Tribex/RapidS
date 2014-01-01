@@ -33,12 +33,11 @@ public class WidgetOps {
 	 * @return The styled widget
 	 */
 	public static JComponent getWidgetStyles(JComponent widget, String id) {
-		
 		//Get the widget data for the id of the widget.
 		Map<String, Object> widgetData = Main.loader.XMLWidgets.get(id);
 
 		//If the element is specified (should be, but just to make sure)
-		if (Globals.stylesMap.get(widgetData.get("element"))!= null) {
+		if (widgetData.get("element") != null && Globals.stylesMap.get(widgetData.get("element")) != null) {
 			//Get the styles for the element
 			String widgetIdentifier = Main.loader.XMLWidgets.get(id).get("element").toString();
 			Map<String, String> styles = Globals.stylesMap.get(widgetIdentifier);
@@ -48,7 +47,7 @@ public class WidgetOps {
 		}
 
 		//If the class is specified
-		if (Globals.stylesMap.get("."+widgetData.get("class"))!= null) {
+		if (widgetData.get("class") != null && Globals.stylesMap.get("."+widgetData.get("class"))!= null) {
 			//Get the styles for the class
 			String widgetIdentifier = Main.loader.XMLWidgets.get(id).get("element").toString();
 			
@@ -224,7 +223,7 @@ public class WidgetOps {
 	//XXX: Map setup :XXX\\
 
 	public static void addWidgetToMaps(Element widgetElement, Object widget, ScriptEngine engine) {
-		//Create a HashMap to hold Button ID and class, as well as other parameters.
+		//Create a HashMap to hold Widget ID and class, as well as other parameters.
 		Map<String, Object> widgetMap = new HashMap<String, Object>();
 
 		//Define the ID of the button
@@ -249,7 +248,8 @@ public class WidgetOps {
 		for (int i=0; i < widgetAttributes.getLength(); i++) {
 			widgetMap.put(widgetAttributes.item(i).getNodeName(), widgetAttributes.item(i).getTextContent());
 		}
-
+		
+		
 		widgetMap.put("element", widgetElement.getNodeName());
 		widgetMap.put("id", widgetID);
 
