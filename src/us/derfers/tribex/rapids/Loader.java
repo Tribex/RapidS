@@ -136,13 +136,21 @@ public class Loader {
 
 						} catch (Exception e) {
 							//If unable to set to .lcm's theme, use the system look'n'feel
+							try {
 							UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+							} catch (Exception a) {
+								UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+							}
 							Utilities.showError("Error loading Look and Feel Specified, Look and Feel set to System");
 
 						}
 					} else {
 						//If swing_Theme == camo or is not set, use the system look'n'feel
-						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+						try {
+							UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+							} catch (Exception a) {
+								UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+							}
 						debugMsg("Look and Feel (Swing) set to System", 3);
 
 					}
@@ -250,7 +258,6 @@ public class Loader {
 		//Temporary replacement, loads jsStdLib from the directory the jarfile is located in.
 		File dir = new File(Utilities.getJarDirectory()+"/"+folder);
 		try {
-			System.out.println(dir.listFiles());
 			
 			File [] fileList = dir.listFiles();
 			
