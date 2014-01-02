@@ -3,7 +3,6 @@
 <title>RapidS: Test init file</title>
 <link rel="stylesheet" href="styles.css"></link>
 <style type="text/css">
-
 #clickableButton {
 	margin-left: 20;
 	margin-right: 20;
@@ -76,8 +75,6 @@ button {
 	padding-y: 60;
 	fill: VERTICAL;
 }
-
-
 </style>
 </head>
 
@@ -121,30 +118,13 @@ button {
 				$showLogo.setText("Show RapidS logo");
 			}
 		}
-	</script> 
+	</script>
 <body layout="gridBag" theme="camo">
-
-	<label class="changesOnHover" onmouseup="runBtnEvt('Click', 'No Id')"
-		onmouseover="runBtnEvt('Mouse Over', 'No Id')"
-		onmouseout="runBtnEvt('Mouse Out', 'No Id')">label changes on	mouseover, mouseout, and click.</label>
-	<label id="clickLabel" onclick="changeBackground('clickLabel', 'click')"
-		onmouseover="changeBackground('clickLabel', 'over')"
-		onmouseout="changeBackground('clickLabel', 'out')">Clickable label</label>
-		
-	<button id="clickableButton" class="changesOnHover" onclick="runBtnEvt('Click', $clickableButton.getName())"
-		onmouseover="runBtnEvt('Mouse Over', $clickableButton.getName())"
-		onmouseout="runBtnEvt('Mouse Out', $clickableButton.getName())">
-		Changes the status of the label.</button>
-	<spinner id="spinner" value="10" max="20" min="-1"
-		onselection="runBtnEvt($spinner.getValue(), $spinner.getName())" />
-	<textfield class="standardPosition">Enter a single line of text here!</textfield>
-	<checkbox class="standardPosition" onclick="console.log('My Checkbox')">My Checkbox</checkbox>	
-	<textarea id="rightSide">Enter multiple lines of text here!</textarea>
 	<menu value="File">
 		<menuitem>Open</menuitem>
 		<menuitem>Save</menuitem>
 		<menuitem>Save As</menuitem>
-		
+
 		<menu value="Open Recent">
 			<menuitem>Item 1</menuitem>
 			<menuitem>Item 2</menuitem>
@@ -152,20 +132,38 @@ button {
 			<menuitem>Item 4</menuitem>
 		</menu>
 	</menu>
-	
+
 	<menu value="About">
 		<menu value="SubMenu">
 			<menuitem>SubMenuItem</menuitem>
 		</menu>
 	</menu>
-	
+
 	<menu value="Help">
 		<menuitem>MenuItem</menuitem>
 	</menu>
+	<label class="changesOnHover" onmouseup="runBtnEvt('Click', 'No Id')"
+		onmouseover="runBtnEvt('Mouse Over', 'No Id')"
+		onmouseout="runBtnEvt('Mouse Out', 'No Id')">label changes on mouseover, mouseout, and click.</label>
+	<label id="clickLabel"
+		onclick="changeBackground('clickLabel', 'click')"
+		onmouseover="changeBackground('clickLabel', 'over')"
+		onmouseout="changeBackground('clickLabel', 'out')">Clickable label</label>
+
+	<button id="clickableButton" class="changesOnHover"
+		onclick="runBtnEvt('Click', $clickableButton.getName())"
+		onmouseover="runBtnEvt('Mouse Over', $clickableButton.getName())"
+		onmouseout="runBtnEvt('Mouse Out', $clickableButton.getName())">
+		Changes the status of the label.</button>
+	<spinner id="spinner" value="10" max="20" min="-1"
+		onselection="runBtnEvt($spinner.getValue(), $spinner.getName())" />
+	<textfield class="standardPosition">Enter a single line of text here!</textfield>
+	<checkbox class="standardPosition" onclick="console.log('My Checkbox')">My
+	Checkbox</checkbox>
+	<textarea id="rightSide">Enter multiple lines of text here!</textarea>
 	<panel id="logoPanel">
 	<button class="standardPosition" id="showLogo" onclick="showLogo()">Show RapidS logo</button>
-	<img class="standardPosition" id="logo" src="icon.png"/>
-	</panel>
+	<img class="standardPosition" id="logo" src="icon.png" /> </panel>
 
 </body>
 
