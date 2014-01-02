@@ -153,7 +153,6 @@ public class GUI {
 
 		//Open the window
 		window.setVisible(true);
-
 		//XXX: END WIDGET CREATION :XXX\\	
 	}
 
