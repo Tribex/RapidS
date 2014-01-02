@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project basedir="." default="build" name="RapidS">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="../../../Software/Eclipse"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.6"/>
     <property name="source" value="1.6"/>
@@ -14,9 +13,10 @@
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
-            <fileset dir="src">
+            <fileset dir=".">
                 <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
+                <exclude name="**/build.xml"/>
             </fileset>
         </copy>
     </target>
@@ -33,25 +33,14 @@
             <classpath refid="RapidS.classpath"/>
         </javac>
     </target>
+    
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
-    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
-        <copy todir="${ant.library.dir}">
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </copy>
-        <unzip dest="${ant.library.dir}">
-            <patternset includes="jdtCompilerAdapter.jar"/>
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </unzip>
-    </target>
+    
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="CSSParser">
-        <java classname="us.derfers.tribex.rapids.parsers.CSSParser" failonerror="true" fork="yes">
-            <classpath refid="RapidS.classpath"/>
-        </java>
-    </target>
+    
     <target name="main">
         <java classname="us.derfers.tribex.rapids.Main" failonerror="true" fork="yes">
             <classpath refid="RapidS.classpath"/>
@@ -59,7 +48,8 @@
     </target>
     
     <target name="create_run_jar">
-        <jar destfile="../../../RapidS.jar">
+		<delete dir="dist"/>
+        <jar destfile="dist/RapidS.jar">
             <manifest>
                 <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
                 <attribute name="Rsrc-Main-Class" value="us.derfers.tribex.rapids.Main"/>
@@ -72,5 +62,15 @@
             <zipfileset dir="lib" includes="weblaf-1.25.jar"/>
             <zipfileset dir="lib" includes="rhino.jar"/>
         </jar>
+        <copy includeemptydirs="false" todir="dist">
+            <fileset dir=".">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+                <exclude name="**/build.xml"/>
+            </fileset>
+        </copy>
+        <delete dir="dist/bin"/>
+        <delete dir="dist/lib"/>
+        <delete dir="dist/dist"/>
     </target>
 </project>

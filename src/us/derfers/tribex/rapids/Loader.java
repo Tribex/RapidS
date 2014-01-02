@@ -1,7 +1,15 @@
 package us.derfers.tribex.rapids;
 import static us.derfers.tribex.rapids.Utilities.debugMsg;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -229,8 +237,8 @@ public class Loader {
 	 * @param folder The folder to load .js files from.
 	 */
 	private static void recursiveLoadJS(ScriptEngine engine, String folder) {
-		//Loop through the files in the folder
-		for (String toImport : Utilities.listFilesInJar(folder)) {
+		//Loop through the files in the folder  FIXME: Load files inside jar.
+		/*for (String toImport : Utilities.listFilesInJar(folder)) {
 			
 			//If toImport does not have a '.' in it, assume it is a folder
 			if (!toImport.contains(".")) {
@@ -239,10 +247,37 @@ public class Loader {
 				
 			} else if (toImport.endsWith(".js")) {
 				//Run the file
-				engine.eval(new InputStreamReader(Main.class.getResourceAsStream("/"+folder+"/"+toImport)));
+				engine.eval(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(folder+"/"+toImport)));
 				debugMsg("Imported JavaScript File: "+toImport, 4);
 				
 			}
+		}*/
+		
+		//Temporary replacement, loads jsStdLib from the directory the jarfile is located in.
+		Path dir = FileSystems.getDefault().getPath(Utilities.getJarDirectory()+"/"+folder);
+		try {
+			DirectoryStream<Path> stream = Files.newDirectoryStream(dir);
+			
+			ArrayList<Path> toSort = new ArrayList<Path>();
+		
+			for (Path path : stream) {
+				toSort.add(path);
+			}
+			
+			Object [] sortedPaths = toSort.toArray();
+			Arrays.sort(sortedPaths);
+			
+			for (Object obj : sortedPaths) {
+				Path path = (Path) obj;
+				if (path.toFile().isDirectory()) {
+					recursiveLoadJS(engine, folder+"/"+path.getFileName().toString());
+				} else if (path.toString().endsWith(".js")) {
+					engine.eval(new FileReader(new File(Utilities.getJarDirectory()+folder+"/"+path.getFileName().toString())));
+					debugMsg("Imported JavaScript File: "+path.getFileName(), 4);
+				}
+			}
+		} catch (Exception e){
+			e.printStackTrace();
 		}
 	}
 }

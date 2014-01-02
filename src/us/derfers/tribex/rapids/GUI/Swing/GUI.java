@@ -143,7 +143,7 @@ public class GUI {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			Utilities.showError("Unable to properly initialize a Swing GUI. File may be corrupt or incorrectly formatted.");
+			Utilities.showError("Unable to properly initialize a Swing GUI. File may be corrupt or incorrectly formatted. \n\n"+e.getMessage());
 		}
 		//Fit the window to the elements in it.
 		window.pack();

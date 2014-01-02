@@ -74,7 +74,7 @@ public class Utilities {
 	public static ArrayList<String> listFilesInJar(String folder) {
 		Enumeration<URL> en;
 		try {
-			en = Main.class.getClassLoader().getResources(folder);
+			en = ClassLoader.getSystemClassLoader().getResources(folder);
 		
 		ArrayList<String> filenames = new ArrayList<String>();
 		if (en.hasMoreElements()) {
@@ -89,6 +89,7 @@ public class Utilities {
 		    
 		    //Iterate through the files.
 		    for (String item : sortedFiles) {
+		    	System.out.println(item);
 		    	filenames.add(item);
 		    }
 		} 

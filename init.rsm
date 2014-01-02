@@ -1,7 +1,6 @@
 <rsm>
 <head>
 <title>RapidS: Test init file</title>
-<link rel="stylesheet" href="styles.css"></link>
 <style type="text/css">
 #clickableButton {
 	margin-left: 20;
