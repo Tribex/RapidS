@@ -3,12 +3,6 @@ import static us.derfers.tribex.rapids.Utilities.debugMsg;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.InputStreamReader;
-import java.nio.file.DirectoryStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -254,26 +248,20 @@ public class Loader {
 		}*/
 		
 		//Temporary replacement, loads jsStdLib from the directory the jarfile is located in.
-		Path dir = FileSystems.getDefault().getPath(Utilities.getJarDirectory()+"/"+folder);
+		File dir = new File(Utilities.getJarDirectory()+"/"+folder);
 		try {
-			DirectoryStream<Path> stream = Files.newDirectoryStream(dir);
+			System.out.println(dir.listFiles());
 			
-			ArrayList<Path> toSort = new ArrayList<Path>();
-		
-			for (Path path : stream) {
-				toSort.add(path);
-			}
+			File [] fileList = dir.listFiles();
 			
-			Object [] sortedPaths = toSort.toArray();
-			Arrays.sort(sortedPaths);
+			Arrays.sort(fileList);
 			
-			for (Object obj : sortedPaths) {
-				Path path = (Path) obj;
-				if (path.toFile().isDirectory()) {
-					recursiveLoadJS(engine, folder+"/"+path.getFileName().toString());
-				} else if (path.toString().endsWith(".js")) {
-					engine.eval(new FileReader(new File(Utilities.getJarDirectory()+folder+"/"+path.getFileName().toString())));
-					debugMsg("Imported JavaScript File: "+path.getFileName(), 4);
+			for (File file : fileList) {
+				if (file.isDirectory()) {
+					recursiveLoadJS(engine, folder+"/"+file.getName());
+				} else if (file.toString().endsWith(".js")) {
+					engine.eval(new FileReader(new File(Utilities.getJarDirectory()+folder+"/"+file.getName())));
+					debugMsg("Imported JavaScript File: "+file.getName(), 4);
 				}
 			}
 		} catch (Exception e){
