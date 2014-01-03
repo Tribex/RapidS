@@ -25,10 +25,10 @@ public class Globals {
 	//XXX: STYLES :XXX\\
 	/**Holds all styles TODO: Make window-specific*/
 	public static Map<String, Map<String, String>> stylesMap = new HashMap<String, Map<String, String>>();
-
 	
 	//XXX: WIDGETS :XXX\\
 	/**Holds all possible widget listener types*/
 	public static String[] listenerTypesArray = {"onmouseup", "onmousedown", "onmouseover", "onmouseout", "onselection", "onclick"};
-
 }
+
+
