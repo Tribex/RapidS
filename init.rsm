@@ -84,7 +84,8 @@ button {
 		
 		console.log("Init.rsm console.log test.");
 		
-		var file = new file("text.txt");
+		var f = files.open("text.txt", "rw+");
+		
 		//Button Clicking System 
 			function runBtnEvt(text, message) {
 				var label_list = window.getElementsByClass("changesOnHover");
@@ -120,8 +121,11 @@ button {
 			}
 		}
 		
-		function getLine() {
-			$getNextLine.setText(file.getNextLine());
+		$rightSide.setText(f.read());
+		
+		function saveLine() {
+			f.writeLine($lineToSave.getText());
+			$rightSide.setText(f.read());
 		}
 	</script>
 <body layout="gridBag" theme="camo">
@@ -154,7 +158,6 @@ button {
 		onclick="changeBackground('clickLabel', 'click')"
 		onmouseover="changeBackground('clickLabel', 'over')"
 		onmouseout="changeBackground('clickLabel', 'out')">Clickable label</label>
-	<button id="getNextLine" onclick="getLine()">Get next line from text.txt</button>
 	<button id="clickableButton" class="changesOnHover"
 		onclick="runBtnEvt('Click', $clickableButton.getName())"
 		onmouseover="runBtnEvt('Mouse Over', $clickableButton.getName())"
@@ -162,7 +165,8 @@ button {
 		Changes the status of the label.</button>
 	<spinner id="spinner" value="10" max="20" min="-1"
 		onselection="runBtnEvt($spinner.getValue(), $spinner.getName())" />
-	<textfield class="standardPosition">Enter a single line of text here!</textfield>
+	<textfield id="lineToSave" class="standardPosition">Enter a single line of text here!</textfield>
+	<button id="saveLine" onclick="saveLine()">Append ^ to text.txt</button>
 	<checkbox class="standardPosition" onclick="console.log('My Checkbox')">My
 	Checkbox</checkbox>
 	<textarea id="rightSide">Enter multiple lines of text here!</textarea>
