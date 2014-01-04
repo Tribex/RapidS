@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
 import org.apache.commons.io.FileUtils;
+import org.jdesktop.http.Method;
+import org.jdesktop.http.async.XmlHttpRequest;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

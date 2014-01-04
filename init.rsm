@@ -84,10 +84,13 @@ button {
 		
 		console.log("Init.rsm console.log test.");
 		
+		var u = urls.open("http://tribex.derfers.us/index.php");
+		u.post("TEST");
+		
+		//GET AND POST ARE WIP
+		console.log(u.get("?page=Projects"));
+		
 		var f = files.open("text.txt", "rw+");
-		
-		
-		console.log(files.userdir);
 
 		//Button Clicking System 
 			function runBtnEvt(text, message) {

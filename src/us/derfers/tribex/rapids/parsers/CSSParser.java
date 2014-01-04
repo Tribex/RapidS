@@ -13,7 +13,11 @@ import java.util.regex.Pattern;
  */
 public class CSSParser {
 	private String toParse;
+
+	private Pattern idPattern = Pattern.compile("(.*?)\\s*?\\{(.*?)}", Pattern.DOTALL);
 	
+	private Pattern propPattern = Pattern.compile("(.*?):(.+?);.*?", Pattern.DOTALL);
+
 	/**
 	 * Creates a new CSSParser with the CSS to parse.
 	 * @param ParseString The CSS to parse
@@ -34,9 +38,8 @@ public class CSSParser {
 
 		//Pattern to get property id
 
-		Pattern idPattern = Pattern.compile("(.*?)\\s*?\\{(.*?)}", Pattern.DOTALL);
 		Matcher idMatcher = idPattern.matcher(toParse);
-		
+
 		//Initialize properties for further searching
 		
 		//Look for properties
@@ -77,7 +80,6 @@ public class CSSParser {
 		}
 		
 		//Regex to loop through properties and add them to the map
-		Pattern propPattern = Pattern.compile("(.*?):(.+?);.*?", Pattern.DOTALL);
 		Matcher propMatcher = propPattern.matcher(properties);
 		while (propMatcher.find()) {
 			idMap.put(propMatcher.group(1).trim(), propMatcher.group(2).trim());
