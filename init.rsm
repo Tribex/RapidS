@@ -86,6 +86,9 @@ button {
 		
 		var f = files.open("text.txt", "rw+");
 		
+		
+		console.log(files.userdir);
+
 		//Button Clicking System 
 			function runBtnEvt(text, message) {
 				var label_list = window.getElementsByClass("changesOnHover");
