@@ -9,6 +9,7 @@
         <pathelement location="lib/commons-io-2.4.jar"/>
         <pathelement location="lib/weblaf-1.25.jar"/>
         <pathelement location="lib/rhino.jar"/>
+        <pathelement location="lib/XMLHttpRequest.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -64,6 +65,7 @@
             <zipfileset dir="lib" includes="commons-io-2.4.jar"/>
             <zipfileset dir="lib" includes="weblaf-1.25.jar"/>
             <zipfileset dir="lib" includes="rhino.jar"/>
+            <zipfileset dir="lib" includes="XMLHttpRequest.jar"/>
         </jar>
         <copy includeemptydirs="false" todir="dist">
             <fileset dir=".">
