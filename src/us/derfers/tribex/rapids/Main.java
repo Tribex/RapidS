@@ -1,9 +1,6 @@
 package us.derfers.tribex.rapids;
 
 import java.io.File;
-
-import us.derfers.tribex.rapids.Loader;
-
 /**
  * Main class. Parses arguments, delegates loading of files, debug handling, and widget creation.
  * @author TribeX, Nateowami
@@ -23,8 +20,7 @@ public class Main {
 	 * The main method for RapidS. Program execution starts here
 	 * @param args The command line arguments
 	 */
-	public static void main(String[] args) {
-		
+	public static void main(String[] args) {		
 		//Value to facilitate automatic loading of init.rsm
 		Boolean hasLoaded  = false;
 		

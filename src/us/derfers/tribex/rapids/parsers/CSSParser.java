@@ -1,6 +1,7 @@
 package us.derfers.tribex.rapids.parsers;
 
 import java.util.HashMap;
+
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
