@@ -91,6 +91,9 @@ button {
 		console.log(u.get("?page=Projects"));
 		
 		var f = files.open("text.txt", "rw+");
+		
+		//try to use an alert
+		showMessageWithIcon("If you find this dialog anoying, just comment out a line of JavaScript.", "Message", "info", getImageIcon("icon.png"));
 
 		//Button Clicking System 
 			function runBtnEvt(text, message) {
