@@ -91,6 +91,9 @@ button {
 		console.log(u.get("?page=Projects"));
 		
 		var f = files.open("text.txt", "rw+");
+		
+		//try to use an alert
+		alert("Hello there!");
 
 		//Button Clicking System 
 			function runBtnEvt(text, message) {
