@@ -1,7 +1,11 @@
 //reads images from files
 
 //read an image from a string
-function getImageIcon(src){
+
+//Construct a new images object to avoid cluttering the global namespace.
+var images = {};
+
+images.getImageIcon = function(src){
 	try{
 		var image = new ImageIcon(src);
 		return image;

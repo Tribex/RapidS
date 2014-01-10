@@ -84,16 +84,10 @@ button {
 		
 		console.log("Init.rsm console.log test.");
 		
-		var u = urls.open("http://tribex.derfers.us/index.php");
-		u.post("TEST");
-		
-		//GET AND POST ARE WIP
-		console.log(u.get("?page=Projects"));
-		
 		var f = files.open("text.txt", "rw+");
 		
-		//try to use an alert
-		showMessageWithIcon("If you find this dialog anoying, just comment out a line of JavaScript.", "Message", "info", getImageIcon("icon.png"));
+		//Show a dialog
+		dialogs.showMessage("If you find this dialog anoying, just comment out line #90 of init.rsm.", "Message", "info", "icon.png");
 
 		//Button Clicking System 
 			function runBtnEvt(text, message) {
