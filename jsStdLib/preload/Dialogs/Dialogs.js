@@ -11,7 +11,12 @@ function alert(message){
 
 //show a message with a custom title and message type
 function showMessage(message, title, type){
-	JOptionPane.showMessageDialog(null, message, title, getType);
+	JOptionPane.showMessageDialog(null, message, title, getType(type));
+}
+
+//show a message with a custom icon
+function showMessageWithIcon(message, title, type, icon){
+	JOptionPane.showMessageDialog(null, message, title, getType(type), icon);
 }
 
 //converts a string to a JOptionPane.SOME_ENUM_VALUE
@@ -30,9 +35,16 @@ function getType(type){
 		//depends on the platform
 		return JOptionPane.WARNING_MESSAGE;
 		break;
+	case "info":
+		return JOptionPane.INFORMATION_MESSAGE;
+		break;
 	default:
 		return JOptionPane.PLAIN_MESSAGE;
 	}
 }
 
+//get input from the user
+function getInput(message){
+	return JOptionPane.showInputDialog(message);
+}
 
