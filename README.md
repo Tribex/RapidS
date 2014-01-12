@@ -5,16 +5,16 @@ A Java toolkit for creating cross-platform programs using just XML (.rsm) and Ja
 
 Progress
 ========
-*22%*
+*70%*
 
-* Initial Loader - 50%
-* CSS Parser - 50%
-* JavaScript Parsing System - 80%
-* XML Widget JavaScript Callbacks - Need to Re-implement from SWT - 60%
-* JavaScript-Java Standard Library - 5%
-* Linking and relative file support - 5%
-* Swing GUI XML Loader - 10% MAJOR TODO
-* Swing layout support - TODO
+* Initial Loader - 90%
+* CSS Parser - 90%
+* JavaScript Parsing System - 99%
+* XML Widget JavaScript Callbacks - 100% (Basic set, more will be added later)
+* JavaScript-Java Standard Library - 20%
+* Linking and relative file support - 100%
+* Swing GUI XML Loader - 100%
+* Swing layout support - 10% - TODO
 * File format specification - TODO
 
 A demo .rsm file - current version.
