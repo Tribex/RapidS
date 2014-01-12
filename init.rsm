@@ -81,10 +81,14 @@ button {
 		require(java.awt.Color);
 		require(java.lang.Class);
 		require(Packages.us.derfers.tribex.rapids);
-		
-		console.log("Init.rsm console.log test.");
-		
+				
 		var f = files.open("text.txt", "rw+");
+		
+		//Print the OS information
+		console.log("RapidS is running on a "+os.name+" "+os.version+", "+os.arch+"-bit computer.");
+		
+		//Execute the Operating System command: "ls"
+		os.exec("ls", true);
 		
 		//Show a dialog
 		dialogs.showMessage("If you find this dialog anoying, just comment out line #90 of init.rsm.", "Message", "info", "icon.png");
