@@ -81,19 +81,30 @@ button {
 		require(java.awt.Color);
 		require(java.lang.Class);
 		require(Packages.us.derfers.tribex.rapids);
-				
+
 		var f = files.open("text.txt", "rw+");
-		
+
+	    //Demonstrates file dialogs
+        /*
+        var returnedValues = files.fileDialog({mode : 'load',
+            directory : '.',
+            filename : "test.txt",
+            title : 'File Dialog',
+            multiple: false
+        });
+        console.log(returnedValues.directory+returnedValues.filename);
+        */
+
 		//Print the OS information
 		console.log("RapidS is running on a "+os.name+" "+os.version+", "+os.arch+"-bit computer.");
-		
+
 		//Execute the Operating System command: "ls"
 		os.exec("ls", true);
-		
+
 		//Show a dialog
 		dialogs.showMessage("If you find this dialog anoying, just comment out line #90 of init.rsm.", "Message", "info", "icon.png");
 
-		//Button Clicking System 
+		//Button Clicking System
 			function runBtnEvt(text, message) {
 				var label_list = window.getElementsByClass("changesOnHover");
 				for (index = 0; index &lt; label_list.length; ++index) {
@@ -107,9 +118,9 @@ button {
 				var color;
 				if (state == 'click') {
 					var color = Color.decode("#666666");
-					
+
 					window.setTimeout('changeBackground("clickLabel", "over")', 200);
-					
+
 				} else if (state == 'over') {
 					var color = Color.decode("#EEEEEE");
 				} else if (state == 'out') {
@@ -117,7 +128,7 @@ button {
 				}
 				widgetID.setBackground(color);
 			}
-			
+
 		function showLogo() {
 			if (!$logo.isVisible()) {
 				$logo.setVisible(true);
@@ -127,9 +138,9 @@ button {
 				$showLogo.setText("Show RapidS logo");
 			}
 		}
-		
+
 		$rightSide.setText(f.read());
-		
+
 		function saveLine() {
 			f.writeLine($lineToSave.getText());
 			$rightSide.setText(f.read());
