@@ -60,7 +60,7 @@ dialogs.input = function(message){
     return JOptionPane.showInputDialog(message);
 }
 
-prompt = dialogs.getInput;
+prompt = dialogs.input;
 
 //Ask the user to confirm an action.
 dialogs.confirm = function(message, title){
@@ -76,4 +76,4 @@ dialogs.confirm = function(message, title){
     }
 }
 
-confirm = dialogs.getConfirmation;
+confirm = dialogs.confirm;
