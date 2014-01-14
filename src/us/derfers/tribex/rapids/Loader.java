@@ -84,25 +84,25 @@ public class Loader {
 
 
         //XXX: Loader section :XXX\\
-            //JAVASCRIPT INITIALIZATION:
-                //Run JavaScript that must be run before preload. Mainly provides require() and similar routines.
-                recursiveLoadJS(engine, "jsStdLib/init");
-                debugMsg("Imported JavaScript Initialization Library (Init)", 4);
+        //JAVASCRIPT INITIALIZATION:
+        //Run JavaScript that must be run before preload. Mainly provides require() and similar routines.
+        recursiveLoadJS(engine, "jsStdLib/init");
+        debugMsg("Imported JavaScript Initialization Library (Init)", 4);
 
-            //PRELOAD:
-                //Loop through the JavaScript standard library for JavaScript and import all .js files in the preload folder.
-                recursiveLoadJS(engine, "jsStdLib/preload");
-                debugMsg("Imported JavaScript Standard Library (PreLoad)", 3);
+        //PRELOAD:
+        //Loop through the JavaScript standard library for JavaScript and import all .js files in the preload folder.
+        recursiveLoadJS(engine, "jsStdLib/preload");
+        debugMsg("Imported JavaScript Standard Library (PreLoad)", 3);
 
-            //LOAD:
-                //Begin loading the XML file(s)
-                debugMsg("Loading "+filePath+"", 2);
-                loadAll(fileEscaped, null, engine);
+        //LOAD:
+        //Begin loading the XML file(s)
+        debugMsg("Loading "+filePath+"", 2);
+        loadAll(fileEscaped, null, engine);
 
-            //POSTLOAD:
-                //Loop through the JavaScript standard library for JavaScript and import all .js files in the postload folder.
-                recursiveLoadJS(engine, "jsStdLib/postload");
-                debugMsg("Imported JavaScript Standard Library (PostLoad)", 3);
+        //POSTLOAD:
+        //Loop through the JavaScript standard library for JavaScript and import all .js files in the postload folder.
+        recursiveLoadJS(engine, "jsStdLib/postload");
+        debugMsg("Imported JavaScript Standard Library (PostLoad)", 3);
 
         //XXX: End loader :XXX\\
     }
@@ -156,7 +156,7 @@ public class Loader {
                         } catch (Exception e) {
                             //If unable to set to .lcm's theme, use the system look'n'feel
                             try {
-                            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                             } catch (Exception a) {
                                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                             }
@@ -167,9 +167,9 @@ public class Loader {
                         //If swing_Theme == camo or is not set, use the system look'n'feel
                         try {
                             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                            } catch (Exception a) {
-                                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-                            }
+                        } catch (Exception a) {
+                            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                        }
                         debugMsg("Look and Feel (Swing) set to System", 3);
 
                     }
@@ -235,17 +235,27 @@ public class Loader {
     private void JSIterator(NodeList scriptNodes, ScriptEngine engine) {
         for (int i=0; i < scriptNodes.getLength(); i++) {
             //Get the specific <script> tag for this loop
-            Node scriptElement = scriptNodes.item(i);
+            Node scriptNode = scriptNodes.item(i);
 
             //Load code in <script> tags
-            if (scriptElement.getNodeName().equals("script")) {
-                debugMsg("Running Script tag: "+(i+1));
-                //Run all the code inside the <script> tags
-                try {
-                    engine.eval(scriptElement.getTextContent());
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+            if (scriptNode.getNodeName().equals("script")) {
+                Element scriptElement = (Element) scriptNode;
+                if (scriptElement.getAttributeNode("src") != null) {
+                    try {
+                        engine.eval(new FileReader(new File(Globals.getCWD()+scriptElement.getAttributeNode("src").getNodeValue())));
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                } else {
+                    debugMsg("Running Script tag: "+(i+1));
+                    //Run all the code inside the <script> tags
+                    try {
+                        engine.eval(scriptNode.getTextContent());
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 }
 
             }
