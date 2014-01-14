@@ -3,90 +3,90 @@
 <title>RapidS: Test init file</title>
 <style type="text/css">
 #clickableButton {
-	margin-left: 20;
-	margin-right: 20;
-	position-x: 0;
-	position-y: rel;
-	anchor: west;
-	padding-y: 40;
-	padding-x: 20;
+    margin-left: 20;
+    margin-right: 20;
+    position-x: 0;
+    position-y: rel;
+    anchor: west;
+    padding-y: 40;
+    padding-x: 20;
 }
 
 #clickLabel {
-	margin: 0 20 0 0;
-	anchor: west;
-	fill: none;
-	foreground-color: #222222;
+    margin: 0 20 0 0;
+    anchor: west;
+    fill: none;
+    foreground-color: #222222;
 }
 
 .standardPosition {
-	margin: 0 20 0 20;
-	fill: BOTH;
-	anchor: west;
+    margin: 0 20 0 20;
+    fill: BOTH;
+    anchor: west;
 }
 
 #rightSide {
-	position-x: rel;
-	occupied-cells-x: 1;
-	occupied-cells-y: 5;
-	position-y: 0;
-	fill: HORIZONTAL;
-	margin: 20 10 20 20;
-	width: 400;
-	height: 200;
+    position-x: rel;
+    occupied-cells-x: 1;
+    occupied-cells-y: 5;
+    position-y: 0;
+    fill: HORIZONTAL;
+    margin: 20 10 20 20;
+    width: 400;
+    height: 200;
 }
 
 label {
-	fill: none;
-	weight-y: 0.0;
-	margin-left: 20;
-	margin-right: 20;
-	background-color: #999999;
-	border: 2 #DDDDDD;
+    fill: none;
+    weight-y: 0.0;
+    margin-left: 20;
+    margin-right: 20;
+    background-color: #999999;
+    border: 2 #DDDDDD;
 }
 
 spinner {
-	fill: HORIZONTAL;
-	margin-left: 20;
-	margin-right: 20;
+    fill: HORIZONTAL;
+    margin-left: 20;
+    margin-right: 20;
 }
 
 button {
-	margin-left: 20;
+    margin-left: 20;
 }
 
 #logo {
-	anchor: west;
-	fill: NONE;
-	position-x: rel;
-	position-y: 0;
-	visibility: hidden;
+    anchor: west;
+    fill: NONE;
+    position-x: rel;
+    position-y: 0;
+    visibility: hidden;
 }
 
 #logoPanel {
-	position-x: 1;
-	position-y: rel;
-	anchor: west;
-	fill: HORIZONTAL;
+    position-x: 1;
+    position-y: rel;
+    anchor: west;
+    fill: HORIZONTAL;
 }
 
 #showLogo {
-	padding-y: 60;
-	fill: VERTICAL;
+    padding-y: 60;
+    fill: VERTICAL;
 }
 </style>
 </head>
 
 <script type="text/javascript">
-		require(java.awt.Color);
-		require(java.lang.Class);
-		require(Packages.us.derfers.tribex.rapids);
+        require(java.awt.Color);
+        require(java.lang.Class);
+        require(Packages.us.derfers.tribex.rapids);
 
-		var f = files.open("text.txt", "rw+");
+        var f = files.open("text.txt", "rw+");
 
-	    //Demonstrates file dialogs
+        //Demonstrates file dialogs
         /*
-        var returnedValues = files.fileDialog({mode : 'load',
+        var returnedValues = dialogs.fileDialog({mode : 'load',
             directory : '.',
             filename : "test.txt",
             title : 'File Dialog',
@@ -95,102 +95,102 @@ button {
         console.log(returnedValues.directory+returnedValues.filename);
         */
 
-		//Print the OS information
-		console.log("RapidS is running on a "+os.name+" "+os.version+", "+os.arch+"-bit computer.");
+        //Print the OS information
+        console.log("RapidS is running on a "+os.name+" "+os.version+", "+os.arch+"-bit computer.");
 
-		//Execute the Operating System command: "ls"
-		os.exec("ls", true);
+        //Execute the Operating System command: "ls"
+        os.exec("ls", true);
 
-		//Show a dialog
-		dialogs.showMessage("If you find this dialog anoying, just comment out line #90 of init.rsm.", "Message", "info", "icon.png");
+        //Show a dialog
+        dialogs.showMessage("If you find this dialog anoying, just comment out line #90 of init.rsm.", "Message", "info", "icon.png");
 
-		//Button Clicking System
-			function runBtnEvt(text, message) {
-				var label_list = window.getElementsByClass("changesOnHover");
-				for (index = 0; index &lt; label_list.length; ++index) {
-					window.shell.setTitle(text);
-					label_list[index].setText(text+" - "+message);
-				}
-			}
+        //Button Clicking System
+            function runBtnEvt(text, message) {
+                var label_list = window.getElementsByClass("changesOnHover");
+                for (index = 0; index &lt; label_list.length; ++index) {
+                    window.shell.setTitle(text);
+                    label_list[index].setText(text+" - "+message);
+                }
+            }
 
-		function changeBackground(widget, state) {
-				var widgetID = window.getElementById(widget);
-				var color;
-				if (state == 'click') {
-					var color = Color.decode("#666666");
+        function changeBackground(widget, state) {
+                var widgetID = window.getElementById(widget);
+                var color;
+                if (state == 'click') {
+                    var color = Color.decode("#666666");
 
-					window.setTimeout('changeBackground("clickLabel", "over")', 200);
+                    window.setTimeout('changeBackground("clickLabel", "over")', 200);
 
-				} else if (state == 'over') {
-					var color = Color.decode("#EEEEEE");
-				} else if (state == 'out') {
-					var color = Color.decode("#999999");
-				}
-				widgetID.setBackground(color);
-			}
+                } else if (state == 'over') {
+                    var color = Color.decode("#EEEEEE");
+                } else if (state == 'out') {
+                    var color = Color.decode("#999999");
+                }
+                widgetID.setBackground(color);
+            }
 
-		function showLogo() {
-			if (!$logo.isVisible()) {
-				$logo.setVisible(true);
-				$showLogo.setText("Hide RapidS logo");
-			} else {
-				$logo.setVisible(false);
-				$showLogo.setText("Show RapidS logo");
-			}
-		}
+        function showLogo() {
+            if (!$logo.isVisible()) {
+                $logo.setVisible(true);
+                $showLogo.setText("Hide RapidS logo");
+            } else {
+                $logo.setVisible(false);
+                $showLogo.setText("Show RapidS logo");
+            }
+        }
 
-		$rightSide.setText(f.read());
+        $rightSide.setText(f.read());
 
-		function saveLine() {
-			f.writeLine($lineToSave.getText());
-			$rightSide.setText(f.read());
-		}
-	</script>
+        function saveLine() {
+            f.writeLine($lineToSave.getText());
+            $rightSide.setText(f.read());
+        }
+    </script>
 <body layout="gridBag" theme="camo">
-	<menu value="File">
-		<menuitem>Open</menuitem>
-		<menuitem>Save</menuitem>
-		<menuitem>Save As</menuitem>
+    <menu value="File">
+        <menuitem>Open</menuitem>
+        <menuitem>Save</menuitem>
+        <menuitem>Save As</menuitem>
 
-		<menu value="Open Recent">
-			<menuitem>Item 1</menuitem>
-			<menuitem>Item 2</menuitem>
-			<menuitem>Item 3</menuitem>
-			<menuitem>Item 4</menuitem>
-		</menu>
-	</menu>
+        <menu value="Open Recent">
+            <menuitem>Item 1</menuitem>
+            <menuitem>Item 2</menuitem>
+            <menuitem>Item 3</menuitem>
+            <menuitem>Item 4</menuitem>
+        </menu>
+    </menu>
 
-	<menu value="About">
-		<menu value="SubMenu">
-			<menuitem>SubMenuItem</menuitem>
-		</menu>
-	</menu>
+    <menu value="About">
+        <menu value="SubMenu">
+            <menuitem>SubMenuItem</menuitem>
+        </menu>
+    </menu>
 
-	<menu value="Help">
-		<menuitem>MenuItem</menuitem>
-	</menu>
-	<label class="changesOnHover" onmouseup="runBtnEvt('Click', 'No Id')"
-		onmouseover="runBtnEvt('Mouse Over', 'No Id')"
-		onmouseout="runBtnEvt('Mouse Out', 'No Id')">label changes on mouseover, mouseout, and click.</label>
-	<label id="clickLabel"
-		onclick="changeBackground('clickLabel', 'click')"
-		onmouseover="changeBackground('clickLabel', 'over')"
-		onmouseout="changeBackground('clickLabel', 'out')">Clickable label</label>
-	<button id="clickableButton" class="changesOnHover"
-		onclick="runBtnEvt('Click', $clickableButton.getName())"
-		onmouseover="runBtnEvt('Mouse Over', $clickableButton.getName())"
-		onmouseout="runBtnEvt('Mouse Out', $clickableButton.getName())">
-		Changes the status of the label.</button>
-	<spinner id="spinner" value="10" max="20" min="-1"
-		onselection="runBtnEvt($spinner.getValue(), $spinner.getName())" />
-	<textfield id="lineToSave" class="standardPosition">Enter a single line of text here!</textfield>
-	<button id="saveLine" onclick="saveLine()">Append ^ to text.txt</button>
-	<checkbox class="standardPosition" onclick="console.log('My Checkbox')">My
-	Checkbox</checkbox>
-	<textarea id="rightSide">Enter multiple lines of text here!</textarea>
-	<panel id="logoPanel">
-	<button class="standardPosition" id="showLogo" onclick="showLogo()">Hide RapidS logo</button>
-	<img class="standardPosition" id="logo" src="icon.png" /> </panel>
+    <menu value="Help">
+        <menuitem>MenuItem</menuitem>
+    </menu>
+    <label class="changesOnHover" onmouseup="runBtnEvt('Click', 'No Id')"
+        onmouseover="runBtnEvt('Mouse Over', 'No Id')"
+        onmouseout="runBtnEvt('Mouse Out', 'No Id')">label changes on mouseover, mouseout, and click.</label>
+    <label id="clickLabel"
+        onclick="changeBackground('clickLabel', 'click')"
+        onmouseover="changeBackground('clickLabel', 'over')"
+        onmouseout="changeBackground('clickLabel', 'out')">Clickable label</label>
+    <button id="clickableButton" class="changesOnHover"
+        onclick="runBtnEvt('Click', $clickableButton.getName())"
+        onmouseover="runBtnEvt('Mouse Over', $clickableButton.getName())"
+        onmouseout="runBtnEvt('Mouse Out', $clickableButton.getName())">
+        Changes the status of the label.</button>
+    <spinner id="spinner" value="10" max="20" min="-1"
+        onselection="runBtnEvt($spinner.getValue(), $spinner.getName())" />
+    <textfield id="lineToSave" class="standardPosition">Enter a single line of text here!</textfield>
+    <button id="saveLine" onclick="saveLine()">Append ^ to text.txt</button>
+    <checkbox class="standardPosition" onclick="console.log('My Checkbox')">My
+    Checkbox</checkbox>
+    <textarea id="rightSide">Enter multiple lines of text here!</textarea>
+    <panel id="logoPanel">
+    <button class="standardPosition" id="showLogo" onclick="showLogo()">Hide RapidS logo</button>
+    <img class="standardPosition" id="logo" src="icon.png" /> </panel>
 
 </body>
 
