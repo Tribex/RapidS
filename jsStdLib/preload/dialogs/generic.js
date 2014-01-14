@@ -64,7 +64,7 @@ prompt = dialogs.input;
 
 //Ask the user to confirm an action.
 dialogs.confirm = function(message, title){
-    if (title === null or title === undefined) {
+    if (title === null || title === undefined) {
         title = "Confirm";
     }
 
