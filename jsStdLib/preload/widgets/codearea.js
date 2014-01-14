@@ -4,8 +4,10 @@
 
 require(Packages.javax.swing.JEditorPane);
 require(Packages.javax.swing.JScrollPane);
+require(Packages.jsyntaxpane.DefaultSyntaxKit);
 
 widgets.registerWidget("JEditorPane", "codearea", "A simple JEditorPane with syntax highlighting support.", function (parentComposite, widgetElement, engine) {
+    DefaultSyntaxKit.initKit();
 
     //Create a new textarea
     widget = new JEditorPane();
