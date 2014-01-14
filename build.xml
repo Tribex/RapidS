@@ -10,20 +10,23 @@
         <pathelement location="lib/weblaf-1.25.jar"/>
         <pathelement location="lib/rhino.jar"/>
         <pathelement location="lib/HttpRequest.jar"/>
+        <pathelement location="lib/jsyntax.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir=".">
+                <exclude name="**/bin/"/>
+                <exclude name="**/dist/"/>
+                <exclude name="**/lib/"/>
                 <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/build.xml"/>
-                <exclude name="**/dist"/>
+                <exclude name=".*"/>
             </fileset>
         </copy>
-        <delete dir="bin/bin"/>
-		<delete dir="bin/dist"/>
     </target>
+
     <target name="clean">
         <delete dir="bin"/>
     </target>
@@ -37,45 +40,54 @@
             <classpath refid="RapidS.classpath"/>
         </javac>
     </target>
-    
+
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
-    
+
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    
+
     <target name="main">
         <java classname="us.derfers.tribex.rapids.Main" failonerror="true" fork="yes">
             <classpath refid="RapidS.classpath"/>
         </java>
     </target>
-    
+
     <target name="create_run_jar">
-		<delete dir="dist"/>
+        <delete dir="dist"/>
         <jar destfile="dist/RapidS.jar">
             <manifest>
                 <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
                 <attribute name="Rsrc-Main-Class" value="us.derfers.tribex.rapids.Main"/>
                 <attribute name="Class-Path" value="."/>
-                <attribute name="Rsrc-Class-Path" value="./ commons-io-2.4.jar weblaf-1.25.jar rhino.jar"/>
+                <attribute name="Rsrc-Class-Path" value="./ commons-io-2.4.jar weblaf-1.25.jar rhino.jar HttpRequest.jar jsyntax.jar"/>
             </manifest>
             <zipfileset src="../jar-in-jar-loader.zip"/>
-            <fileset dir="bin"/>
+            <fileset dir="bin">
+                <exclude name="lib/"/>
+                <exclude name="jsStdLib/"/>
+                <exclude name=".*"/>
+                <exclude name="text.txt"/>
+                <exclude name="icon.png"/>
+            </fileset>
             <zipfileset dir="lib" includes="commons-io-2.4.jar"/>
             <zipfileset dir="lib" includes="weblaf-1.25.jar"/>
             <zipfileset dir="lib" includes="rhino.jar"/>
             <zipfileset dir="lib" includes="HttpRequest.jar"/>
+            <zipfileset dir="lib" includes="jsyntax.jar"/>
         </jar>
         <copy includeemptydirs="false" todir="dist">
             <fileset dir=".">
+                <exclude name="bin/"/>
+                <exclude name="dist/"/>
+                <exclude name="lib/"/>
                 <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/build.xml"/>
+                <exclude name=".*"/>
             </fileset>
         </copy>
-        <delete dir="dist/bin"/>
-        <delete dir="dist/lib"/>
-        <delete dir="dist/dist"/>
+
     </target>
 </project>

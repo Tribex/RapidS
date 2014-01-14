@@ -6,6 +6,6 @@
 	<classpathentry kind="lib" path="lib/weblaf-1.25.jar"/>
 	<classpathentry kind="lib" path="lib/rhino.jar"/>
 	<classpathentry kind="lib" path="lib/HttpRequest.jar"/>
-	<classpathentry kind="lib" path="lib/jsyntaxpane-0.9.5-b29.jar"/>
+	<classpathentry kind="lib" path="lib/jsyntax.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
