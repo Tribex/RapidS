@@ -33,7 +33,7 @@ dialogs.alert = function(message){
     JOptionPane.showMessageDialog(null, message);
 }
 
-alert = dialogs.alert();
+alert = dialogs.alert;
 
 //Show a message with a custom title and message type.
 //@Nateowami: I combined this with showMessageWithIcon, for brevity's sake.
@@ -59,4 +59,6 @@ dialogs.showMessage = function(message, title, type, icon){
 dialogs.getInput = function(message){
     return JOptionPane.showInputDialog(message);
 }
+
+prompt = dialogs.getInput;
 
