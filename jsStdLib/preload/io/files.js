@@ -16,11 +16,15 @@ function files(filename, flag) {
     // The file being operated on
     var filename = filename;
 
+    if (flag === null || flag === undefined) {
+        flag = "rw";
+    }
+
     // If the file operation specified is "read", "read-write", or
     // "read-write-append" (r, rw, rw+)
     if (stringContains(flag, "r")) {
         try {
-            var scanner = new Scanner(new File(Globals.getCWD() + filename));
+            var scanner = new Scanner(new File(filename));
         } catch (e) {
             Utilities.showError("Error reading file: " + filename
                     + ". Does it exist?\n\n" + e.message);
@@ -28,8 +32,7 @@ function files(filename, flag) {
 
         // Returns a string containing all the contents of filename
         this.read = function() {
-            return FileUtils.readFileToString(new File(Globals.getCWD()
-                    + filename));
+            return FileUtils.readFileToString(new File(filename));
         }
 
         // Reads the next line from filename
@@ -77,8 +80,7 @@ function files(filename, flag) {
         // Write 'data' to 'filename'.
         this.write = function(data) {
             try {
-                FileUtils.writeStringToFile(new File(Globals.getCWD()
-                        + filename), data, append);
+                FileUtils.writeStringToFile(new File(filename), data, append);
             } catch (e) {
                 Utilities.showError("Error writing to file: " + filename
                         + " - " + e.message);
@@ -89,7 +91,7 @@ function files(filename, flag) {
         // a newline to the end of 'data'
         this.writeLine = function(data) {
             try {
-                FileUtils.write(new File(Globals.getCWD() + filename), data
+                FileUtils.write(new File(filename), data
                         + "\n", true);
             } catch (e) {
                 Utilities.showError("Error writing line to file: " + filename
@@ -101,7 +103,11 @@ function files(filename, flag) {
 
 /* Static constructor that removes the need for a 'new' keyword */
 files.open = function(filename, flag) {
-    return new files(filename, flag);
+    if (filename.startsWith("/") || filename.startsWith("C:\\")) {
+        return new files(filename, flag);
+    } else {
+        return new files(Globals.getCWD()+filename, flag);
+    }
 }
 
 /* Static function for copying one filename to another */
