@@ -30,10 +30,8 @@
     occupied-cells-x: 1;
     occupied-cells-y: 5;
     position-y: 0;
-    fill: HORIZONTAL;
+    fill: BOTH;
     margin: 20 10 20 20;
-    width: 400;
-    height: 200;
 }
 
 label {

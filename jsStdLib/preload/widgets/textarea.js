@@ -7,20 +7,20 @@ require(Packages.javax.swing.JScrollPane);
 
 widgets.registerWidget("JTextArea", "textarea", "A simple JTextArea", function (parentComposite, widgetElement, engine) {
 
-	//Create a new textarea
-	widget  = new JTextArea();
+    //Create a new textarea
+    widget = new JTextArea();
 
-	//Create a new scrollpane and add the textarea to it
-	scrollPane = new JScrollPane(widget);  
+    //Create a new scrollpane and add the textarea to it
+    scrollPane = new JScrollPane(widget);
 
-	//Set the text of the textArea
-	widget.setText(widgetElement.getTextContent());
+    //Set the text of the textArea
+    widget.setText(widgetElement.getTextContent());
 
-	//Add the scrollpane to the parentComposite
-	parentComposite.add(scrollPane, Layouts.getWidgetConstraint(widgetElement));
+    //Add the scrollpane to the parentComposite
+    parentComposite.add(scrollPane, Layouts.getWidgetConstraint(widgetElement));
 
+    widgets.initializeWidget(widget, widgetElement, engine);
 
-	widgets.initializeWidget(widget, widgetElement, engine);
-	return widget;
+    return widget;
 });
 
