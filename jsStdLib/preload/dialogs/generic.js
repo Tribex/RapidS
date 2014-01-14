@@ -37,7 +37,7 @@ alert = dialogs.alert;
 
 //Show a message with a custom title and message type.
 //@Nateowami: I combined this with showMessageWithIcon, for brevity's sake.
-dialogs.showMessage = function(message, title, type, icon){
+dialogs.message = function(message, title, type, icon){
 
     //If the user didn't specify an icon
     if (icon == null || icon == undefined) {
@@ -55,10 +55,25 @@ dialogs.showMessage = function(message, title, type, icon){
 }
 
 
-//get input from the user
-dialogs.getInput = function(message){
+//Get input from the user.
+dialogs.input = function(message){
     return JOptionPane.showInputDialog(message);
 }
 
 prompt = dialogs.getInput;
 
+//Ask the user to confirm an action.
+dialogs.confirm = function(message, title){
+    if (title === null or title === undefined) {
+        title = "Confirm";
+    }
+
+    var reply = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+    if (reply == JOptionPane.YES_OPTION) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+confirm = dialogs.getConfirmation;
