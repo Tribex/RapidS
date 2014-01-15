@@ -18,6 +18,7 @@
 
 package us.derfers.tribex.rapids.GUI.Swing;
 
+import java.awt.Container;
 import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -53,14 +54,6 @@ import us.derfers.tribex.rapids.parsers.CSSParser;
  */
 public class GUI {
 
-    //Constants that need to be defined to keep the GUI in one frame system.
-    /** The Main Window. Needs to be made more modular to support opening new windows.*/
-    private static JFrame window = new JFrame();
-
-    /** The Main Panel.  Will be set to window.getContentPane() */
-    private static JPanel windowPanel = new JPanel();
-
-
     /**
      * Starts the JFrame, sets a GridBagLayout TODO: allow layouts to be configurable, Sets the Window Title,
      * loads Styles, and runs loadInComposite to load widgets.
@@ -70,62 +63,57 @@ public class GUI {
      * @param parent Optional parent JFrame or Composite. Will be elaborated on soon.
      * @param clearWidgets Wether or not to clear all widgets out of the parent before loading more into it.
      */
-    public void loadGUI(String escapedFile, ScriptEngine engine, Object parent, Boolean clearWidgets) {
+    public void loadWindow(Element windowElement, ScriptEngine engine, Boolean setVisible) {
         //XXX: Initialization :XXX\\
-        //Create ParentComposite variable
+        String id = "";
 
-        //Make sure the window closes the program TODO: Make configurable.
+        final JFrame window = new JFrame();
+
+        Container windowPanel = window.getContentPane();
+
         window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        window.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                 System.exit(0);
-            }
-        });
 
-
-        JPanel parentComposite = null;
-
-        //Check to see if the parent exists
-        if (parent == null || parent.getClass().equals(JFrame.class)) {
-            //If it does not exist, add the the default panel to the window
-            window.getContentPane().add(windowPanel);
-
-            //Set the parentComposite to the windowPanel
-            parentComposite = windowPanel;
+        if (windowElement.hasAttribute("id") && windowElement.getAttributeNode("id").getTextContent().equals("init")) {
+            setVisible = true;
+            id = "__INIT__";
+            window.addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    System.exit(0);
+                }
+            });
+        } else if (windowElement.getAttributeNode("id") == null) {
+            Utilities.showError("ERROR: Window does not have an id. Unable to recover.");
+            System.exit(0);
         } else {
-            //Set the parentComposite to the Parent
-            parentComposite = (JPanel) parent;
+            id = windowElement.getAttributeNode("id").getTextContent();
+            window.addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                   window.setVisible(false);
+                }
+            });
         }
 
         //TODO: Flexible layout types
         //Create a gridbaglayout
         windowPanel.setLayout(new GridBagLayout());
 
-
-        //TODO: Create a better menubar
         JMenuBar menuBar = new JMenuBar();
         window.setJMenuBar(menuBar);
 
 
 
         //Create a subMap for holding the Window and any properties of it
-        Map<String, Object> shellMap = new HashMap<String, Object>();
+        Map<String, Object> windowMap = new HashMap<String, Object>();
 
-        shellMap.put("__WINDOW__", window);
+        windowMap.put(id, window);
 
-        Main.loader.XMLWidgets.put("__WINDOW__", shellMap);
+        Main.loader.XMLObjects.put(id, windowMap);
 
 
         try {
-
-            //XML File Loading
-            Document doc = Utilities.XMLStringToDocument(escapedFile);
-
-            doc.getDocumentElement().normalize();
-
             //XXX: HEAD :XXX\\
             //Get Window information from the Head Element
-            NodeList headElementList = doc.getElementsByTagName("head").item(0).getChildNodes();
+            NodeList headElementList = windowElement.getElementsByTagName("head").item(0).getChildNodes();
 
             //Loop through the children of the Head element
             for (int counter=0; counter < headElementList.getLength(); counter++) {
@@ -157,7 +145,7 @@ public class GUI {
             //XXX: BODY : XXX\\
             //Loop through all children of the body element and add them
 
-            loadInComposite(parentComposite, doc.getElementsByTagName("body").item(0), engine);
+            loadInComposite((JComponent) windowPanel, windowElement.getElementsByTagName("body").item(0), engine);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,10 +155,9 @@ public class GUI {
         window.pack();
 
         //Loading the JS must be done ABSOLUTELY LAST before the setVisible() call, or some properties will be missed.
-        Main.loader.loadJS(escapedFile, engine);
 
         //Open the window
-        window.setVisible(true);
+        window.setVisible(setVisible);
         //XXX: END WIDGET CREATION :XXX\\
     }
 
@@ -201,36 +188,17 @@ public class GUI {
             if (widgetNode.getNodeType() == Node.ELEMENT_NODE) {
                 final Element widgetElement = (Element) widgetNode;
 
-                //Load all link tags
-                if (widgetElement.getNodeName().equals("link")) {
-                    if (widgetElement.getAttributeNode("href") != null) {
-                        Main.loader.loadAll((widgetElement.getAttributeNode("href").getNodeValue()), parentComposite, engine);
-
-                    } else {
-                        Utilities.showError("Warning: <link> tags must contain a href attribute.");
-                    }
-                } else {
-                    //If this element exists in the list of registered widgets
-                    if (registeredWidgets.contains(widgetElement.getNodeName())) {
-                        //Run the JavaScript function to draw and display the widget
-                        engine.call("widgets.widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, engine);
-                    }
+                //If this element exists in the list of registered widgets
+                if (registeredWidgets.contains(widgetElement.getNodeName())) {
+                    //Run the JavaScript function to draw and display the widget
+                    engine.call("widgets.widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, engine);
                 }
             }
 
         }
-        for (Map <String, Object> item : Main.loader.XMLWidgets.values()) {
-
-            //I know this is confusing, working on splitting it up. TODO: Split this up to make it readable
-            //TODO: Make windows flexible
-            if (item.containsKey("id")) {
-                item.put((String) item.get("id"), (Object) WidgetOps.getWidgetStyles((JComponent) item.get(item.get("id")), (String) item.get("id")));
-            }
-        }
 
         //position and draw the widgets
         parentComposite.doLayout();
-        window.pack();
 
     }
 
@@ -272,8 +240,7 @@ public class GUI {
                 }
             } else {
                 //Attempt to load as a .rsm file
-                Main.loader.loadAll((linkElement.getAttributeNode("href").getNodeValue()),
-                        Main.loader.XMLWidgets.get("__WINDOW__").get("__WINDOW__"), engine);
+                Main.loader.loadAll((Utilities.EscapeScriptTags(linkElement.getAttributeNode("href").getNodeValue())), engine);
             }
 
         } else {
@@ -283,7 +250,7 @@ public class GUI {
     }
 
     //Style loading method
-    private boolean loadStyles(String content, String file) {
+    public boolean loadStyles(String content, String file) {
         //If the user has specified loading from a string, not file
         if (file == null) {
             //Create a new CSSParser

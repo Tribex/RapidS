@@ -48,20 +48,22 @@ public class Loader {
     /** The initial JavaScript engine */
     public ScriptEngine engine = new ScriptEngine();
 
+    public GUI GUI = new GUI();
+
+
     /**
      * Where widget variables are stored.  Format: WIDGETID {WIDGETID {WIDGET}, class {CLASSNAME}, And so on for the rest of the parameters}
      */
-    public Map<String, Map<String, Object>> XMLWidgets = new HashMap<String, Map<String, Object>>();
+    public Map<String, Map<String, Object>> XMLObjects = new HashMap<String, Map<String, Object>>();
 
     /** Counts Taken ID's for ID-less widgets */
-    public Integer XMLWidgets__NO__ID = 0;
+    public Integer XMLObjects__NO__ID = 0;
 
     /**
      * The startup method. Starts the JavaScript engine and runs loadAll.
      * @param filePath The file to load initially.
      */
     public void startLoader(String filePath) {
-
         String fileEscaped = Utilities.EscapeScriptTags(filePath);
         //JavaScript Engine Initialization
         //---------------------------------------------------------------------------//
@@ -97,7 +99,7 @@ public class Loader {
         //LOAD:
         //Begin loading the XML file(s)
         debugMsg("Loading "+filePath+"", 2);
-        loadAll(fileEscaped, null, engine);
+        loadAll(fileEscaped, engine);
 
         //POSTLOAD:
         //Loop through the JavaScript standard library for JavaScript and import all .js files in the postload folder.
@@ -113,7 +115,7 @@ public class Loader {
      * @param parent The (optional) parent Object, Eg, a JFrame or JPanel.
      * @param engine The JavaScript engine to pass to GUI_Swing
      */
-    public void loadAll(String escapedFile, final Object parent, ScriptEngine engine) {
+    public void loadAll(String escapedFile, ScriptEngine engine) {
 
         //Attempt to load .rsm file filePath
         try {
@@ -125,19 +127,19 @@ public class Loader {
             doc.normalize();
 
             //Get body element
-            NodeList bodyNodeList = doc.getElementsByTagName("body");
+            NodeList mainNodeList = doc.getElementsByTagName("rsm");
 
             //Make sure there is only ONE body element
-            if (bodyNodeList.getLength() == 1) {
-                debugMsg("Parsing Body Element", 4);
+            if (mainNodeList.getLength() == 1) {
+                debugMsg("Parsing Main Element", 4);
                 //Get body Element
-                Element bodyElement = (Element) bodyNodeList.item(0);
+                Element mainElement = (Element) mainNodeList.item(0);
 
                 //If the bodyelement has the attribute "theme"
-                if (bodyElement.getAttributeNode("theme") != null) {
+                if (mainElement.getAttributeNode("theme") != null) {
 
                     //Get the value of the attribute theme for the body element
-                    Attr swing_Theme = bodyElement.getAttributeNode("theme");
+                    Attr swing_Theme = mainElement.getAttributeNode("theme");
 
                     //See if the lcm file specifies a theme other than camo
                     if (swing_Theme != null && !swing_Theme.getNodeValue().equalsIgnoreCase("camo")) {
@@ -176,16 +178,31 @@ public class Loader {
 
 
                     //Create a new GUI instance and initialize it.
-                    GUI GUI = new GUI();
-                    GUI.loadGUI(escapedFile, engine, parent, false);
+
+                    for (int i = 0; i < mainElement.getElementsByTagName("window").getLength(); i++) {
+                        GUI.loadWindow((Element) mainElement.getElementsByTagName("window").item(i), engine, false);
+                    }
+
+                    for (int i = 0; i < mainElement.getElementsByTagName("style").getLength(); i++) {
+                        Element styleElement = (Element) mainElement.getElementsByTagName("style").item(i);
+                        //Load all styles from the style tags
+                        if (styleElement.getAttributeNode("href") != null) {
+                            GUI.loadStyles(null, styleElement.getTextContent());
+                        } else {
+                            GUI.loadStyles(styleElement.getTextContent(), null);
+
+                        }
+                    }
+
+                    Main.loader.loadJS(escapedFile, engine);
 
                 }
 
             } else { //There was more than one body tag, or 0 body tags
 
                 //Display Error and quit, as we cannot recover from an abnormally formatted file
-                Utilities.showError("Error: More or less than one <body> tag in '"+escapedFile+"'.\n\n"
-                        + "Please add ONE body tag to '"+escapedFile+"'.");
+                Utilities.showError("Error: More or less than one <rsm> tag in '"+escapedFile+"'.\n\n"
+                        + "Please add ONE <rsm> tag to '"+escapedFile+"'.");
                 System.exit(1);
             }
 
@@ -248,7 +265,7 @@ public class Loader {
                         e.printStackTrace();
                     }
                 } else {
-                    debugMsg("Running Script tag: "+(i+1));
+                    debugMsg("Loading Script tag: "+(i+1));
                     //Run all the code inside the <script> tags
                     try {
                         engine.eval(scriptNode.getTextContent());
@@ -268,23 +285,6 @@ public class Loader {
      * @param folder The folder to load .js files from.
      */
     private static void recursiveLoadJS(ScriptEngine engine, String folder) {
-        //Loop through the files in the folder  FIXME: Load files inside jar.
-        /*for (String toImport : Utilities.listFilesInJar(folder)) {
-
-            //If toImport does not have a '.' in it, assume it is a folder
-            if (!toImport.contains(".")) {
-                //Attempt to recursively load it as a folder.
-                recursiveLoadJS(engine, folder+"/"+toImport);
-
-            } else if (toImport.endsWith(".js")) {
-                //Run the file
-                engine.eval(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(folder+"/"+toImport)));
-                debugMsg("Imported JavaScript File: "+toImport, 4);
-
-            }
-        }*/
-
-        //Temporary replacement, loads jsStdLib from the directory the jarfile is located in.
         File dir = new File(Utilities.getJarDirectory()+"/"+folder);
         try {
 

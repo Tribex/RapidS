@@ -1,6 +1,5 @@
-<rsm>
-<head>
-<title>RapidS: Test init file</title>
+<rsm theme="camo">
+
 <style type="text/css">
 #clickableButton {
     margin-left: 20;
@@ -73,7 +72,6 @@ button {
     fill: VERTICAL;
 }
 </style>
-</head>
 
 <script type="text/javascript">
         require(java.awt.Color);
@@ -106,7 +104,7 @@ button {
             function runBtnEvt(text, message) {
                 var label_list = window.getElementsByClass("changesOnHover");
                 for (index = 0; index &lt; label_list.length; ++index) {
-                    window.shell.setTitle(text);
+                    window.getElementById("b").setTitle(text);
                     label_list[index].setText(text+" - "+message);
                 }
             }
@@ -144,7 +142,11 @@ button {
             $rightSide.setText(f.read());
         }
     </script>
-<body layout="gridBag" theme="camo">
+<window id="b">
+<head>
+<title>RapidS: Test init file</title>
+</head>
+<body>
     <menu value="File">
         <menuitem>Open</menuitem>
         <menuitem>Save</menuitem>
@@ -192,5 +194,14 @@ button {
     <img class="standardPosition" id="logo" src="icon.png" /> </panel>
 
 </body>
+</window>
 
+<window id="init">
+    <head>
+        <title>Erm</title>
+    </head>
+    <body>
+        <button onclick="window.getElementById('b').setVisible(true)">Clicky</button>
+    </body>
+</window>
 </rsm>
