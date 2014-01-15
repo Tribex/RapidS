@@ -25,7 +25,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import us.derfers.tribex.rapids.ScriptEngine;
-
 import us.derfers.tribex.rapids.Main;
 
 /**
@@ -41,8 +40,8 @@ public class Window {
      * @return The widget specified by 'id' from XMLWidgets
      */
     public static Object getElementById(String id) {
-        if (Main.loader.XMLWidgets.get(id) != null) {
-            return Main.loader.XMLWidgets.get(id).get(id);
+        if (Main.loader.XMLObjects.get(id) != null) {
+            return Main.loader.XMLObjects.get(id).get(id);
         } else {
             return null;
         }
@@ -59,7 +58,7 @@ public class Window {
         List<Object> elementList = new ArrayList<Object>();
 
         //Loop through all the widgets
-        for (Map<String, Object> element: Main.loader.XMLWidgets.values()) {
+        for (Map<String, Object> element : Main.loader.XMLObjects.values()) {
             if (element.get("class") != null && element.get("class").equals(class_identifier)) {
                 elementList.add(element.get(element.get("id")));
             }
@@ -73,7 +72,7 @@ public class Window {
     //XXX: WINDOW OPERATIONS :XXX\\
 
     /**An easy reference to the top-level JFrame*/
-    public static javax.swing.JFrame shell = (javax.swing.JFrame) Main.loader.XMLWidgets.get("__WINDOW__").get("__WINDOW__");
+    public static javax.swing.JFrame shell = (javax.swing.JFrame) Main.loader.XMLObjects.get("b").get("b");
 
 
     //An easy static reference to the JavaScript engine.

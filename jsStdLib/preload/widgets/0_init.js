@@ -36,6 +36,9 @@ var widgets = {
                 }
 
             }
-            WidgetOps.addWidgetToMaps(widgetElement, widget, engine, prependID);
+            var id = WidgetOps.getWidgetId(widgetElement, prependID);
+            WidgetOps.addWidgetToMaps(id, widgetElement, widget, engine);
+            widget = WidgetOps.getWidgetStyles(widget, id);
+            WidgetOps.addWidgetToMaps(id, widgetElement, widget, engine);
         },
 }

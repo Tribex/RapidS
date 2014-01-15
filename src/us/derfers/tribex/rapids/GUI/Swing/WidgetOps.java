@@ -52,12 +52,12 @@ public class WidgetOps {
      */
     public static JComponent getWidgetStyles(JComponent widget, String id) {
         //Get the widget data for the id of the widget.
-        Map<String, Object> widgetData = Main.loader.XMLWidgets.get(id);
+        Map<String, Object> widgetData = Main.loader.XMLObjects.get(id);
 
         //If the element is specified (should be, but just to make sure)
         if (widgetData.get("element") != null && Globals.stylesMap.get(widgetData.get("element")) != null) {
             //Get the styles for the element
-            String widgetIdentifier = Main.loader.XMLWidgets.get(id).get("element").toString();
+            String widgetIdentifier = Main.loader.XMLObjects.get(id).get("element").toString();
             Map<String, String> styles = Globals.stylesMap.get(widgetIdentifier);
 
             //Load the widget styles.
@@ -67,7 +67,7 @@ public class WidgetOps {
         //If the class is specified
         if (widgetData.get("class") != null && Globals.stylesMap.get("."+widgetData.get("class"))!= null) {
             //Get the styles for the class
-            String widgetIdentifier = Main.loader.XMLWidgets.get(id).get("element").toString();
+            String widgetIdentifier = Main.loader.XMLObjects.get(id).get("element").toString();
 
             Map<String, String> styles = Globals.stylesMap.get("."+widgetIdentifier);
 
@@ -240,14 +240,7 @@ public class WidgetOps {
 
     //XXX: Map setup :XXX\\
 
-    public static void addWidgetToMaps(Element widgetElement, Object widget, ScriptEngine engine) {
-        addWidgetToMaps(widgetElement, widget, engine, "");
-    }
-    public static void addWidgetToMaps(Element widgetElement, Object widget, ScriptEngine engine, String prependID) {
-
-        //Create a HashMap to hold Widget ID and class, as well as other parameters.
-        Map<String, Object> widgetMap = new HashMap<String, Object>();
-
+    public static String getWidgetId(Element widgetElement, String prependID) {
         //Define the ID of the button
         String widgetID = null;
         if (widgetElement.getAttributeNode("id") != null) {
@@ -255,9 +248,18 @@ public class WidgetOps {
 
             //If not, assign an incremental id: __ID__#
         } else {
-            widgetID = prependID+"__ID__"+Integer.toString(Main.loader.XMLWidgets__NO__ID+1);
-            Main.loader.XMLWidgets__NO__ID += 1;
+            widgetID = prependID+"__ID__"+Integer.toString(Main.loader.XMLObjects__NO__ID+1);
+            Main.loader.XMLObjects__NO__ID += 1;
         }
+        return widgetID;
+    }
+
+    public static void addWidgetToMaps(String widgetID, Element widgetElement, Object widget, ScriptEngine engine) {
+
+        //Create a HashMap to hold Widget ID and class, as well as other parameters.
+        Map<String, Object> widgetMap = new HashMap<String, Object>();
+
+
         Utilities.debugMsg("Adding widget "+widgetID+" to XMLWidgets.", 3);
 
         //Add the widget to the widgetMap
@@ -276,7 +278,7 @@ public class WidgetOps {
         widgetMap.put("id", widgetID);
 
         //Add the temporary widgetMap to the XMLWidgets array.
-        Main.loader.XMLWidgets.put(widgetID, widgetMap);
+        Main.loader.XMLObjects.put(widgetID, widgetMap);
         engine.put("$"+widgetID, widget);
 
     }
