@@ -179,20 +179,22 @@ public class Loader {
 
                     //Create a new GUI instance and initialize it.
 
-                    for (int i = 0; i < mainElement.getElementsByTagName("window").getLength(); i++) {
-                        GUI.loadWindow((Element) mainElement.getElementsByTagName("window").item(i), engine, false);
-                    }
-
                     for (int i = 0; i < mainElement.getElementsByTagName("style").getLength(); i++) {
                         Element styleElement = (Element) mainElement.getElementsByTagName("style").item(i);
                         //Load all styles from the style tags
                         if (styleElement.getAttributeNode("href") != null) {
                             GUI.loadStyles(null, styleElement.getTextContent());
                         } else {
+                            System.out.println("anything?");
                             GUI.loadStyles(styleElement.getTextContent(), null);
 
                         }
                     }
+
+                    for (int i = 0; i < mainElement.getElementsByTagName("window").getLength(); i++) {
+                        GUI.loadWindow((Element) mainElement.getElementsByTagName("window").item(i), engine, false);
+                    }
+
 
                     Main.loader.loadJS(escapedFile, engine);
 

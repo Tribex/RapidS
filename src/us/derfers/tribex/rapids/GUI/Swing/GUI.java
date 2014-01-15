@@ -127,16 +127,7 @@ public class GUI {
                     if (headElement.getNodeName().equals("title") || headElement.getNodeName().equals("window_title")) {
                         window.setTitle(headElement.getTextContent());
 
-                        //Parse style information in the header
-                    } else if (headElement.getNodeName().equals("style")) {
-                        //Load all styles from the style tags
-                        if (headElement.getAttributeNode("href") != null) {
-                            loadStyles(null, headElement.getTextContent());
-                        } else {
-                            loadStyles(headElement.getTextContent(), null);
-
-                        }
-
+                        //Parse link information in the header
                     } else if (headElement.getNodeName().equals("link")) {
                         parseLinks(headElement, engine);
                     }
@@ -163,7 +154,7 @@ public class GUI {
 
     /**
      * Loads all XML widgets into the parent composite.
-     * @param parentComposite A JPanel, at the moment, only the window.getContentPane() really works
+     * @param parentComposite Any widget that can accept children
      * @param node The body or any other composite node.
      * @param engine The JavaScript engine
      */

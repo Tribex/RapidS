@@ -48,9 +48,6 @@ spinner {
     margin-right: 20;
 }
 
-button {
-    margin-left: 20;
-}
 
 #logo {
     anchor: west;
