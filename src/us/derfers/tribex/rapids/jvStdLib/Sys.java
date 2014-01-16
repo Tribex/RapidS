@@ -22,7 +22,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -131,5 +130,20 @@ public class Sys {
             e.printStackTrace();
             return 1;
         }
+    }
+
+    /**
+     * Creates a thread and returns it to the calling JavaScript.
+     * @param javascript The script to run.
+     */
+    public static Thread Worker(final String javascript) {
+        return new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                Main.loader.engine.eval(javascript);
+            }
+
+        });
     }
 }

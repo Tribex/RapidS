@@ -100,11 +100,16 @@ spinner {
         //Button Clicking System
             function runBtnEvt(text, message) {
                 var label_list = window.getElementsByClass("changesOnHover");
-                for (index = 0; index &lt; label_list.length; ++index) {
+                for (index = 0; index < label_list.length; ++index) {
                     window.getElementById("b").setTitle(text);
                     label_list[index].setText(text+" - "+message);
                 }
             }
+
+
+        //A basic thread.
+        thread = new Worker("console.log('This is executing in a thread!')");
+        thread.start();
 
         function changeBackground(widget, state) {
                 var widgetID = window.getElementById(widget);
@@ -112,7 +117,7 @@ spinner {
                 if (state == 'click') {
                     var color = Color.decode("#666666");
 
-                    window.setTimeout('changeBackground("clickLabel", "over")', 200);
+                    setTimeout(function(){alert("Hello")}, 200);
 
                 } else if (state == 'over') {
                     var color = Color.decode("#EEEEEE");
