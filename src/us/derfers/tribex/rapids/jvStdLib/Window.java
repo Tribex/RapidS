@@ -72,7 +72,7 @@ public class Window {
     //XXX: WINDOW OPERATIONS :XXX\\
 
     /**An easy reference to the top-level JFrame*/
-    public static javax.swing.JFrame shell = (javax.swing.JFrame) Main.loader.XMLObjects.get("b").get("b");
+    public static javax.swing.JFrame shell = (javax.swing.JFrame) Main.loader.XMLObjects.get("__INIT__").get("__INIT__");
 
 
     //An easy static reference to the JavaScript engine.

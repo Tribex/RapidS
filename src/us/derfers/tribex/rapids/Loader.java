@@ -185,7 +185,6 @@ public class Loader {
                         if (styleElement.getAttributeNode("href") != null) {
                             GUI.loadStyles(null, styleElement.getTextContent());
                         } else {
-                            System.out.println("anything?");
                             GUI.loadStyles(styleElement.getTextContent(), null);
 
                         }

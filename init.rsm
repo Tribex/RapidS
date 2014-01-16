@@ -101,7 +101,7 @@ spinner {
             function runBtnEvt(text, message) {
                 var label_list = window.getElementsByClass("changesOnHover");
                 for (index = 0; index < label_list.length; ++index) {
-                    window.getElementById("b").setTitle(text);
+                    window.getElementById("__INIT__").setTitle(text);
                     label_list[index].setText(text+" - "+message);
                 }
             }
@@ -144,7 +144,7 @@ spinner {
             $rightSide.setText(f.read());
         }
     </script>
-<window id="b">
+<window id="init">
 <head>
 <title>RapidS: Test init file</title>
 </head>
@@ -196,14 +196,5 @@ spinner {
     <img class="standardPosition" id="logo" src="icon.png" /> </panel>
 
 </body>
-</window>
-
-<window id="init">
-    <head>
-        <title>Erm</title>
-    </head>
-    <body>
-        <button onclick="window.getElementById('b').setVisible(true)">Clicky</button>
-    </body>
 </window>
 </rsm>
