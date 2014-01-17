@@ -185,8 +185,7 @@ public class Loader {
                     }
 
 
-                    //Create a new GUI instance and initialize it.
-
+                    //Parse styles
                     for (int i = 0; i < mainElement.getElementsByTagName("style").getLength(); i++) {
                         Element styleElement = (Element) mainElement.getElementsByTagName("style").item(i);
                         //Load all styles from the style tags
@@ -198,11 +197,13 @@ public class Loader {
                         }
                     }
 
+                    //Parse links
                     for (int i = 0; i < mainElement.getElementsByTagName("link").getLength(); i++) {
-                        Element linkElement = (Element) mainElement.getElementsByTagName("style").item(i);
+                        Element linkElement = (Element) mainElement.getElementsByTagName("link").item(i);
                         parseLinks(linkElement, engine);
                     }
 
+                    //Parse GUI
                     for (int i = 0; i < mainElement.getElementsByTagName("window").getLength(); i++) {
                         GUI.loadWindow((Element) mainElement.getElementsByTagName("window").item(i), engine, false);
                     }
@@ -366,6 +367,7 @@ public class Loader {
             }
 
         } else {
+            System.out.println(linkElement.toString());
             Utilities.showError("Warning: <link> tags must contain a href attribute and a rel attribute. Skipping tag.");
         }
         return false;

@@ -71,7 +71,7 @@ public class GUI {
 
         window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-        if (windowElement.hasAttribute("id") && windowElement.getAttributeNode("id").getTextContent().equals("init")) {
+        if (windowElement.hasAttribute("id") && windowElement.getAttributeNode("id").getTextContent().equals("__INIT__")) {
             setVisible = true;
             id = "__INIT__";
             window.addWindowListener(new WindowAdapter() {
@@ -129,7 +129,6 @@ public class GUI {
             }
             //XXX: BODY : XXX\\
             //Loop through all children of the body element and add them
-
             loadInComposite((JComponent) windowPanel, windowElement.getElementsByTagName("body").item(0), engine);
 
         } catch (Exception e) {
@@ -186,7 +185,5 @@ public class GUI {
         parentComposite.doLayout();
 
     }
-
-
 
 }

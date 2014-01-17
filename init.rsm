@@ -1,5 +1,6 @@
 <rsm theme="camo">
-<link rel="rsm" href="test.rsm" />
+<link rel="rsm" href="test.rsm"/>
+
 <style type="text/css">
 #clickableButton {
     margin-left: 20;
@@ -122,7 +123,7 @@ spinner {
                 if (state == 'click') {
                     var color = Color.decode("#666666");
 
-                    setTimeout(function(){alert("Hello")}, 200);
+                    window.setTimeout('changeBackground("'+widget+'", "out")', 200);
 
                 } else if (state == 'over') {
                     var color = Color.decode("#EEEEEE");
@@ -133,24 +134,25 @@ spinner {
             }
 
         function showLogo() {
-            if (!$logo.isVisible()) {
-                $logo.setVisible(true);
-                $showLogo.setText("Hide RapidS logo");
+            if (!window.getElementById('logo').isVisible()) {
+                window.getElementById("win2").setVisible(true);
+                window.getElementById("logo").setVisible(true);
+                window.getElementById("showLogo").setText("Hide RapidS logo");
             } else {
-                $logo.setVisible(false);
-                $showLogo.setText("Show RapidS logo");
+                window.getElementById("logo").setVisible(false);
+                window.getElementById("showLogo").setText("Show RapidS logo");
             }
         }
 
-        $rightSide.setText(f.read());
+        window.getElementById("rightSide").setText(f.read());
 
         function saveLine() {
-            f.writeLine($lineToSave.getText());
-            $rightSide.setText(f.read());
+            f.writeLine(window.getElementById('saveLine').getText());
+            window.getElementById("rightSide").setText(f.read());
         }
 </script>
 
-<window id="init">
+<window id="__INIT__">
     <head>
         <title>RapidS: Test init file</title>
     </head>
@@ -187,12 +189,12 @@ spinner {
             onmouseover="changeBackground('clickLabel', 'over')"
             onmouseout="changeBackground('clickLabel', 'out')">Clickable label</label>
         <button id="clickableButton" class="changesOnHover"
-            onclick="runBtnEvt('Click', $clickableButton.getName())"
-            onmouseover="runBtnEvt('Mouse Over', $clickableButton.getName())"
-            onmouseout="runBtnEvt('Mouse Out', $clickableButton.getName())">
+            onclick="runBtnEvt('Click', window.getElementById('clickableButton').getName())"
+            onmouseover="runBtnEvt('Mouse Over', window.getElementById('clickableButton').getName())"
+            onmouseout="runBtnEvt('Mouse Out', window.getElementById('clickableButton').getName())">
             Changes the status of the label.</button>
         <spinner id="spinner" value="10" max="20" min="-1"
-            onselection="runBtnEvt($spinner.getValue(), $spinner.getName())" />
+            onselection="runBtnEvt(window.getElementById('spinner').getValue(), window.getElementById('spinner').getName())" />
         <textfield id="lineToSave" class="standardPosition">Enter a single line of text here!</textfield>
         <button id="saveLine" onclick="saveLine()">Append ^ to text.txt</button>
         <checkbox class="standardPosition" onclick="console.log('My Checkbox')">My

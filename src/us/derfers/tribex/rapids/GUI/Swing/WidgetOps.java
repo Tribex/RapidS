@@ -279,7 +279,5 @@ public class WidgetOps {
 
         //Add the temporary widgetMap to the XMLWidgets array.
         Main.loader.XMLObjects.put(widgetID, widgetMap);
-        engine.put("$"+widgetID, widget);
-
     }
 }
