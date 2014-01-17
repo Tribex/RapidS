@@ -32,11 +32,9 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
-import javax.swing.JPanel;
 
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -99,8 +97,6 @@ public class GUI {
 
         JMenuBar menuBar = new JMenuBar();
         window.setJMenuBar(menuBar);
-
-
 
         //Create a subMap for holding the Window and any properties of it
         Map<String, Object> windowMap = new HashMap<String, Object>();

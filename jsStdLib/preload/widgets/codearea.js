@@ -15,6 +15,12 @@ widgets.registerWidget("JEditorPane", "codearea", "A simple JEditorPane with syn
     //Create a new scrollpane and add the textarea to it
     scrollPane = new JScrollPane(widget);
 
+    widget.setContentType("text/plain");
+
+    if (widgetElement.getAttributeNode("type") != null) {
+        widget.setContentType(widgetElement.getAttributeNode("type").getTextContent());
+    }
+
     //Set the text of the textArea
     widget.setText(widgetElement.getTextContent());
 
