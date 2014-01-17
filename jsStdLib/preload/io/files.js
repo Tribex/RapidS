@@ -22,7 +22,7 @@ function files(filename, flag) {
 
     // If the file operation specified is "read", "read-write", or
     // "read-write-append" (r, rw, rw+)
-    if (stringContains(flag, "r")) {
+    if (flag.contains("r")) {
         try {
             var scanner = new Scanner(new File(filename));
         } catch (e) {
@@ -67,13 +67,13 @@ function files(filename, flag) {
 
     // If the file operation is "write", "write-append", "read-write", or
     // "read-write-append" (w, w+, rw, rw+)
-    if (stringContains(flag, "w")) {
+    if (flag.contains("w")) {
 
         var append = false;
 
         // If the flag contains +, set append to true, causing any write
         // operations to preserve existing data
-        if (stringContains(flag, "+")) {
+        if (flag.contains("+")) {
             append = true;
         }
 
