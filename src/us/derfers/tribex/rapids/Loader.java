@@ -21,14 +21,18 @@ package us.derfers.tribex.rapids;
 import static us.derfers.tribex.rapids.Utilities.debugMsg;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.UIManager;
 
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Attr;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -36,6 +40,7 @@ import org.w3c.dom.NodeList;
 
 import us.derfers.tribex.rapids.GUI.Swing.GUI;
 import us.derfers.tribex.rapids.jvStdLib.Sys;
+import us.derfers.tribex.rapids.parsers.CSSParser;
 
 /**
  * Starts the JavaScript engine and begins loading XML for widgets and layout information.
@@ -58,6 +63,9 @@ public class Loader {
 
     /** Counts Taken ID's for ID-less widgets */
     public Integer XMLObjects__NO__ID = 0;
+
+    /** The escaped compiled RSM file(s) */
+    public String escapedFile = "";
 
     /**
      * The startup method. Starts the JavaScript engine and runs loadAll.
@@ -183,11 +191,16 @@ public class Loader {
                         Element styleElement = (Element) mainElement.getElementsByTagName("style").item(i);
                         //Load all styles from the style tags
                         if (styleElement.getAttributeNode("href") != null) {
-                            GUI.loadStyles(null, styleElement.getTextContent());
+                            loadStyles(null, styleElement.getTextContent());
                         } else {
-                            GUI.loadStyles(styleElement.getTextContent(), null);
+                            loadStyles(styleElement.getTextContent(), null);
 
                         }
+                    }
+
+                    for (int i = 0; i < mainElement.getElementsByTagName("link").getLength(); i++) {
+                        Element linkElement = (Element) mainElement.getElementsByTagName("style").item(i);
+                        parseLinks(linkElement, engine);
                     }
 
                     for (int i = 0; i < mainElement.getElementsByTagName("window").getLength(); i++) {
@@ -304,5 +317,96 @@ public class Loader {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Loads scripts and styles from link tags. Currently files only, URLS not supported :C
+     * @param linkElement The element from which to load the content from.
+     * @param engine The ScriptEngine to run links to scripts in.
+     * @return
+     */
+    private boolean parseLinks(Element linkElement, ScriptEngine engine) {
+
+        //Check and see if the <link> tag contains a rel and href attribute
+        if (linkElement.getAttributeNode("rel") != null && linkElement.getAttribute("href") != null) {
+            //If it links to a stylesheet
+            if (linkElement.getAttributeNode("rel").getTextContent().equals("stylesheet")) {
+
+                //Check and see if the file exists
+                if (this.loadStyles(null, linkElement.getAttributeNode("href").getTextContent()) == false) {
+                    Utilities.debugMsg("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
+                    return false;
+                };
+
+                //If it links to a script
+            } else if (linkElement.getAttributeNode("rel").getTextContent().equals("script")) {
+
+                //Check and see if the file exists
+                try {
+                    //Run script in file
+                    engine.eval(new java.io.FileReader(linkElement.getAttributeNode("href").getTextContent()));
+                    return true;
+
+                } catch (FileNotFoundException e) {
+                    Utilities.debugMsg("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
+                    e.printStackTrace();
+                    return false;
+                } catch (DOMException e) {
+                    Utilities.debugMsg("Error: Improperly formatted XML");
+                    e.printStackTrace();
+                    return false;
+                } catch (Exception e) {
+                    Utilities.debugMsg("Error: invalid script in file "+linkElement.getAttributeNode("href").getTextContent());
+                    e.printStackTrace();
+                    return false;
+                }
+            } else {
+                //Attempt to load as a .rsm file
+                Main.loader.loadAll((Utilities.EscapeScriptTags(linkElement.getAttributeNode("href").getNodeValue())), engine);
+            }
+
+        } else {
+            Utilities.showError("Warning: <link> tags must contain a href attribute and a rel attribute. Skipping tag.");
+        }
+        return false;
+    }
+
+    /**
+     * Gets all styles from the String content, or file.
+     * @param content String containing valid CSS, or null.
+     * @param file String containing the path to a valid CSS file, or null.
+     * @return True on success, false on failure.
+     */
+    private boolean loadStyles(String content, String file) {
+        //If the user has specified loading from a string, not file
+        if (file == null) {
+            //Create a new CSSParser
+            CSSParser parser = new CSSParser(content);
+
+            //Put all the content of the parsed CSS into the stylesMap
+            Globals.stylesMap.putAll(parser.parseAll());
+            return true;
+            //If the user has specified loading from a file, not string
+        } else if (content == null) {
+            //Attempt to get the style information from the file
+            try {
+                //Load the file into the string toParse
+                String toParse = FileUtils.readFileToString(new File(file));
+
+                //Create a new CSSParser
+                CSSParser parser = new CSSParser(toParse);
+
+                //Put all the content of the parsed CSS into the stylesMap
+                Globals.stylesMap.putAll(parser.parseAll());
+                return true;
+            } catch (IOException e) {
+                Utilities.showError("Error: Invalid CSS formatting in file: "+file);
+                return false;
+            }
+
+
+        }
+        //In case something went wrong that was not caught
+        return false;
     }
 }

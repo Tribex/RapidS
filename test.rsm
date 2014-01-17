@@ -1,5 +1,5 @@
 <rsm theme="camo">
-<link rel="rsm" href="test.rsm" />
+
 <style type="text/css">
 #clickableButton {
     margin-left: 20;

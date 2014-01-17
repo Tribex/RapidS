@@ -109,6 +109,8 @@ public class GUI {
         try {
             //XXX: HEAD :XXX\\
             //Get Window information from the Head Element
+
+            //Parse link information in the header
             NodeList headElementList = windowElement.getElementsByTagName("head").item(0).getChildNodes();
 
             //Loop through the children of the Head element
@@ -122,10 +124,6 @@ public class GUI {
                     //Set the shell title with the title or window_title node
                     if (headElement.getNodeName().equals("title") || headElement.getNodeName().equals("window_title")) {
                         window.setTitle(headElement.getTextContent());
-
-                        //Parse link information in the header
-                    } else if (headElement.getNodeName().equals("link")) {
-                        parseLinks(headElement, engine);
                     }
                 }
             }
@@ -187,87 +185,6 @@ public class GUI {
         //position and draw the widgets
         parentComposite.doLayout();
 
-    }
-
-    //Parse <link> tags
-    private boolean parseLinks(Element linkElement, ScriptEngine engine) {
-
-        //Check and see if the <link> tag contains a rel and href attribute
-        if (linkElement.getAttributeNode("rel") != null && linkElement.getAttribute("href") != null) {
-            //If it links to a stylesheet
-            if (linkElement.getAttributeNode("rel").getTextContent().equals("stylesheet")) {
-
-                //Check and see if the file exists
-                if (this.loadStyles(null, linkElement.getAttributeNode("href").getTextContent()) == false) {
-                    Utilities.debugMsg("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
-                    return false;
-                };
-
-                //If it links to a script
-            } else if (linkElement.getAttributeNode("rel").getTextContent().equals("script")) {
-
-                //Check and see if the file exists
-                try {
-                    //Run script in file
-                    engine.eval(new java.io.FileReader(linkElement.getAttributeNode("href").getTextContent()));
-                    return true;
-
-                } catch (FileNotFoundException e) {
-                    Utilities.debugMsg("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
-                    e.printStackTrace();
-                    return false;
-                } catch (DOMException e) {
-                    Utilities.debugMsg("Error: Improperly formatted XML");
-                    e.printStackTrace();
-                    return false;
-                } catch (Exception e) {
-                    Utilities.debugMsg("Error: invalid script in file "+linkElement.getAttributeNode("href").getTextContent());
-                    e.printStackTrace();
-                    return false;
-                }
-            } else {
-                //Attempt to load as a .rsm file
-                Main.loader.loadAll((Utilities.EscapeScriptTags(linkElement.getAttributeNode("href").getNodeValue())), engine);
-            }
-
-        } else {
-            Utilities.showError("Warning: <link> tags must contain a href attribute and a rel attribute. Skipping tag.");
-        }
-        return false;
-    }
-
-    //Style loading method
-    public boolean loadStyles(String content, String file) {
-        //If the user has specified loading from a string, not file
-        if (file == null) {
-            //Create a new CSSParser
-            CSSParser parser = new CSSParser(content);
-
-            //Put all the content of the parsed CSS into the stylesMap
-            Globals.stylesMap.putAll(parser.parseAll());
-            return true;
-            //If the user has specified loading from a file, not string
-        } else if (content == null) {
-            //Attempt to get the style information from the file
-            try {
-                //Load the file into the string toParse
-                String toParse = FileUtils.readFileToString(new File(file));
-
-                //Create a new CSSParser
-                CSSParser parser = new CSSParser(toParse);
-
-                //Put all the content of the parsed CSS into the stylesMap
-                Globals.stylesMap.putAll(parser.parseAll());
-                return true;
-            } catch (IOException e) {
-                Utilities.showError("Error: Invalid CSS formatting in file: "+file);
-                return false;
-            }
-
-
-        }
-        //In case something went wrong that was not caught
-        return false;
     }
 
 
