@@ -7,20 +7,20 @@ require(Packages.java.awt.GridBagLayout);
 require(Packages.us.derfers.tribex.rapids.GUI.Swing.GUI);
 
 widgets.registerWidget("JPanel", "panel", "A JPanel which can hold other widgets.", function (parentComposite, widgetElement, engine) {
-		//Create a new Panel
-		var widget = new JPanel();
+        //Create a new Panel
+        var widget = new JPanel();
 
-		//Set the layout of the panel to GridBagLayout TODO: Add more layout types
-		widget.setLayout(new GridBagLayout());
+        //Set the layout of the panel to GridBagLayout TODO: Add more layout types
+        widget.setLayout(new GridBagLayout());
 
-		//Add the panel to the window with all of its constraints.
-		parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
+        //Add the panel to the window with all of its constraints.
+        parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
-		//Load all elements inside of the composite/widget.  INFINITE NESTING!
-		GUI.loadInComposite(widget, widgetElement, engine);
-		
-		
-		widgets.initializeWidget(widget, widgetElement, engine);
+        //Load all elements inside of the composite/widget.  INFINITE NESTING!
+        GUI.loadInComposite(widget, widgetElement, engine);
 
-		return widget;
+
+        widgets.initializeWidget(widget, widgetElement, engine);
+
+        return widget;
 });
