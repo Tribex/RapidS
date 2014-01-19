@@ -334,7 +334,7 @@ public class Loader {
             if (linkElement.getAttributeNode("rel").getTextContent().equals("stylesheet")) {
 
                 //Check and see if the file exists
-                if (this.loadStyles(null, linkElement.getAttributeNode("href").getTextContent()) == false) {
+                if (this.loadStyles(null, Globals.getCWD()+linkElement.getAttributeNode("href").getTextContent()) == false) {
                     Utilities.debugMsg("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
                     return false;
                 };
@@ -345,7 +345,7 @@ public class Loader {
                 //Check and see if the file exists
                 try {
                     //Run script in file
-                    engine.eval(new java.io.FileReader(linkElement.getAttributeNode("href").getTextContent()));
+                    engine.eval(new java.io.FileReader(Globals.getCWD()+linkElement.getAttributeNode("href").getTextContent()));
                     return true;
 
                 } catch (FileNotFoundException e) {
@@ -363,7 +363,7 @@ public class Loader {
                 }
             } else {
                 //Attempt to load as a .rsm file
-                Main.loader.loadAll((Utilities.EscapeScriptTags(linkElement.getAttributeNode("href").getNodeValue())), engine);
+                Main.loader.loadAll((Utilities.EscapeScriptTags(Globals.getCWD()+linkElement.getAttributeNode("href").getNodeValue())), engine);
             }
 
         } else {
