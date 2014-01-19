@@ -142,10 +142,10 @@ public class Loader {
                 debugMsg("Parsing Main Element", 4);
                 //Get body Element
                 Element mainElement = (Element) mainNodeList.item(0);
+
                 debugMsg("Setting Theme", 4);
                 //If the bodyelement has the attribute "theme"
                 if (mainElement.getAttributeNode("theme") != null) {
-
                     //Get the value of the attribute theme for the body element
                     Attr swing_Theme = mainElement.getAttributeNode("theme");
 
@@ -164,7 +164,7 @@ public class Loader {
                             debugMsg("Look and Feel set to '"+swing_Theme.getNodeValue()+"'.", 3);
 
                         } catch (Exception e) {
-                            //If unable to set to .lcm's theme, use the system look'n'feel
+                            //If unable to set to .rsm's theme, use the system look'n'feel
                             try {
                                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                             } catch (Exception a) {
