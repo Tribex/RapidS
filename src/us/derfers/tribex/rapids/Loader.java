@@ -142,14 +142,14 @@ public class Loader {
                 debugMsg("Parsing Main Element", 4);
                 //Get body Element
                 Element mainElement = (Element) mainNodeList.item(0);
-
+                debugMsg("Setting Theme", 4);
                 //If the bodyelement has the attribute "theme"
                 if (mainElement.getAttributeNode("theme") != null) {
 
                     //Get the value of the attribute theme for the body element
                     Attr swing_Theme = mainElement.getAttributeNode("theme");
 
-                    //See if the lcm file specifies a theme other than camo
+                    //See if the rsm file specifies a theme other than camo
                     if (swing_Theme != null && !swing_Theme.getNodeValue().equalsIgnoreCase("camo")) {
                         try {
                             //Split the theme into the jarfile and the classname (JARFILE.jar : com.stuff.stuff.theme)

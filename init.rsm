@@ -112,7 +112,6 @@ spinner {
                 }
             }
 
-
         //A basic thread.
         thread = new Worker("console.log('This is executing in a thread!')");
         thread.start();
