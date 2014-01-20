@@ -49,7 +49,7 @@ public class Sys {
         try {
             URLClassLoader classLoader
             = (URLClassLoader) ClassLoader.getSystemClassLoader();
-            Class cls= URLClassLoader.class;
+            Class<URLClassLoader> cls = URLClassLoader.class;
 
             // Use reflection
             Method method= cls.getDeclaredMethod("addURL", new Class[] { URL.class });

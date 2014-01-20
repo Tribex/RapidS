@@ -22,9 +22,6 @@ import java.awt.Container;
 import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,17 +30,13 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 
-import org.apache.commons.io.FileUtils;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import us.derfers.tribex.rapids.Globals;
 import us.derfers.tribex.rapids.Main;
 import us.derfers.tribex.rapids.ScriptEngine;
 import us.derfers.tribex.rapids.Utilities;
-import us.derfers.tribex.rapids.parsers.CSSParser;
 
 /**
  * The Main Swing GUI creator.
