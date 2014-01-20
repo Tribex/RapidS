@@ -32,14 +32,28 @@ public class Globals {
 
     //XXX: SYSTEM :XXX\\
     /**The selected current working directory. DON'T modify this, as it is automatically set.*/
-    public static String selCWD = null;
+    public static String CWD = null;
 
     /**
-     * Getter for the selCWD. Useful for JavaScripts that need it.
+     * Getter for the CWD. Useful for JavaScripts that need it.
      * @return selCWD
      */
     public static String getCWD() {
-        return selCWD;
+        return getCWD("");
+    }
+
+    /**
+     * Getter for the CWD. Useful for JavaScripts that need it.
+     * @param append The file to append to the CWD.
+     * @return selCWD
+     */
+    public static String getCWD(String append) {
+        if (append.startsWith(":\\", 1) || append.startsWith("/") || append.startsWith("~")) {
+            return append;
+        } else {
+            return CWD+append;
+        }
+
     }
     //XXX: STYLES :XXX\\
     /**Holds all styles TODO: Make window-specific*/

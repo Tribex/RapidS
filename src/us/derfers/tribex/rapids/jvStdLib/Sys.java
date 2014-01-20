@@ -89,8 +89,8 @@ public class Sys {
 
                 //Load file from jar directory.
             } else {
-                System.out.println(Globals.selCWD);
-                Main.loader.engine.eval(new FileReader(Globals.selCWD+fileString));
+                System.out.println(Globals.CWD);
+                Main.loader.engine.eval(new FileReader(Globals.CWD+fileString));
             }
         } catch (FileNotFoundException e) {
             Utilities.showError("File does not exist: '" +fileString+"'\n\n"

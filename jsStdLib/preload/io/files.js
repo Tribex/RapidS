@@ -103,18 +103,14 @@ function files(filename, flag) {
 
 /* Static constructor that removes the need for a 'new' keyword */
 files.open = function(filename, flag) {
-    if (filename.startsWith("/") || filename.startsWith("C:\\")) {
-        return new files(filename, flag);
-    } else {
-        return new files(Globals.getCWD()+filename, flag);
-    }
+    return new files(Globals.getCWD(filename), flag);
 }
 
 /* Static function for copying one filename to another */
 files.copy = function(sourceFileName, destFileName) {
     // Set up Files
-    var sourcefile = new File(Globals.getCWD() + sourceFileName);
-    var destfile = new File(Globals.getCWD() + destFileName);
+    var sourcefile = new File(Globals.getCWD(sourceFileName));
+    var destfile = new File(Globals.getCWD(destFileName));
 
     // If the source exists (of course the destination doesn't)
     if (sourcefile.exists()) {
@@ -140,8 +136,8 @@ files.copy = function(sourceFileName, destFileName) {
 /* Static function for moving a file from one place to another. (cut) */
 files.move = function(sourceFileName, destFileName) {
     // Set up Files
-    var sourcefile = new File(Globals.getCWD() + sourceFileName);
-    var destfile = new File(Globals.getCWD() + destFileName);
+    var sourcefile = new File(Globals.getCWD(sourceFileName));
+    var destfile = new File(Globals.getCWD(destFileName));
 
     // If the source exists (of course the destination doesn't)
     if (sourcefile.exists()) {
@@ -178,7 +174,7 @@ files.cut = files.move;
 files.mkdir = function(dirname, recursive) {
     recursive = typeof recursive !== 'undefined' ? recursive : false;
 
-    dir = new File(Globals.getCWD() + dirname);
+    dir = new File(Globals.getCWD(dirname));
     if (recursive) {
         if (dir.mkdirs()) {
             return true;
@@ -210,13 +206,13 @@ files.find = function(dirname, recursive, extensions) {
     recursive = typeof recursive !== 'undefined' ? recursive : false;
     extensions = typeof extensions !== 'undefined' ? extensions : null;
 
-    return FileUtils.listFiles(new File(Globals.getCWD() + dirname),
+    return FileUtils.listFiles(new File(Globals.getCWD(dirname)),
             extensions, recursive);
 }
 
 /* Determines whether or not a file exists */
 files.exists = function(filename) {
-    if (new File(Globals.getCWD() + filename).exists()) {
+    if (new File(Globals.getCWD(filename)).exists()) {
         return true;
     } else {
         return false;

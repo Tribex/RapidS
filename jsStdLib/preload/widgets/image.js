@@ -9,27 +9,27 @@ require(Packages.javax.swing.JLabel);
 require(Packages.us.derfers.tribex.rapids.Globals);
 
 widgets.registerWidget("Image", "img", "A simple image.", function (parentComposite, widgetElement, engine) {
-	//if the src is there
-	if (widgetElement.getAttributeNode("src") != null) {
-		try {
-			//create a new image object
-			var image = new ImageIO.read(new File(Globals.getCWD()+widgetElement.getAttributeNode("src").getNodeValue()));
+    //if the src is there
+    if (widgetElement.getAttributeNode("src") != null) {
+        try {
+            //create a new image object
+            var image = new ImageIO.read(new File(Globals.getCWD(widgetElement.getAttributeNode("src").getNodeValue())));
 
-			var widget = new JLabel(new ImageIcon(image));
-			parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
+            var widget = new JLabel(new ImageIcon(image));
+            parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
-			widgets.initializeWidget(widget, widgetElement, engine);
-		
-			return widget;
-		} catch (e) {
-			Utilities.debugMsg(e.message);
-			Utilities.showError("Error: Image "+Globals.getCWD()+widgetElement.getAttributeNode("src").getNodeValue()+" does not exist \n\nor is improperly formatted.");
-			return false;
-		}
-	} else {
-		Utilities.showError("Error: Image tag does not have a 'src' element.");
-		return false;
-	}
+            widgets.initializeWidget(widget, widgetElement, engine);
+
+            return widget;
+        } catch (e) {
+            Utilities.debugMsg(e.message);
+            Utilities.showError("Error: Image "+Globals.getCWD(widgetElement.getAttributeNode("src").getNodeValue())+" does not exist \n\nor is improperly formatted.");
+            return false;
+        }
+    } else {
+        Utilities.showError("Error: Image tag does not have a 'src' element.");
+        return false;
+    }
 
 });
 

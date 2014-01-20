@@ -46,7 +46,7 @@ dialogs.message = function(message, title, type, icon){
     } else {
         //Attempt to load the icon, which *may* not work.
         try {
-            var completeIcon = Globals.getCWD()+icon;
+            var completeIcon = Globals.getCWD(icon);
             JOptionPane.showMessageDialog(null, message, title, dialogs.getType(type), images.getImageIcon(completeIcon));
         } catch (e) {
             Utilities.showError("Error loading icon '"+completeIcon+"' into Dialog: "+e.message);

@@ -19,6 +19,8 @@
 
 package us.derfers.tribex.rapids;
 
+import java.io.File;
+
 /**
  * Main class. Parses arguments, delegates loading of files, debug handling, and widget creation.
  * @author TribeX, Nateowami
@@ -49,9 +51,18 @@ public class Main {
                 DEBUG_LEVEL = Integer.valueOf(arg.split(":")[1]);
                 Utilities.debugMsg("Debug Level: "+DEBUG_LEVEL);
 
-                //If the program is started with a .rsm file to parse other than init.rsm.
+            //If the program is started with a .rsm file to parse other than init.rsm.
             } else if (!arg.startsWith("-")){
-                runLoader(Utilities.getJarDirectory()+arg);
+                //Create a file to test its location
+                File file = new File(Utilities.getJarDirectory()+arg);
+
+                //Make sure the file exists and is a directory
+                if (file.exists() && !file.isDirectory()) {
+                    runLoader(file.toString(), file.getParent());
+                } else {
+                    Utilities.showError("Error: File "+file.getAbsolutePath()+" does not exist or is a directory.");
+                    System.exit(0);
+                }
                 hasLoaded = true;
             }
         }
@@ -61,11 +72,11 @@ public class Main {
             //If the user is running RapidS in the directory for a reason,
             if (DEBUG_LEVEL == 5) {
                 //Load from the java CWD instead of the Jar Location
-                runLoader("init.rsm");
+                runLoader("init.rsm", "./");
 
                 //Load from package directory if in debug mode
             } else {
-                runLoader(Utilities.getJarDirectory()+"init.rsm");
+                runLoader(Utilities.getJarDirectory()+"init.rsm", Utilities.getJarDirectory());
             }
         }
 
@@ -75,8 +86,8 @@ public class Main {
      * Runs the loadAll method of loader and sets the selected Current working directory.
      * @param fileName The name of the file to be run, normally init.rsm
      */
-    private static void runLoader(String fileName) {
-        Globals.selCWD = Utilities.getJarDirectory();
+    private static void runLoader(String fileName, String parentDirectory) {
+        Globals.CWD = parentDirectory;
         loader.startLoader(fileName);
     }
 
