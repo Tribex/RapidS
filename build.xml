@@ -7,7 +7,6 @@
     <path id="RapidS.classpath">
         <pathelement location="bin"/>
         <pathelement location="lib/commons-io-2.4.jar"/>
-        <pathelement location="lib/weblaf-1.25.jar"/>
         <pathelement location="lib/rhino.jar"/>
         <pathelement location="lib/HttpRequest.jar"/>
         <pathelement location="lib/jsyntax.jar"/>
@@ -72,7 +71,6 @@
                 <exclude name="icon.png"/>
             </fileset>
             <zipfileset dir="lib" includes="commons-io-2.4.jar"/>
-            <zipfileset dir="lib" includes="weblaf-1.25.jar"/>
             <zipfileset dir="lib" includes="rhino.jar"/>
             <zipfileset dir="lib" includes="HttpRequest.jar"/>
             <zipfileset dir="lib" includes="jsyntax.jar"/>
@@ -88,6 +86,7 @@
                 <exclude name=".*"/>
             </fileset>
         </copy>
+        <chmod file="dist/RapidS.jar" perm="770"/>
 
     </target>
 </project>

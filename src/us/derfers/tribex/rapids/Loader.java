@@ -155,8 +155,9 @@ public class Loader {
                             //Split the theme into the jarfile and the classname (JARFILE.jar : com.stuff.stuff.theme)
                             String[] splitTheme = swing_Theme.getNodeValue().split(":");
 
+                            System.out.println(splitTheme[0].trim()+"**"+splitTheme[1].trim());
                             //Attempt to dynamically load the specified jarfile
-                            Sys.addJarToClasspath(splitTheme[0].trim());
+                            Sys.addJarToClasspath(Globals.getCWD(splitTheme[0].trim()));
 
                             //Attempt to set the look'n'feel to the theme specified by the file
                             UIManager.setLookAndFeel(splitTheme[1].trim());
@@ -171,6 +172,7 @@ public class Loader {
                                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                             }
                             Utilities.showError("Error loading Look and Feel Specified, Look and Feel set to System");
+                            e.printStackTrace();
 
                         }
                     } else {

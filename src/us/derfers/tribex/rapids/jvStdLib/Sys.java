@@ -42,15 +42,19 @@ import us.derfers.tribex.rapids.Utilities;
 public class Sys {
 
     /**
-     * Adds the specified JAR to the class path
+     * Adds the specified JAR to the class path. VERY HACKY AND COMPLICATED. Avoid whenever possible.
      * @param fileString The name of the JAR to add to the class path
      */
     public static void addJarToClasspath(String fileString) {
         try {
-            File file = new File(Utilities.getJarDirectory()+fileString);
-            Method method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
+            URLClassLoader classLoader
+            = (URLClassLoader) ClassLoader.getSystemClassLoader();
+            Class cls= URLClassLoader.class;
+
+            // Use reflection
+            Method method= cls.getDeclaredMethod("addURL", new Class[] { URL.class });
             method.setAccessible(true);
-            method.invoke(ClassLoader.getSystemClassLoader(), new Object[]{file.toURI().toURL()});
+            method.invoke(classLoader, new Object[] {new File(Globals.getCWD(fileString)).toURI().toURL()});
         } catch (NoSuchMethodException e) {
             Utilities.showError("Error adding Jar to Classpath.  Are you not using a standard JRE?");
         } catch (SecurityException e) {

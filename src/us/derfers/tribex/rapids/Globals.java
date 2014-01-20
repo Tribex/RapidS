@@ -51,7 +51,7 @@ public class Globals {
         if (append.startsWith(":\\", 1) || append.startsWith("/") || append.startsWith("~")) {
             return append;
         } else {
-            return CWD+append;
+            return CWD+"/"+append;
         }
 
     }
