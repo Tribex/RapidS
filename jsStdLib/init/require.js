@@ -1,19 +1,19 @@
-/* RAPIDS JAVASCRIPT STANDARD LIBRARY (JAVASCRIPT SECTION)
+/** RAPIDS JAVASCRIPT STANDARD LIBRARY (JAVASCRIPT SECTION)
  *
- * import.js - Defines global functions for importing Javascript files and Java packages/classes
+ * require.js - Defines global functions for importing Javascript files and Java packages/classes
  *
  * functions:
  *	-require(CLASS OR PACKAGE, NAME TO ASSIGN THE CLASS OR PACKAGE TO)
  */
 
 
-/*
- * require - A top level wrapper for importing JavaScript files, Java classes, and Java Packages
+/**
+ * A top level wrapper for importing JavaScript files, Java classes, and Java Packages
  * 			Allows "importing" Java packages by creating a variable in the global
  * 			 namespace with the last section of the class/package qualifier.
  *
- *  @classpkg - A Class, Package or File path in the Rhino syntax: Packages.com.example.stuff.substuff
- *  @qualifier - The optional name of the variable to be assigned to the global namespace.
+ *  @param classpkg A Class, Package or File path in the Rhino syntax: Packages.com.example.stuff.substuff
+ *  @param qualifier The optional name of the variable to be assigned to the global namespace.
  */
 function require(classpkg, qualifier) {
     if (typeof(classpkg) == "string") {
@@ -23,6 +23,11 @@ function require(classpkg, qualifier) {
     }
 }
 
+/**
+ * Loads Java Classes or Packages and assigns them to top-level variables for ease-of-access.
+ * @param classpkg The Class or Package to import
+ * @param qualifier The optional variable for the class or package to be assigned to.
+ */
 function require_Java(classpkg, qualifier) {
     //If the user didn't specify a qualifier, generate one
     if (String(qualifier) != "undefined" || String(qualifier) != "null" || String(qualifier) != "") {
