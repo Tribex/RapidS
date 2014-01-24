@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: preload/dialogs/generic.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: preload/dialogs/generic.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Provides methods for showing generic dialog windows.
+ * @author Nateowami
+ */
+require(Packages.javax.swing.JOptionPane);
+require(Packages.us.derfers.tribex.rapids.Globals);
+
+//converts a string to a JOptionPane.SOME_ENUM_VALUE
+//this is because JavaScript can't easily access JOptionPane, so they can send the message type as a string
+//and this function will convert it to an enum
+dialogs.getType = function(type){
+    switch(type){
+    case "error":
+        return JOptionPane.ERROR_MESSAGE;
+        break;
+    case "plain":
+        return JOptionPane.PLAIN_MESSAGE;
+        break;
+    case "warning":
+        //on Ubuntu "warning" looks like an error message. Guessing it
+        //depends on the platform
+        return JOptionPane.WARNING_MESSAGE;
+        break;
+    case "info":
+        return JOptionPane.INFORMATION_MESSAGE;
+        break;
+    default:
+        return JOptionPane.PLAIN_MESSAGE;
+    }
+}
+
+/**
+ * Traditional alert dialog.
+ * @param message {string} The message to display in the dialog.
+ */
+dialogs.alert = function(message){
+    //This is the only way to display an information message.
+    //Which is really odd since it doesn't let you set the title.
+    JOptionPane.showMessageDialog(null, message);
+}
+
+/**
+ * An alias of dialogs.alert.
+ * @param message {string} The message to display in the dialog.
+ */
+alert = dialogs.alert;
+
+/**
+ * Show a dialog with a custom title, message, type, and/or icon.
+ * @param message {string} The message to display in the dialog.
+ * @param title {string} The dialog window title.
+ * @param type {string} The type of dialog. Can be 'error', 'plain', 'warning', or 'info'. OPTIONAL
+ * @param icon {string} The path to an image file to display as the icon next to the text. OPTIONAL
+ */
+dialogs.message = function(message, title, type, icon){
+
+    //If the user didn't specify an icon
+    if (icon == null || icon == undefined) {
+        //Show a message without an icon
+        JOptionPane.showMessageDialog(null, message, title, dialogs.getType(type));
+    } else {
+        //Attempt to load the icon, which *may* not work.
+        try {
+            var completeIcon = Globals.getCWD(icon);
+            JOptionPane.showMessageDialog(null, message, title, dialogs.getType(type), images.getImageIcon(completeIcon));
+        } catch (e) {
+            Utilities.showError("Error loading icon '"+completeIcon+"' into Dialog: "+e.message);
+        }
+    }
+}
+
+
+/**
+ * Get input from the user.
+ * @param message {string} The message to display.
+ * @return {string} The value entered by the user.
+ */
+dialogs.input = function(message){
+    return JOptionPane.showInputDialog(message);
+}
+
+
+/**
+ * Alias of dialogs.input
+ * @param message {string} The message to display.
+ * @return {string} The value entered by the user.
+ */
+prompt = dialogs.input;
+
+/**
+ * Yes/No confirmation dialog.
+ * @param message {string} The message to display
+ * @param title {string} The title of the dialog window.
+ * @return {boolean} True if the user answered Yes, False if No.
+ */
+dialogs.confirm = function(message, title){
+    if (title === null || title === undefined) {
+        title = "Confirm";
+    }
+
+    var reply = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+    if (reply == JOptionPane.YES_OPTION) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * Alias of dialogs.confirm
+ * @param message {string} The message to display
+ * @param title {string} The title of the dialog window.
+ * @return {boolean} A boolean. True if the user answered Yes, False if No.
+ */
+confirm = dialogs.confirm;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Namespaces</h3><ul><li><a href="console.html">console</a></li><li><a href="dialogs.html">dialogs</a></li><li><a href="files.html">files</a></li><li><a href="images.html">images</a></li><li><a href="os.html">os</a></li><li><a href="program.html">program</a></li><li><a href="time.html">time</a></li><li><a href="urls.html">urls</a></li><li><a href="window.html">window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alert">alert</a></li><li><a href="global.html#confirm">confirm</a></li><li><a href="global.html#hasNext">hasNext</a></li><li><a href="global.html#hasNextLine">hasNextLine</a></li><li><a href="global.html#print">print</a></li><li><a href="global.html#prompt">prompt</a></li><li><a href="global.html#read">read</a></li><li><a href="global.html#readNext">readNext</a></li><li><a href="global.html#readNextLine">readNextLine</a></li><li><a href="global.html#require">require</a></li><li><a href="global.html#require_Java">require_Java</a></li><li><a href="global.html#Worker">Worker</a></li><li><a href="global.html#write">write</a></li><li><a href="global.html#writeLine">writeLine</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri Jan 24 2014 15:59:30 GMT+0800 (HKT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
