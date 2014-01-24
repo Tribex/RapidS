@@ -18,8 +18,8 @@ var widgets = {
         },
 
         //Used to register a new widget type.
-        registerWidget : function (name, element, description, func) {
-            this.widgetTypes[element] = {name : name, element : element, description : description, loader : func}
+        registerWidget : function (name, element, description, func, customData) {
+            this.widgetTypes[element] = {name : name, element : element, description : description, loader : func, widget : customData}
         },
 
         //Iterate through listener types and set listeners if they exist

@@ -3,6 +3,8 @@
  */
 
 require(Packages.javax.swing.JTabbedPane);
+require(Packages.javax.swing.JPanel);
+require(Packages.java.awt.GridBagLayout);
 
 widgets.registerWidget("JTabbedPane", "tabpane", "A simple JTabbedPane", function (parentComposite, widgetElement, engine) {
     var widget = new JTabbedPane();
@@ -14,5 +16,6 @@ widgets.registerWidget("JTabbedPane", "tabpane", "A simple JTabbedPane", functio
 
     widgets.initializeWidget(widget, widgetElement, engine);
     return widget;
-});
+}
+);
 
