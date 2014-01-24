@@ -1,5 +1,17 @@
 
-/* Opens the system file load or save dialog. */
+/**
+ * Opens the system file dialog to either load or save.
+ * OPTS Object Example:
+ * {
+ *  mode : 'load',
+ *  directory : '.',
+ *  filename : "test.txt",
+ *  title : 'File Dialog',
+ *  multiple: false
+   }
+ * @param opts {object} A object containing the configuration values for the fileDialog.
+ * @return {object} An object with properties; (directory: LAST VIEWED DIRECTORY, filename: SELECTED FILE)
+ */
 dialogs.fileDialog = function(opts) {
 
     //Check to make sure that a proper mode is always set.

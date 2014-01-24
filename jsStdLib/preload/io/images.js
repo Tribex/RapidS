@@ -1,18 +1,27 @@
-//reads images from files
+/**
+ * @file Provides image operations. May be moved into a separate folder.
+ * @author Nateowami
+ */
 
-//read an image from a string
-
-//Construct a new images object to avoid cluttering the global namespace.
+/**
+ * Images object for operating on images
+ * @namespace
+ */
 var images = {};
 
+/**
+ * Get an icon from the source location.
+ * @param src {string} The source location of the image
+ * @returns {ImageIcon} An image object containing the image from the src.
+ */
 images.getImageIcon = function(src){
-	try{
-		var image = new ImageIcon(src);
-		return image;
-	}
-	catch (e) {
-			Utilities.showError("Error reading image file: "+filename+". Does it exist?\n\n"+e.message);
-			return null;
-	}
+    try{
+        var image = new ImageIcon(src);
+        return image;
+    }
+    catch (e) {
+            Utilities.showError("Error reading image file: "+filename+". Does it exist?\n\n"+e.message);
+            return null;
+    }
 }
 

@@ -1,9 +1,9 @@
 /**
- * Provides basic file reading, writing, polling, moving, and copying features.
- * --USES APACHE COMMONS IO--
+ * @file Provides basic file reading, writing, polling, moving, and copying features.
+ * @author Nateowami, Tribex
  */
 
-//import packages
+//Import packages
 require(Packages.java.io.File);
 require(Packages.java.util.Scanner);
 require(Packages.us.derfers.tribex.rapids.Globals);
@@ -11,7 +11,9 @@ require(Packages.us.derfers.tribex.rapids.Utilities);
 require(Packages.org.apache.commons.io.FileUtils);
 require(Packages.java.awt.FileDialog);
 
-/** Files object TODO: Support multiple encodings. */
+/** Files object TODO: Support multiple encodings.
+ * @namespace
+ */
 function files(filename, flag) {
     // The file being operated on
     var filename = filename;
@@ -30,12 +32,18 @@ function files(filename, flag) {
                     + ". Does it exist?\n\n" + e.message);
         }
 
-        // Returns a string containing all the contents of filename
+        /**
+         * Read the content of the object's file.
+         * @reutrns {string} The contents of the file.
+         */
         this.read = function() {
             return FileUtils.readFileToString(new File(filename));
         }
 
-        // Reads the next line from filename
+        /**
+         * Read the content of the next line of this object's file.
+         * @reutrns {string} The contents of the line.
+         */
         this.readNextLine = function() {
             if (scanner.hasNextLine()) {
                 return scanner.nextLine();
@@ -45,7 +53,10 @@ function files(filename, flag) {
             }
         }
 
-        // Reads the next word from filename
+        /**
+         * Read the content of the next word of this object's file.
+         * @reutrns {string} The next word.
+         */
         this.readNext = function() {
             if (scanner.hasNext()) {
                 return scanner.next();
@@ -54,12 +65,18 @@ function files(filename, flag) {
             }
         }
 
-        // Boolean. Determines whether or not there is another word in filename
+        /**
+         * Determines whether or not there is another word in filename
+         * @reuturs {boolean} True if there is another word, false if not.
+         */
         this.hasNext = function() {
             return scanner.hasNext();
         }
 
-        // Boolean. Determines whether or not there is another line in filename
+        /**
+         * Determines whether or not there is another line in filename
+         * @returns {boolean} True if there is another line, false if not.
+         */
         this.hasNextLine = function() {
             return scanner.hasNextLine();
         }
@@ -77,7 +94,10 @@ function files(filename, flag) {
             append = true;
         }
 
-        // Write 'data' to 'filename'.
+        /**
+         * Write data to filename.
+         * @param data {string} The data to write. Must be a string.
+         */
         this.write = function(data) {
             try {
                 FileUtils.writeStringToFile(new File(filename), data, append);
@@ -87,8 +107,10 @@ function files(filename, flag) {
             }
         }
 
-        // Write 'data' to 'filename'. Always preserves existing data, and adds
-        // a newline to the end of 'data'
+        /**
+         * Append a line to filename.
+         * @param data {string} The line to write. Must be a string.
+         */
         this.writeLine = function(data) {
             try {
                 FileUtils.write(new File(filename), data
@@ -101,12 +123,21 @@ function files(filename, flag) {
     }
 }
 
-/* Static constructor that removes the need for a 'new' keyword */
+/**
+ * Opens the file at location filename with a mode set by flag.
+ * @param filename {string} The location of the file to open.
+ * @param flag {string} The mode of the file: Must be 'r', 'rw', 'w', 'w+', or 'rw+'
+ */
 files.open = function(filename, flag) {
     return new files(Globals.getCWD(filename), flag);
 }
 
-/* Static function for copying one filename to another */
+/**
+ * Copy a file from one place to another
+ * @param sourceFileName {string} The location of the source file.
+ * @param destFileName {string} The location of the destination file.
+ * @returns {boolean} True on success, false on failure.
+ */
 files.copy = function(sourceFileName, destFileName) {
     // Set up Files
     var sourcefile = new File(Globals.getCWD(sourceFileName));
@@ -133,7 +164,13 @@ files.copy = function(sourceFileName, destFileName) {
     }
 }
 
-/* Static function for moving a file from one place to another. (cut) */
+
+/**
+ * Move a file from one place to another
+ * @param sourceFileName {string} The location of the source file.
+ * @param destFileName {string} The location of the destination file.
+ * @returns {boolean} True on success, false on failure.
+ */
 files.move = function(sourceFileName, destFileName) {
     // Set up Files
     var sourcefile = new File(Globals.getCWD(sourceFileName));
@@ -159,17 +196,18 @@ files.move = function(sourceFileName, destFileName) {
         return false;
     }
 }
-//files.cut, alias of files.move
+/**
+ * Alias of files.move.
+ */
 files.cut = files.move;
 
 /**
  * Make a directory.
- *
- * @param dirname
- *            The string name of the directory
- * @param recursive
+ * @param dirname {string} The string name of the directory
+ * @param recursive {string}
  *            Whether or not to create multiple nested directories as indicated
  *            by dirname
+ * @returns {boolean} True on success, false on failure.
  */
 files.mkdir = function(dirname, recursive) {
     recursive = typeof recursive !== 'undefined' ? recursive : false;
@@ -190,7 +228,11 @@ files.mkdir = function(dirname, recursive) {
     }
 }
 
-/* Returns the size of a file in bytes */
+/**
+ * Returns the size of a file in bytes
+ * @param filename {string} The location of the file to check the size on.
+ * @returns Integer of the size on success, false on failure
+ */
 files.size = function(filename) {
     file = new File(filename);
     try {
@@ -201,7 +243,13 @@ files.size = function(filename) {
     }
 }
 
-/* List files inside dirname */
+/**
+ * Get an array of all the files in dirname, optionally search dirname recursively. DOES NOT SHOW DIRECTORIES
+ * @param dirname {string} The directory to search.
+ * @param recursive {boolean} Set to true to search all subdirectories of dirname.
+ * @param extensions Either a string or an array of extensions. If this is set, the search will only look for files with these extensions.
+ * @returns {array} An array of file paths in dirname.
+ */
 files.find = function(dirname, recursive, extensions) {
     recursive = typeof recursive !== 'undefined' ? recursive : false;
     extensions = typeof extensions !== 'undefined' ? extensions : null;
@@ -210,7 +258,11 @@ files.find = function(dirname, recursive, extensions) {
             extensions, recursive);
 }
 
-/* Determines whether or not a file exists */
+/**
+ * Determine whether or not a file exists.
+ * @param filename {string} the location of the file to check.
+ * @returns {boolean} True if the file exists, false if it doesn't.
+ */
 files.exists = function(filename) {
     if (new File(Globals.getCWD(filename)).exists()) {
         return true;
@@ -219,10 +271,10 @@ files.exists = function(filename) {
     }
 }
 
-/* A string representing the location of the system temporary directory */
+/** The full path to the system temporary directory */
 files.tempdir = FileUtils.getTempDirectoryPath();
 
-/*
+/**
  * A string representing the location of the user's home directory. MAY
  * MISBEHAVE ON WINDOWS VISTA+
  */
