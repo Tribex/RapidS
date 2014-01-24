@@ -96,11 +96,11 @@ time.dayOfWeekName = function () {
 }
 
 /*
-Returns true if it is am, false if it is pm -FLAWED @Nateowami
+Returns true if it is am, false if it is pm
 */
 time.isAM = function () {
 	//XXX bug here!
-	if(Calendar.getInstance().get(Calendar.HOUR) < 12){
+	if(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) < 12){
 		return true;
 	}
 	else{
@@ -109,12 +109,12 @@ time.isAM = function () {
 }
 
 /*
-Returns the hour in 12 hour format -FLAWED @Nateowami?
+Returns the hour in 12 hour format
 */
-time.hours12 = function () {
+time.hour12 = function () {
+	//gives us 0-11
 	var hours = Calendar.getInstance().get(Calendar.HOUR);
-	//convert to 12-hour format
-	hours %= 12;
+	//call hour 0, 12
 	if(hours == 0){
 		//in the 12-hour format 0 is shown as 12
 		hours = 12;
@@ -123,11 +123,60 @@ time.hours12 = function () {
 }
 
 /*
-Returns the hour in 24 hour format -FLAWED @Nateowami
+Returns the hour in 24 hour format
 */
-time.hours24 = function () {
-	return Calendar.getInstance().get(Calendar.HOUR);
+time.hour24 = function () {
+	return Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 }
 
+/*
+Returns the number of minutes past the current hour
+*/
+time.minute = function (){
+	return Calendar.getInstance().get(Calendar.MINUTE);
+}
 
+/*
+Returns the number of seconds past the current minute
+*/
+time.second = function (){
+	return Calendar.getInstance().get(Calendar.SECOND);
+}
 
+/*
+Returns the number of milliseconds past the current second
+*/
+time.millisecond = function (){
+	return Calendar.getInstance().get(Calendar.MILLISECOND);
+}
+
+//Leap-year stuff below
+
+/*
+Returns if the current year is a leap year
+*/
+time.isLeapYear = function (){
+	//ask about the current year
+	return time.isLeapYear(time.year());
+}	
+
+/*
+Returns if the specified year is a leap year
+*/
+time.isLeapYear = function (year){
+	var leap = false;
+	//these are if's intentionally, not else if's
+	//if it's divisible by four
+	if(year % 4 == 0){
+		leap = true;
+	}
+	//100
+	if(year % 100 == 0){
+		leap = false;
+	}
+	//400
+	if(year % 400 == 0){
+		leap = true;
+	}
+	return leap;
+}
