@@ -44,7 +44,16 @@ time.date = function () {
  * @returns {string} The name of the current month.
  */
 time.monthName = function () {
-    switch(time.month()){
+   return time.monthName(time.month());
+}
+
+/**
+ * Gets the name of the specified month, such as "January".
+ * @param month {integer} The month for which you want the name
+ * @returns {string} The name of the current month.
+ */
+time.monthName = function (month) {
+    switch(month){
     //return is as good as break
     case 0:
         return "January";
@@ -86,8 +95,17 @@ time.dayOfWeek = function () {
  * @returns {string} The name of the current day of the week.
  */
 time.dayOfWeekName = function () {
+    return time.dayOfWeekName(time.dayOfWeek());
+}
+
+/**
+ * Gets the name of the specified day of the week, such as "Monday".
+ * @param day {integer} The day of the week for which you want the name
+ * @returns {string} The name of the current day of the week.
+ */
+time.dayOfWeekName = function (day) {
     //return is as good as break
-    switch(time.dayOfWeek()){
+    switch(day){
     case 1:
         return "Sunday";
     case 2:
