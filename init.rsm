@@ -99,7 +99,7 @@ spinner {
         //dialogs.message("If you find this dialog anoying, just comment out line #90 of init.rsm.", "Message", "info", "icon.png");
         //I found it annoying :)
 
-       console.log(time.year() + " - " +  time.month() + " - "+ time.date() + " - " + time.monthName() + " - " + time.dayOfWeek() + " - " + time.dayOfWeekName() + " - " + time.isAM() + " - " + time.hour12() + " - " + time.hour24() + " - " + time.minute() + " - " + time.second() + " - " + time.millisecond() + " - " + time.isLeapYear());
+       console.log(time.year() + " - " +  time.month() + " - "+ time.date() + " - " + time.monthName(time.month()) + " - " + time.dayOfWeek() + " - " + time.dayOfWeekName(time.dayOfWeek()) + " - " + time.isAM() + " - " + time.hour12() + " - " + time.hour24() + " - " + time.minute() + " - " + time.second() + " - " + time.millisecond() + " - " + time.isLeapYear() + " - " + time.timeInMillis() + " - " + time.dayOfYear() + " - " + time.weekOfYear());
 
         //Button Clicking System
             function runBtnEvt(text, message) {

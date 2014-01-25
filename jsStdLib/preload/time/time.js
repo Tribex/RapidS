@@ -1,7 +1,8 @@
 /**
  * @file Provides methods for finding the current date and time
  * For sorting purposes larger time periods are at the top,
- * while small time periods (seconds) are at the bottom.
+ * while small time periods (seconds) are at the bottom. Following this
+ * are functions for leap years and other misc functions
  * @author Nateowami
  */
 
@@ -40,11 +41,12 @@ time.date = function () {
 }
 
 /**
- * Gets the name of the current month, such as "January".
+ * Gets the name of the specified month, such as "January".
+ * @param month {integer} The month for which you want the name
  * @returns {string} The name of the current month.
  */
-time.monthName = function () {
-    switch(time.month()){
+time.monthName = function (month) {
+    switch(month){
     //return is as good as break
     case 0:
         return "January";
@@ -82,12 +84,13 @@ time.dayOfWeek = function () {
 }
 
 /**
- * Gets the name of the day of the week, such as "Monday".
+ * Gets the name of the specified day of the week, such as "Monday".
+ * @param day {integer} The day of the week for which you want the name
  * @returns {string} The name of the current day of the week.
  */
-time.dayOfWeekName = function () {
+time.dayOfWeekName = function (day) {
     //return is as good as break
-    switch(time.dayOfWeek()){
+    switch(day){
     case 1:
         return "Sunday";
     case 2:
@@ -170,15 +173,6 @@ time.millisecond = function (){
 //Leap-year stuff below
 
 /**
- * Whether or not the current year is a leap year
- * @returns True if the current year is a leap year, False if not.
- */
-time.isLeapYear = function (){
-    //ask about the current year
-    return time.isLeapYear(time.year());
-}
-
-/**
  * Whether or not the specified year is a leap year
  * @param year {integer} The year to check.
  * @returns True if the specified year is a leap year, False if not.
@@ -199,4 +193,27 @@ time.isLeapYear = function (year){
         leap = true;
     }
     return leap;
+}
+
+//misc time functions
+
+/**
+@return {long} The current time, expressed in milliseconds after January 1, 1970, 0:00:00 GMT.
+*/
+time.timeInMillis = function (){
+	return Calendar.getInstance().getTimeInMillis()
+}
+
+/**
+@return {integer} The current day of the year 
+*/
+time.dayOfYear = function (){
+	return Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+}
+
+/**
+@return {integer} The current week of the year. If the year does not start on Monday, the partial week is still counted.
+*/
+time.weekOfYear = function (){
+	return Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
 }
