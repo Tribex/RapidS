@@ -218,3 +218,26 @@ time.isLeapYear = function (year){
     }
     return leap;
 }
+
+//misc time functions
+
+/**
+@return {long} The current time, expressed in milliseconds after January 1, 1970, 0:00:00 GMT.
+*/
+time.timeInMillis = function (){
+	return Calendar.getInstance().getTimeInMillis()
+}
+
+/**
+@return {integer} The current day of the year 
+*/
+time.dayOfYear = function (){
+	return Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+}
+
+/**
+@return {integer} The current week of the year. If the year does not start on Monday, the partial week is still counted.
+*/
+time.weekOfYear = function (){
+	return Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
+}
