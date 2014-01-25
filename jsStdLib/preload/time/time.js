@@ -1,7 +1,8 @@
 /**
  * @file Provides methods for finding the current date and time
  * For sorting purposes larger time periods are at the top,
- * while small time periods (seconds) are at the bottom.
+ * while small time periods (seconds) are at the bottom. Following this
+ * are functions for leap years and other misc functions
  * @author Nateowami
  */
 
@@ -37,14 +38,6 @@ time.month = function () {
  */
 time.date = function () {
     return Calendar.getInstance().get(Calendar.DATE);
-}
-
-/**
- * Gets the name of the current month, such as "January".
- * @returns {string} The name of the current month.
- */
-time.monthName = function () {
-   return time.monthName(time.month());
 }
 
 /**
@@ -88,14 +81,6 @@ time.monthName = function (month) {
  */
 time.dayOfWeek = function () {
     return Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-}
-
-/**
- * Gets the name of the day of the week, such as "Monday".
- * @returns {string} The name of the current day of the week.
- */
-time.dayOfWeekName = function () {
-    return time.dayOfWeekName(time.dayOfWeek());
 }
 
 /**
@@ -186,15 +171,6 @@ time.millisecond = function (){
 }
 
 //Leap-year stuff below
-
-/**
- * Whether or not the current year is a leap year
- * @returns True if the current year is a leap year, False if not.
- */
-time.isLeapYear = function (){
-    //ask about the current year
-    return time.isLeapYear(time.year());
-}
 
 /**
  * Whether or not the specified year is a leap year
