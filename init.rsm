@@ -1,5 +1,4 @@
 <rsm theme="camo">
-<link rel="rsm" href="test.rsm"/>
 
 <style type="text/css">
 #clickableButton {
@@ -132,7 +131,6 @@ spinner {
 
         function showLogo() {
             if (!window.getElementById('logo').isVisible()) {
-                window.getElementById("win2").setVisible(true);
                 window.getElementById("logo").setVisible(true);
                 window.getElementById("showLogo").setText("Hide RapidS logo");
             } else {
