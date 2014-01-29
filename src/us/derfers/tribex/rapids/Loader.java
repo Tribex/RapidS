@@ -24,6 +24,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +35,7 @@ import java.util.Map;
 import javax.swing.UIManager;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -72,7 +77,13 @@ public class Loader {
      * @param filePath The file to load initially.
      */
     public void startLoader(String filePath) {
-        String fileEscaped = Utilities.EscapeScriptTags(filePath);
+        String fileEscaped = "";
+        try {
+            fileEscaped = Utilities.EscapeScriptTags(FileUtils.readFileToString(new File(filePath)));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         //JavaScript Engine Initialization
         //---------------------------------------------------------------------------//
         //Start Engine:
@@ -336,36 +347,100 @@ public class Loader {
             if (linkElement.getAttributeNode("rel").getTextContent().equals("stylesheet")) {
 
                 //Check and see if the file exists
-                if (this.loadStyles(null, Globals.getCWD(linkElement.getAttributeNode("href").getTextContent())) == false) {
-                    Utilities.debugMsg("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
-                    return false;
-                };
+                if (linkElement.getAttributeNode("href").getNodeValue().contains("://")) {
+                    try {
+                        if (this.loadStyles(IOUtils.toString(new URL(linkElement.getAttributeNode("href").getNodeValue())), null) == false) {
+                            Utilities.debugMsg("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
+                            return false;
+                        }
+                    } catch (MalformedURLException e) {
+                        Utilities.showError("Invalid URL: "+linkElement.getAttributeNode("href").getNodeValue());
+                    } catch (DOMException e) {
+                        Utilities.showError("Unrecoverable error, please report this to the devs: "+e.getMessage());
+                    } catch (IOException e) {
+                        Utilities.showError("Unable to locate "+linkElement.getAttributeNode("href").getNodeValue());
+                    }
+                } else {
+                    if (this.loadStyles(null, Globals.getCWD(linkElement.getAttributeNode("href").getTextContent())) == false) {
+                        Utilities.debugMsg("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
+                        return false;
+                    };
+                }
 
                 //If it links to a script
             } else if (linkElement.getAttributeNode("rel").getTextContent().equals("script")) {
 
                 //Check and see if the file exists
-                try {
+                if (linkElement.getAttributeNode("href").getNodeValue().contains("://")) {
                     //Run script in file
-                    engine.eval(new java.io.FileReader(Globals.getCWD(linkElement.getAttributeNode("href").getTextContent())));
-                    return true;
+                    URL url;
+                    try {
+                        url = new URL(linkElement.getAttributeNode("href").getTextContent());
 
-                } catch (FileNotFoundException e) {
-                    Utilities.debugMsg("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
-                    e.printStackTrace();
-                    return false;
-                } catch (DOMException e) {
-                    Utilities.debugMsg("Error: Improperly formatted XML");
-                    e.printStackTrace();
-                    return false;
-                } catch (Exception e) {
-                    Utilities.debugMsg("Error: invalid script in file "+linkElement.getAttributeNode("href").getTextContent());
-                    e.printStackTrace();
-                    return false;
+                        URLConnection connection = url.openConnection();
+                        connection.setConnectTimeout(10000);
+                        connection.setReadTimeout(10000);
+                        engine.eval(new InputStreamReader(connection.getInputStream()));
+                        return true;
+                    } catch (MalformedURLException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (DOMException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    try {
+                        //Run script in file
+                        engine.eval(new java.io.FileReader(Globals.getCWD(linkElement.getAttributeNode("href").getTextContent())));
+                        return true;
+
+                    } catch (FileNotFoundException e) {
+                        Utilities.debugMsg("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
+                        e.printStackTrace();
+                        return false;
+                    } catch (DOMException e) {
+                        Utilities.debugMsg("Error: Improperly formatted XML");
+                        e.printStackTrace();
+                        return false;
+                    } catch (Exception e) {
+                        Utilities.debugMsg("Error: invalid script in file "+linkElement.getAttributeNode("href").getTextContent());
+                        e.printStackTrace();
+                        return false;
+                    }
                 }
             } else {
                 //Attempt to load as a .rsm file
-                Main.loader.loadAll((Utilities.EscapeScriptTags(Globals.getCWD(linkElement.getAttributeNode("href").getNodeValue()))), engine);
+
+                //If the file is a URL on the internet:
+                if (linkElement.getAttributeNode("href").getNodeValue().contains("://")) {
+                    try {
+                        //Load the file from the internet.
+                        Main.loader.loadAll(Utilities.EscapeScriptTags(IOUtils.toString(new URL(linkElement.getAttributeNode("href").getNodeValue()))), engine);
+                    } catch (MalformedURLException e) {
+                        Utilities.showError("Invalid URL: "+linkElement.getAttributeNode("href").getNodeValue());
+                    } catch (DOMException e) {
+                        Utilities.showError("Unrecoverable error, please report this to the devs: "+e.getMessage());
+                    } catch (IOException e) {
+                        Utilities.showError("Unable to locate "+linkElement.getAttributeNode("href").getNodeValue());
+                    }
+
+                    //Load the file from the Hard Drive
+                } else {
+                    try {
+                        Main.loader.loadAll(Utilities.EscapeScriptTags(FileUtils.readFileToString(new File(Globals.getCWD(linkElement.getAttributeNode("href").getNodeValue())))), engine);
+                    } catch (DOMException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
             }
 
         } else {
@@ -383,7 +458,7 @@ public class Loader {
      */
     private boolean loadStyles(String content, String file) {
         //If the user has specified loading from a string, not file
-        if (file == null) {
+        if (file == null && content != null) {
             //Create a new CSSParser
             CSSParser parser = new CSSParser(content);
 
@@ -405,6 +480,7 @@ public class Loader {
                 return true;
             } catch (IOException e) {
                 Utilities.showError("Error: Invalid CSS formatting in file: "+file);
+                e.printStackTrace();
                 return false;
             }
 

@@ -177,11 +177,10 @@ public class Utilities {
 
     /**
      * Escapes all script tags in the file 'filePath'.
-     * @param filePath The file to escape from.
+     * @param content The content of the file to escape.
      * @return A string containing the escaped text.
      */
-    public static String EscapeScriptTags(String filePath) {
-        String escaped = null;
+    public static String EscapeScriptTags(String content) {
 
         //Put all the escapable items in the map
         HashMap<String, String> escapable = new HashMap<String, String>();
@@ -190,24 +189,16 @@ public class Utilities {
         escapable.put("<", "&lt;");
         escapable.put(">", "&gt;");
 
-        //Attempt to escape the file
-        try {
-            escaped = FileUtils.readFileToString(new File(filePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-            Utilities.debugMsg("ERROR: File not found for script escaping: "+filePath);
-        }
-
         Pattern pat = Pattern.compile("<script .+?>(.+?)</script>", Pattern.DOTALL);
-        Matcher m = pat.matcher(escaped);
+        Matcher m = pat.matcher(content);
         while (m.find()) {
             String temp = m.group(1);
             for (int i = 0; i < escapable.size(); i++) {
                 temp = temp.replaceAll((String) escapable.keySet().toArray()[i], (String) escapable.values().toArray()[i]);
             }
-            escaped = escaped.replace(m.group(0), m.group(0).replace(m.group(1), temp));
+            content = content.replace(m.group(0), m.group(0).replace(m.group(1), temp));
 
         }
-        return escaped;
+        return content;
     }
 }
