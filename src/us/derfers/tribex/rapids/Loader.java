@@ -25,7 +25,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
@@ -284,25 +283,14 @@ public class Loader {
 
             //Load code in <script> tags
             if (scriptNode.getNodeName().equals("script")) {
-                Element scriptElement = (Element) scriptNode;
-                if (scriptElement.getAttributeNode("src") != null) {
-                    try {
-                        engine.eval(new FileReader(new File(Globals.getCWD(scriptElement.getAttributeNode("src").getNodeValue()))));
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                } else {
-                    debugMsg("Loading Script tag: "+(i+1));
-                    //Run all the code inside the <script> tags
-                    try {
-                        engine.eval(scriptNode.getTextContent());
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                debugMsg("Loading Script tag: "+(i+1));
+                //Run all the code inside the <script> tags
+                try {
+                    engine.eval(scriptNode.getTextContent());
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
-
             }
         }
     }
@@ -346,23 +334,36 @@ public class Loader {
             //If it links to a stylesheet
             if (linkElement.getAttributeNode("rel").getTextContent().equals("stylesheet")) {
 
-                //Check and see if the file exists
+                //Check and see if the href and URL exist.
                 if (linkElement.getAttributeNode("href").getNodeValue().contains("://")) {
                     try {
                         if (this.loadStyles(IOUtils.toString(new URL(linkElement.getAttributeNode("href").getNodeValue())), null) == false) {
-                            Utilities.debugMsg("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
+                            Utilities.showError("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
                             return false;
                         }
-                    } catch (MalformedURLException e) {
-                        Utilities.showError("Invalid URL: "+linkElement.getAttributeNode("href").getNodeValue());
-                    } catch (DOMException e) {
-                        Utilities.showError("Unrecoverable error, please report this to the devs: "+e.getMessage());
-                    } catch (IOException e) {
+
+                        if (linkElement.getAttributeNode("cache") != null) {
+                            try {
+                                FileUtils.writeStringToFile(new File(Globals.getCWD(linkElement.getAttributeNode("cache").getTextContent())), IOUtils.toString(new URL(linkElement.getAttributeNode("href").getNodeValue())));
+                            } catch (Exception e2) {
+                                Utilities.showError("Error: unable to cache to file "+linkElement.getAttributeNode("cache").getTextContent());
+                            }
+                        }
+
+                    } catch (Exception e) {
                         Utilities.showError("Unable to locate "+linkElement.getAttributeNode("href").getNodeValue());
+                        //Attempt to load from the fallback file. (If tag and file exist)
+                        if (linkElement.getAttributeNode("fallback") != null) {
+                            if (this.loadStyles(null, Globals.getCWD(linkElement.getAttributeNode("fallback").getTextContent())) == false) {
+                                Utilities.showError("Error: invalid file in fallback tag pointing to "+linkElement.getAttributeNode("fallback").getTextContent());
+                                return false;
+                            };
+                        }
                     }
+                    //Load from file
                 } else {
                     if (this.loadStyles(null, Globals.getCWD(linkElement.getAttributeNode("href").getTextContent())) == false) {
-                        Utilities.debugMsg("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
+                        Utilities.showError("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
                         return false;
                     };
                 }
@@ -381,16 +382,28 @@ public class Loader {
                         connection.setConnectTimeout(10000);
                         connection.setReadTimeout(10000);
                         engine.eval(new InputStreamReader(connection.getInputStream()));
+
+                        if (linkElement.getAttributeNode("cache") != null) {
+                            try {
+                                FileUtils.writeStringToFile(new File(Globals.getCWD(linkElement.getAttributeNode("cache").getTextContent())), IOUtils.toString(new URL(linkElement.getAttributeNode("href").getNodeValue())));
+                            } catch (Exception e2) {
+                                Utilities.showError("Error: unable to cache to file "+linkElement.getAttributeNode("cache").getTextContent());
+                            }
+                        }
+
                         return true;
-                    } catch (MalformedURLException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    } catch (DOMException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        //Attempt to load from the fallback file. (If tag and file exist)
+                        if (linkElement.getAttributeNode("fallback") != null) {
+                            try {
+                                engine.eval(new java.io.FileReader(Globals.getCWD(linkElement.getAttributeNode("fallback").getTextContent())));
+                            } catch (Exception e2) {
+                                Utilities.showError("Error: invalid file in fallback tag pointing to "+linkElement.getAttributeNode("fallback").getTextContent());
+                            }
+                        } else {
+                            Utilities.showError("Unable to load "+linkElement.getAttributeNode("href").getTextContent()+". No fallback found.");
+                        }
+
                     }
 
                 } else {
@@ -400,15 +413,15 @@ public class Loader {
                         return true;
 
                     } catch (FileNotFoundException e) {
-                        Utilities.debugMsg("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
+                        Utilities.showError("Error: invalid file in link tag pointing to "+linkElement.getAttributeNode("href").getTextContent());
                         e.printStackTrace();
                         return false;
                     } catch (DOMException e) {
-                        Utilities.debugMsg("Error: Improperly formatted XML");
+                        Utilities.showError("Error: Improperly formatted XML");
                         e.printStackTrace();
                         return false;
                     } catch (Exception e) {
-                        Utilities.debugMsg("Error: invalid script in file "+linkElement.getAttributeNode("href").getTextContent());
+                        Utilities.showError("Error: invalid script in file "+linkElement.getAttributeNode("href").getTextContent());
                         e.printStackTrace();
                         return false;
                     }
@@ -421,12 +434,22 @@ public class Loader {
                     try {
                         //Load the file from the internet.
                         Main.loader.loadAll(Utilities.EscapeScriptTags(IOUtils.toString(new URL(linkElement.getAttributeNode("href").getNodeValue()))), engine);
-                    } catch (MalformedURLException e) {
-                        Utilities.showError("Invalid URL: "+linkElement.getAttributeNode("href").getNodeValue());
-                    } catch (DOMException e) {
-                        Utilities.showError("Unrecoverable error, please report this to the devs: "+e.getMessage());
-                    } catch (IOException e) {
-                        Utilities.showError("Unable to locate "+linkElement.getAttributeNode("href").getNodeValue());
+
+                        if (linkElement.getAttributeNode("cache") != null) {
+                            try {
+                                FileUtils.writeStringToFile(new File(Globals.getCWD(linkElement.getAttributeNode("cache").getTextContent())), IOUtils.toString(new URL(linkElement.getAttributeNode("href").getNodeValue())));
+                            } catch (Exception e2) {
+                                Utilities.showError("Error: unable to cache to file "+linkElement.getAttributeNode("cache").getTextContent());
+                            }
+                        }
+                    } catch (Exception e) {
+                        if (linkElement.getAttributeNode("fallback") != null) {
+                            try {
+                                Main.loader.loadAll(Utilities.EscapeScriptTags(FileUtils.readFileToString(new File(Globals.getCWD(linkElement.getAttributeNode("fallback").getNodeValue())))), engine);
+                            } catch (Exception e2) {
+                                Utilities.showError("Error: invalid file in fallback tag pointing to "+linkElement.getAttributeNode("fallback").getTextContent());
+                            }
+                        }
                     }
 
                     //Load the file from the Hard Drive
