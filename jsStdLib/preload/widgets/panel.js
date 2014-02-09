@@ -6,7 +6,7 @@ require(Packages.javax.swing.JPanel);
 require(Packages.java.awt.GridBagLayout);
 require(Packages.us.derfers.tribex.rapids.GUI.Swing.GUI);
 
-widgets.registerWidget("JPanel", "panel", "A JPanel which can hold other widgets.", function (parentComposite, widgetElement, engine) {
+widgetTypes.registerWidget("panel", function (parentComposite, widgetElement, engine) {
         //Create a new Panel
         var widget = new JPanel();
 

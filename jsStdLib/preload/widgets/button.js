@@ -4,7 +4,7 @@
 
 require(Packages.javax.swing.JButton);
 
-widgets.registerWidget("JButton", "button", "A simple JButton", function (parentComposite, widgetElement, engine) {
+widgetTypes.registerWidget("button", function (parentComposite, widgetElement, engine) {
     var widget = new JButton();
     parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 

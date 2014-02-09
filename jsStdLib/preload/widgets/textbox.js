@@ -4,14 +4,14 @@
 
 require(Packages.javax.swing.JTextField);
 
-widgets.registerWidget("JTextField", "textfield", "A simple JTextField", function (parentComposite, widgetElement, engine) {
-	var widget = new JTextField();
-	parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
+widgetTypes.registerWidget("textfield", function (parentComposite, widgetElement, engine) {
+    var widget = new JTextField();
+    parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
-	//Set button text with the content of the <button></button> tags
-	widget.setText(widgetElement.getTextContent());
+    //Set button text with the content of the <button></button> tags
+    widget.setText(widgetElement.getTextContent());
 
-	widgets.initializeWidget(widget, widgetElement, engine);
-	return widget;
+    widgets.initializeWidget(widget, widgetElement, engine);
+    return widget;
 });
 

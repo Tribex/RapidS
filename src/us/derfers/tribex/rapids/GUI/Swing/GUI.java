@@ -147,7 +147,7 @@ public class GUI {
     public static void loadInComposite(JComponent parentComposite, Node node, ScriptEngine engine) {
 
         //Create a map of widgetTypes from the JavaScript object widgets.widgetTypes
-        HashMap<String, Object> widgetTypes = engine.getMap("widgetTypes", "widgets");
+        HashMap<String, Object> widgetTypes = engine.getMap("widgetTypes", engine.scope);
 
         //Create and populate the list of registered widgets
         ArrayList<String> registeredWidgets = new ArrayList<String>();
@@ -168,7 +168,7 @@ public class GUI {
                 //If this element exists in the list of registered widgets
                 if (registeredWidgets.contains(widgetElement.getNodeName())) {
                     //Run the JavaScript function to draw and display the widget
-                    engine.call("widgets.widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, engine);
+                    engine.call("widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, engine);
                 }
             }
 

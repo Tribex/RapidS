@@ -5,7 +5,7 @@
 require(Packages.javax.swing.JTextArea);
 require(Packages.javax.swing.JScrollPane);
 
-widgets.registerWidget("JTextArea", "textarea", "A simple JTextArea", function (parentComposite, widgetElement, engine) {
+widgetTypes.registerWidget("textarea", function (parentComposite, widgetElement, engine) {
 
     //Create a new textarea
     widget = new JTextArea();

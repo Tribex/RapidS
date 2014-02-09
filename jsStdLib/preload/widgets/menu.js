@@ -6,7 +6,7 @@ require(Packages.javax.swing.JMenu);
 require(Packages.javax.swing.JMenuItem);
 require(Packages.us.derfers.tribex.rapids.jvStdLib.Window);
 
-widgets.registerWidget("JMenu", "menu", "A simple JMenu", function (parentComposite, widgetElement, engine) {
+widgetTypes.registerWidget("menu", function (parentComposite, widgetElement, engine) {
     var widget = new JMenu();
 
     if (widgetElement.getParentNode().getNodeName() == "body") {
@@ -26,7 +26,7 @@ widgets.registerWidget("JMenu", "menu", "A simple JMenu", function (parentCompos
     return widget;
 });
 
-widgets.registerWidget("JMenuItem", "menuitem", "A simple JMenuItem", function (parentComposite, widgetElement, engine) {
+widgetTypes.registerWidget("menuitem", function (parentComposite, widgetElement, engine) {
     var widget = new JMenuItem();
 
     widget.setText(widgetElement.getTextContent());

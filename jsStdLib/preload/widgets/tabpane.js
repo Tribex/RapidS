@@ -6,7 +6,7 @@ require(Packages.javax.swing.JTabbedPane);
 require(Packages.javax.swing.JPanel);
 require(Packages.java.awt.GridBagLayout);
 
-widgets.registerWidget("JTabbedPane", "tabpane", "A simple JTabbedPane", function (parentComposite, widgetElement, engine) {
+widgetTypes.registerWidget("tabpane", function (parentComposite, widgetElement, engine) {
     var widget = new JTabbedPane();
 
     parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));

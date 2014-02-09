@@ -4,14 +4,14 @@
 
 require(Packages.javax.swing.JLabel);
 
-widgets.registerWidget("JLabel", "label", "A simple JLabel", function (parentComposite, widgetElement, engine) {
-	var widget = new JLabel();
-	parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
+widgetTypes.registerWidget("label", function (parentComposite, widgetElement, engine) {
+    var widget = new JLabel();
+    parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
-	//Set button text with the content of the <button></button> tags
-	widget.setText(widgetElement.getTextContent());
+    //Set button text with the content of the <button></button> tags
+    widget.setText(widgetElement.getTextContent());
 
-	widgets.initializeWidget(widget, widgetElement, engine);
-	return widget;
+    widgets.initializeWidget(widget, widgetElement, engine);
+    return widget;
 });
 

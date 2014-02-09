@@ -8,7 +8,7 @@ require(Packages.javax.swing.ImageIcon);
 require(Packages.javax.swing.JLabel);
 require(Packages.us.derfers.tribex.rapids.Globals);
 
-widgets.registerWidget("Image", "img", "A simple image.", function (parentComposite, widgetElement, engine) {
+widgetTypes.registerWidget("img", function (parentComposite, widgetElement, engine) {
     //if the src is there
     if (widgetElement.getAttributeNode("src") != null) {
         try {

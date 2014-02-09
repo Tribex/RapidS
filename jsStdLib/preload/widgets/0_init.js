@@ -8,20 +8,22 @@ importClass(Packages.us.derfers.tribex.rapids.Globals);
 importClass(Packages.us.derfers.tribex.rapids.GUI.Swing.Layouts);
 importClass(Packages.us.derfers.tribex.rapids.GUI.Swing.WidgetOps);
 
-var widgets = {
-        //A list of registered widgets. Populated by widgets.registerWidget()
-        widgetTypes : {},
-
+//A list of registered widgets. Populated by widgetTypes.registerWidget()
+var widgetTypes = {
         //Used to add a new widget to the GUI
         addWidget : function(name, func) {
             this[name] = func;
         },
 
         //Used to register a new widget type.
-        registerWidget : function (name, element, description, func, customData) {
-            this.widgetTypes[element] = {name : name, element : element, description : description, loader : func, widget : customData}
+        registerWidget : function (element, loader, styleBlacklist, styleWhitelist, customData) {
+            this[element] = {element : element, loader : loader, styleBlacklist : styleBlacklist, styleWhitelist : styleWhitelist}
         },
 
+}
+
+//Hold current UI widgets
+var widgets = {
         //Iterate through listener types and set listeners if they exist
         initializeWidget : function (widget, widgetElement, engine, prependID) {
             if (prependID === null || prependID === undefined) {
@@ -40,5 +42,6 @@ var widgets = {
             WidgetOps.addWidgetToMaps(id, widgetElement, widget, engine);
             widget = WidgetOps.getWidgetStyles(widget, id);
             WidgetOps.addWidgetToMaps(id, widgetElement, widget, engine);
+            widgets[id] = {widget : widget, parent : widget.getParent()}
         },
 }
