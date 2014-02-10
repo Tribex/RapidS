@@ -145,6 +145,8 @@ spinner {
             f.writeLine(program.getElementById('saveLine').widget.getText());
             program.getElementById("rightSide").widget.setText(f.read());
         }
+
+        program.getElementById("tabP").appendChild('<tab value="Tab2"><button class="standardPosition" id="showLogo" onclick="showLogo()">Hide RapidS logo</button><img class="standardPosition" id="logo" src="icon.png" /> </tab>')
 </script>
 
 <window id="__INIT__">

@@ -20,7 +20,7 @@ __widgetTypes.registerWidget("menu", function (parentComposite, widgetElement, e
     }
     parentComposite.add(widget);
 
-    GUI.loadInComposite(widget, widgetElement, engine);
+    GUI.loadInComposite(widget, widgetElement);
 
     __widgetOps.initializeWidget(widget, widgetElement, engine);
     return widget;

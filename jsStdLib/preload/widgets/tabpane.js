@@ -12,7 +12,7 @@ __widgetTypes.registerWidget("tabpane", function (parentComposite, widgetElement
     parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
     //Load all elements inside of the composite/widget.  INFINITE NESTING!
-    GUI.loadInComposite(widget, widgetElement, engine);
+    GUI.loadInComposite(widget, widgetElement);
 
     __widgetOps.initializeWidget(widget, widgetElement, engine);
     return widget;

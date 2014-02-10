@@ -33,6 +33,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import us.derfers.tribex.rapids.Main;
 import us.derfers.tribex.rapids.ScriptEngine;
 import us.derfers.tribex.rapids.Utilities;
 
@@ -115,7 +116,7 @@ public class GUI {
             }
             //XXX: BODY : XXX\\
             //Loop through all children of the body element and add them
-            loadInComposite((JComponent) windowPanel, windowElement.getElementsByTagName("body").item(0), engine);
+            loadInComposite((JComponent) windowPanel, windowElement.getElementsByTagName("body").item(0));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,9 +138,9 @@ public class GUI {
      * @param node The body or any other composite node.
      * @param engine The JavaScript engine
      */
-    public static void loadInComposite(JComponent parentComposite, Node node, ScriptEngine engine) {
+    public static void loadInComposite(JComponent parentComposite, Node node) {
         //Get the JavaScript object widgetTypes from the ScriptEngine scope.
-        Scriptable widgetTypes = (Scriptable) engine.scope.get("__widgetTypes", engine.scope);
+        Scriptable widgetTypes = (Scriptable) Main.loader.engine.scope.get("__widgetTypes", Main.loader.engine.scope);
 
         //Get Widgets from the parent Element
         NodeList bodyElementList = node.getChildNodes();
@@ -154,12 +155,13 @@ public class GUI {
                 final Element widgetElement = (Element) widgetNode;
 
                 //If the tagname is found in widgetTypes
-                if (widgetTypes.get(widgetElement.getNodeName(), engine.scope).getClass().getName().equals("org.mozilla.javascript.NativeObject")) {
+                if (widgetTypes.get(widgetElement.getNodeName(),
+                        Main.loader.engine.scope).getClass().getName().equals("org.mozilla.javascript.NativeObject")) {
 
                     //Make sure the JavaScript widgetType object is really a widget Type
-                    if (((NativeObject) widgetTypes.get(widgetElement.getNodeName(), engine.scope)).get("element").toString().equals(widgetElement.getNodeName())) {
+                    if (((NativeObject) widgetTypes.get(widgetElement.getNodeName(), Main.loader.engine.scope)).get("element").toString().equals(widgetElement.getNodeName())) {
                         //Run the JavaScript function to draw and display the widget
-                        engine.call("__widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, engine);
+                        Main.loader.engine.call("__widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, Main.loader.engine);
                     }
                 }
 
