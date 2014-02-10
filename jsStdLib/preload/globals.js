@@ -4,10 +4,3 @@
  * minimize confusion and transition.
  * @author Tribex
  */
-
-/**
- * Provides access to the Java Window object for ease of use and familiarity.
- * @namespace
- */
-var window = Window;
-

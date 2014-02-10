@@ -33,42 +33,6 @@ import us.derfers.tribex.rapids.Main;
  *
  */
 public class Window {
-
-    /**
-     * Gets the widget object fromm the XMLWidgets Map that matches 'id'.
-     * @param id The id of the widget to return
-     * @return The widget specified by 'id' from XMLWidgets
-     */
-    public static Object getElementById(String id) {
-        if (Main.loader.XMLObjects.get(id) != null) {
-            return Main.loader.XMLObjects.get(id).get(id);
-        } else {
-            return null;
-        }
-
-    }
-
-    /**
-     * Gets an array of widget objects from the XMLWidgets Map that match 'class_identifier'.
-     * @param class_identifier The class of the widgets to return
-     * @return An Object Array of widgets specified by the 'class_identifier' from XMLWidgets.
-     */
-    public static Object[] getElementsByClass(String class_identifier) {
-
-        List<Object> elementList = new ArrayList<Object>();
-
-        //Loop through all the widgets
-        for (Map<String, Object> element : Main.loader.XMLObjects.values()) {
-            if (element.get("class") != null && element.get("class").equals(class_identifier)) {
-                elementList.add(element.get(element.get("id")));
-            }
-        }
-
-        return elementList.toArray();
-
-    }
-
-
     //XXX: WINDOW OPERATIONS :XXX\\
 
     //An easy static reference to the JavaScript engine.

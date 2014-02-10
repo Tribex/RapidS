@@ -2,7 +2,7 @@
 
 require(Packages.java.awt.GridBagConstraints);
 
-styles.registerLayoutStyle("fill", "Sets direction for the widget to automatically grab space from.", 
+__styleList.registerLayoutStyle("fill", "Sets direction for the widget to automatically grab space from.", 
 		function (constraint, value) {
 			//If the widget is to fill horizontally
 			if (value.toUpperCase() === "HORIZONTAL") {

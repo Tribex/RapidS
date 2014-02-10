@@ -2,7 +2,7 @@
 
 require(Packages.us.derfers.tribex.rapids.Utilities);
 
-styles.registerLayoutStyle("margin", 
+__styleList.registerLayoutStyle("margin", 
 		"Sets margin of the widget. (INT INT INT INT)", 
 		function (constraint, value) {
 			//Split string (int int) or (int int int int) into an array 
@@ -25,28 +25,28 @@ styles.registerLayoutStyle("margin",
 		}
 );
 
-styles.registerLayoutStyle("margin-top", 
+__styleList.registerLayoutStyle("margin-top", 
 		"Sets the top margin of the widget.", 
 		function (constraint, value) {
 			constraint.insets.top = Integer.valueOf(value);
 		}
 );
 
-styles.registerLayoutStyle("margin-bottom", 
+__styleList.registerLayoutStyle("margin-bottom", 
 		"Sets the bottom margin of the widget.", 
 		function (constraint, value) {
 			constraint.insets.bottom = Integer.valueOf(value);
 		}
 );
 
-styles.registerLayoutStyle("margin-left", 
+__styleList.registerLayoutStyle("margin-left", 
 		"Sets the left margin of the widget.", 
 		function (constraint, value) {
 			constraint.insets.left = Integer.valueOf(value);
 		}
 );
 
-styles.registerLayoutStyle("margin-right", 
+__styleList.registerLayoutStyle("margin-right", 
 		"Sets the right margin of the widget.", 
 		function (constraint, value) {
 			constraint.insets.right = Integer.valueOf(value);

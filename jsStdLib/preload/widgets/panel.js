@@ -6,7 +6,7 @@ require(Packages.javax.swing.JPanel);
 require(Packages.java.awt.GridBagLayout);
 require(Packages.us.derfers.tribex.rapids.GUI.Swing.GUI);
 
-widgetTypes.registerWidget("panel", function (parentComposite, widgetElement, engine) {
+__widgetTypes.registerWidget("panel", function (parentComposite, widgetElement, engine) {
         //Create a new Panel
         var widget = new JPanel();
 
@@ -20,7 +20,7 @@ widgetTypes.registerWidget("panel", function (parentComposite, widgetElement, en
         GUI.loadInComposite(widget, widgetElement, engine);
 
 
-        widgetOps.initializeWidget(widget, widgetElement, engine);
+        __widgetOps.initializeWidget(widget, widgetElement, engine);
 
         return widget;
 });

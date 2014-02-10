@@ -7,10 +7,9 @@
 require(Packages.us.derfers.tribex.rapids.Globals);
 require(Packages.us.derfers.tribex.rapids.GUI.Swing.Layouts);
 require(Packages.us.derfers.tribex.rapids.GUI.Swing.WidgetOps);
-require(Packages.org.w3c.dom.NamedNodeMap);
 
-//A list of registered widgets. Populated by widgetTypes.registerWidget()
-var widgetTypes = {
+//A list of registered widgets. Populated by __widgetTypes.registerWidget()
+var __widgetTypes = {
         //Used to add a new widget to the GUI
         addWidget : function(name, func) {
             this[name] = func;
@@ -24,7 +23,7 @@ var widgetTypes = {
 }
 
 //Widget Operations
-var widgetOps = {
+var __widgetOps = {
         //Iterate through listener types and set listeners if they exist
         initializeWidget : function (widget, widgetElement, engine, prependID) {
             if (prependID === null || prependID === undefined) {
@@ -45,40 +44,39 @@ var widgetOps = {
             widget = WidgetOps.getWidgetStyles(widget, id);
             WidgetOps.addWidgetToMaps(id, widgetElement, widget, engine);
             //Use this instead.
-            widgetOps.storeWidget(id, widgetElement, widget);
+            this.storeWidget(id, widgetElement, widget);
         },
 
         storeWidget : function(widgetID, widgetElement, widget) {
 
-            //Create a HashMap to hold Widget ID and class, as well as other parameters.
+            //Create an object to hold the widget and its attributes.
             var widgetObject = {};
 
+            Utilities.debugMsg("Adding widget "+widgetID+" to __widgetList object.", 3);
 
-            Utilities.debugMsg("Adding widget "+widgetID+" to widgets object.", 3);
+            //Add the widget itself to the widgetObject
+            widgetObject["widget"] = widget;
 
-            //Add the widget to the widgetMap
-            widgetObject[widgetID] = widget;
-
-            //If the ID is set, add it to the Object list so that we can get it later.
+            //Get a list of the attributes
             var widgetAttributes = widgetElement.getAttributes();
 
-            //Iterate through all the attributes of the widget and add them to the widgetMap
+            //Iterate through all the attributes of the widget and add them to the widgetObject
             for (var i=0; i < widgetAttributes.getLength(); i++) {
                 widgetObject[widgetAttributes.item(i).getNodeName()] = widgetAttributes.item(i).getTextContent();
             }
 
-
+            //Set the element of widgetObject
             widgetObject["element"] = widgetElement.getNodeName();
+
+            //Set the id of widgetObject
             widgetObject["id"] = widgetID;
 
-            //Add the temporary widgetMap to the XMLWidgets array.
-            widgets[widgetID] = widgetObject;
+            //Add the temporary widgetMap to the widgets object under its id.
+            __widgetList[widgetID] = widgetObject;
         }
 };
 
 
 //Hold current UI widgets
-var widgets = {
-
-}
+var __widgetList = {};
 

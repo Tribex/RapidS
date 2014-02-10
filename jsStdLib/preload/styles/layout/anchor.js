@@ -2,7 +2,7 @@
 
 require(Packages.us.derfers.tribex.rapids.Utilities);
 
-styles.registerLayoutStyle("anchor", 
+__styleList.registerLayoutStyle("anchor", 
 		"Sets anchor point of the widget.", 
 		function (constraint, value) {
 			var f = null;

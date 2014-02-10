@@ -43,7 +43,6 @@ import us.derfers.tribex.rapids.Utilities;
  *
  */
 public class WidgetOps {
-    private static ScriptEngine engine = Main.loader.engine;
     //Widget styles
     /**
      * Returns a widget styled with all the styles specified in its element, class.
@@ -103,7 +102,7 @@ public class WidgetOps {
     public static JComponent loadWidgetStyles(JComponent widget, Map<String, String> styles, String widgetIdentifier) {
 
         //Create a map of styles from the JavaScript object styles.widgetStyles
-        HashMap<String, Object> widgetStyleTypes = Main.loader.engine.getMap("widgetStyles", "styles");
+        HashMap<String, Object> widgetStyleTypes = Main.loader.engine.getMap("widgetStyles", "__styleList");
 
         //If there are styles for this identifier
         if (styles != null && !styles.isEmpty()) {
@@ -118,7 +117,7 @@ public class WidgetOps {
 
                     try {
                         //Attempt to apply it.
-                        widget = (JComponent) Main.loader.engine.call("styles.widgetStyles."+style+".apply", widget, styles.get(style));
+                        widget = (JComponent) Main.loader.engine.call("__styleList.widgetStyles."+style+".apply", widget, styles.get(style));
                     } catch (Exception e) {
                         //Show an error if it is invalid
                         Utilities.showError("Invalid CSS: '"+widgetIdentifier+" {"+style+" = "+styles.get(style)+";}'. "

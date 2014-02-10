@@ -2,14 +2,14 @@
 
 require(Packages.java.lang.Float);
 
-styles.registerLayoutStyle("weight-x", 
+__styleList.registerLayoutStyle("weight-x", 
 		"Sets x the weight of a widget. (The relative amount of space it takes up)", 
 		function (constraint, value) {
 			constraint.weightx = Float.valueOf(value);
 		}
 );
 
-styles.registerLayoutStyle("weight-y", 
+__styleList.registerLayoutStyle("weight-y", 
 		"Sets y the weight of a widget. (The relative amount of space it takes up)", 
 		function (constraint, value) {
 			constraint.weighty = Float.valueOf(value);

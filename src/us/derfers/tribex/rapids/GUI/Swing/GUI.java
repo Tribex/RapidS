@@ -22,8 +22,6 @@ import java.awt.Container;
 import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -35,7 +33,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import us.derfers.tribex.rapids.Main;
 import us.derfers.tribex.rapids.ScriptEngine;
 import us.derfers.tribex.rapids.Utilities;
 
@@ -92,12 +89,7 @@ public class GUI {
         JMenuBar menuBar = new JMenuBar();
         window.setJMenuBar(menuBar);
 
-        //Create a subMap for holding the Window and any properties of it
-        Map<String, Object> windowMap = new HashMap<String, Object>();
-
-        windowMap.put(id, window);
-
-        Main.loader.XMLObjects.put(id, windowMap);
+        engine.call("__widgetOps.storeWidget", id, windowElement, window);
 
 
         try {
@@ -147,7 +139,7 @@ public class GUI {
      */
     public static void loadInComposite(JComponent parentComposite, Node node, ScriptEngine engine) {
         //Get the JavaScript object widgetTypes from the ScriptEngine scope.
-        Scriptable widgetTypes = (Scriptable) engine.scope.get("widgetTypes", engine.scope);
+        Scriptable widgetTypes = (Scriptable) engine.scope.get("__widgetTypes", engine.scope);
 
         //Get Widgets from the parent Element
         NodeList bodyElementList = node.getChildNodes();
@@ -167,7 +159,7 @@ public class GUI {
                     //Make sure the JavaScript widgetType object is really a widget Type
                     if (((NativeObject) widgetTypes.get(widgetElement.getNodeName(), engine.scope)).get("element").toString().equals(widgetElement.getNodeName())) {
                         //Run the JavaScript function to draw and display the widget
-                        engine.call("widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, engine);
+                        engine.call("__widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, engine);
                     }
                 }
 

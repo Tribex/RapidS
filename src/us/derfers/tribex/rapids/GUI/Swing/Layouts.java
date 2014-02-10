@@ -99,7 +99,7 @@ public class Layouts {
     private static void loadConstraintStyles(GridBagConstraints widgetConstraint, Map<String, String> styles, String widgetIdentifier) {
 
         //Create a map of styles from the JavaScript object styles.layoutStyles
-        HashMap<String, Object> layoutStyleTypes = Main.loader.engine.getMap("layoutStyles", "styles");
+        HashMap<String, Object> layoutStyleTypes = Main.loader.engine.getMap("layoutStyles", "__styleList");
 
         //If there are styles for this identifier
         if (styles != null && !styles.isEmpty()) {
@@ -114,7 +114,7 @@ public class Layouts {
 
                     try {
                         //Attempt to apply it.
-                        Main.loader.engine.call("styles.layoutStyles."+style+".apply", widgetConstraint, styles.get(style));
+                        Main.loader.engine.call("__styleList.layoutStyles."+style+".apply", widgetConstraint, styles.get(style));
                     } catch (Exception e) {
                         //Show an error if it is invalid
                         Utilities.showError("Invalid CSS: '"+widgetIdentifier+" {"+style+" = "+styles.get(style)+";}'. "

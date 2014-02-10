@@ -102,10 +102,11 @@ spinner {
 
         //Button Clicking System
             function runBtnEvt(text, message) {
-                var label_list = window.getElementsByClass("changesOnHover");
-                for (index = 0; index < label_list.length; ++index) {
-                    window.getElementById("__INIT__").setTitle(text);
-                    label_list[index].setText(text+" - "+message);
+                var label_list = program.getElementsByClass("changesOnHover");
+                console.log(label_list[0].element);
+                for (var index = 0; index < label_list.length; index++) {
+                    program.getElementById("__INIT__").widget.setTitle(text);
+                    label_list[index].widget.setText(text+" - "+message);
                 }
             }
 
@@ -114,7 +115,7 @@ spinner {
         thread.start();
 
         function changeBackground(widget, state) {
-                var widgetID = window.getElementById(widget);
+                var widgetID = program.getElementById(widget).widget;
                 var color;
                 if (state == 'click') {
                     var color = Color.decode("#666666");
@@ -130,20 +131,20 @@ spinner {
             }
 
         function showLogo() {
-            if (!window.getElementById('logo').isVisible()) {
-                window.getElementById("logo").setVisible(true);
-                window.getElementById("showLogo").setText("Hide RapidS logo");
+            if (!program.getElementById('logo').widget.isVisible()) {
+                program.getElementById("logo").widget.setVisible(true);
+                program.getElementById("showLogo").widget.setText("Hide RapidS logo");
             } else {
-                window.getElementById("logo").setVisible(false);
-                window.getElementById("showLogo").setText("Show RapidS logo");
+                program.getElementById("logo").widget.setVisible(false);
+                program.getElementById("showLogo").widget.setText("Show RapidS logo");
             }
         }
 
-        window.getElementById("rightSide").setText(f.read());
+        program.getElementById("rightSide").widget.setText(f.read());
 
         function saveLine() {
-            f.writeLine(window.getElementById('saveLine').getText());
-            window.getElementById("rightSide").setText(f.read());
+            f.writeLine(program.getElementById('saveLine').widget.getText());
+            program.getElementById("rightSide").widget.setText(f.read());
         }
 </script>
 
@@ -184,12 +185,12 @@ spinner {
             onmouseover="changeBackground('clickLabel', 'over')"
             onmouseout="changeBackground('clickLabel', 'out')">Clickable label</label>
         <button id="clickableButton" class="changesOnHover"
-            onclick="runBtnEvt('Click', window.getElementById('clickableButton').getName())"
-            onmouseover="runBtnEvt('Mouse Over', window.getElementById('clickableButton').getName())"
-            onmouseout="runBtnEvt('Mouse Out', window.getElementById('clickableButton').getName())">
+            onclick="runBtnEvt('Click', program.getElementById('clickableButton').id)"
+            onmouseover="runBtnEvt('Mouse Over', program.getElementById('clickableButton').id)"
+            onmouseout="runBtnEvt('Mouse Out', program.getElementById('clickableButton').id)">
             Changes the status of the label.</button>
         <spinner id="spinner" value="10" max="20" min="-1"
-            onselection="runBtnEvt(window.getElementById('spinner').getValue(), window.getElementById('spinner').getName())" />
+            onselection="runBtnEvt(program.getElementById('spinner').widget.getValue(), program.getElementById('spinner').id)" />
         <textfield id="lineToSave" class="standardPosition">Enter a single line of text here!</textfield>
         <button id="saveLine" onclick="saveLine()">Append ^ to text.txt</button>
         <checkbox class="standardPosition" onclick="console.log('My Checkbox')">My

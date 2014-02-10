@@ -2,7 +2,7 @@
 
 require(Packages.java.awt.Color);
 
-styles.registerWidgetStyle("background-color", "Sets the background color of the widget.", function (widget, value) {
+__styleList.registerWidgetStyle("background-color", "Sets the background color of the widget.", function (widget, value) {
 	//Set the background color of the widget
 	widget.setBackground(Color.decode(value));
 
@@ -13,7 +13,7 @@ styles.registerWidgetStyle("background-color", "Sets the background color of the
 	return widget;
 });
 
-styles.registerWidgetStyle("foreground-color", "Sets the foreground color of the widget.", function (widget, value) {
+__styleList.registerWidgetStyle("foreground-color", "Sets the foreground color of the widget.", function (widget, value) {
 	//Set the foreground color of the widget
 	widget.setForeground(Color.decode(value));
 
@@ -21,7 +21,7 @@ styles.registerWidgetStyle("foreground-color", "Sets the foreground color of the
 	return widget;
 });
 
-styles.registerWidgetStyle("color", "Sets the foreground color of the widget. (Alias of foreground-color)", function (widget, value) {
+__styleList.registerWidgetStyle("color", "Sets the foreground color of the widget. (Alias of foreground-color)", function (widget, value) {
 	//Set the foreground color of the widget
 	widget.setForeground(Color.decode(value));
 	
@@ -30,7 +30,7 @@ styles.registerWidgetStyle("color", "Sets the foreground color of the widget. (A
 });
 
 //NOT WORKING
-styles.registerWidgetStyle("opacity", "Sets the opacity of the widget", function (widget, value) {
+__styleList.registerWidgetStyle("opacity", "Sets the opacity of the widget", function (widget, value) {
 	
 	if (value.toUpperCase().indexOf("OPAQ") > -1) {
 		widget.setOpaque(true);

@@ -1,7 +1,7 @@
 /** Provides widget z-index style - Doesn't really work well at all yet. */
 
 //TODO: Make this more flexible and advanced.. And work right.
-styles.registerWidgetStyle("z-index", "Sets the z-index of the widget.", function (widget, value) {
+__styleList.registerWidgetStyle("z-index", "Sets the z-index of the widget.", function (widget, value) {
 	//Get the parent of the widget
 	var parent = widget.getParent();
 	

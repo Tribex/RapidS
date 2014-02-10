@@ -6,7 +6,7 @@ require(Packages.javax.swing.JEditorPane);
 require(Packages.javax.swing.JScrollPane);
 require(Packages.jsyntaxpane.DefaultSyntaxKit);
 
-widgetTypes.registerWidget("codearea", function (parentComposite, widgetElement, engine) {
+__widgetTypes.registerWidget("codearea", function (parentComposite, widgetElement, engine) {
     DefaultSyntaxKit.initKit();
 
     //Create a new textarea
@@ -27,7 +27,7 @@ widgetTypes.registerWidget("codearea", function (parentComposite, widgetElement,
     //Add the scrollpane to the parentComposite
     parentComposite.add(scrollPane, Layouts.getWidgetConstraint(widgetElement));
 
-    widgetOps.initializeWidget(widget, widgetElement, engine);
+    __widgetOps.initializeWidget(widget, widgetElement, engine);
 
     return widget;
 });

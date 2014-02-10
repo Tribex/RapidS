@@ -1,6 +1,6 @@
 require(Packages.javax.swing.JCheckBox);
 
-widgetTypes.registerWidget("checkbox", function (parentComposite, widgetElement, engine) {
+__widgetTypes.registerWidget("checkbox", function (parentComposite, widgetElement, engine) {
     //Create a new Checkbox.
     var widget = new JCheckBox();
 
@@ -11,7 +11,7 @@ widgetTypes.registerWidget("checkbox", function (parentComposite, widgetElement,
     parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
     //Add the widget to all maps and set event listeners.
-    widgetOps.initializeWidget(widget, widgetElement, engine);
+    __widgetOps.initializeWidget(widget, widgetElement, engine);
 
     //Return the widget for forwards compatibility.
     return widget;

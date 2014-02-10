@@ -2,7 +2,7 @@
 
 require(Packages.java.awt.GridBagConstraints);
 
-styles.registerLayoutStyle("position-x", "Sets the x position of the widget in the parent panel's grid.", function (constraint, value) {
+__styleList.registerLayoutStyle("position-x", "Sets the x position of the widget in the parent panel's grid.", function (constraint, value) {
 	if (value.indexOf("rel") != -1) {
 		constraint.gridx = GridBagConstraints.RELATIVE;
 	} else {
@@ -10,7 +10,7 @@ styles.registerLayoutStyle("position-x", "Sets the x position of the widget in t
 	}
 });
 
-styles.registerLayoutStyle("position-y", "Sets the y position of the widget in the parent panel's grid.", function (constraint, value) {
+__styleList.registerLayoutStyle("position-y", "Sets the y position of the widget in the parent panel's grid.", function (constraint, value) {
 	if (value.indexOf("rel") != -1) {
 		constraint.gridy = GridBagConstraints.RELATIVE;
 	} else {

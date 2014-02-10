@@ -8,7 +8,7 @@ require(Packages.javax.swing.ImageIcon);
 require(Packages.javax.swing.JLabel);
 require(Packages.us.derfers.tribex.rapids.Globals);
 
-widgetTypes.registerWidget("img", function (parentComposite, widgetElement, engine) {
+__widgetTypes.registerWidget("img", function (parentComposite, widgetElement, engine) {
     //if the src is there
     if (widgetElement.getAttributeNode("src") != null) {
         try {
@@ -18,7 +18,7 @@ widgetTypes.registerWidget("img", function (parentComposite, widgetElement, engi
             var widget = new JLabel(new ImageIcon(image));
             parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
-            widgetOps.initializeWidget(widget, widgetElement, engine);
+            __widgetOps.initializeWidget(widget, widgetElement, engine);
 
             return widget;
         } catch (e) {

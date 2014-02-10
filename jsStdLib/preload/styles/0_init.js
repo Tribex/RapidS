@@ -6,19 +6,19 @@
 //Will be needed by most of the style types
 require(Packages.java.lang.Integer);
 
-var styles = {
-		//Styles that effect the widget's layout and positioning
-		layoutStyles : {},
-		
-		//Styles that effect the widget's appearance and behavior.
-		widgetStyles : {},
-		
-		//Register function for widget layouts
-		registerLayoutStyle : function (name, description, func) {
-			this.layoutStyles[name] = {name : name, description : description, apply : func} 
-		},
-		
-		registerWidgetStyle : function (name, description, func) {
-			this.widgetStyles[name] = {name : name, description : description, apply : func} 
-		},
+var __styleList = {
+        //Styles that effect the widget's layout and positioning
+        layoutStyles : {},
+
+        //Styles that effect the widget's appearance and behavior.
+        widgetStyles : {},
+
+        //Register function for widget layouts
+        registerLayoutStyle : function (name, description, func) {
+            this.layoutStyles[name] = {name : name, description : description, apply : func}
+        },
+
+        registerWidgetStyle : function (name, description, func) {
+            this.widgetStyles[name] = {name : name, description : description, apply : func}
+        },
 };

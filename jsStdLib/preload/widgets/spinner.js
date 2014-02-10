@@ -6,7 +6,7 @@ require(Packages.javax.swing.JSpinner);
 require(Packages.javax.swing.SpinnerNumberModel);
 require(Packages.java.lang.Integer);
 
-widgetTypes.registerWidget("spinner", function (parentComposite, widgetElement, engine) {
+__widgetTypes.registerWidget("spinner", function (parentComposite, widgetElement, engine) {
     //Create a new composite for sub-elements
     var model = new SpinnerNumberModel();
 
@@ -28,7 +28,7 @@ widgetTypes.registerWidget("spinner", function (parentComposite, widgetElement, 
     //Add the panel to the window with all of its constraints.
     parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
-    widgetOps.initializeWidget(widget, widgetElement, engine);
+    __widgetOps.initializeWidget(widget, widgetElement, engine);
 
     return widget;
 });
