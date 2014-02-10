@@ -1,8 +1,9 @@
 /**
- * @file Provides important program functions, mainly exiting.
+ * @file Provides important program functions.
  * @author Tribex
  */
 
+require(Packages.us.derfers.tribex.rapids.Utilities);
 /**
  * Contains methods that deal with the program.
  * @namespace
@@ -60,3 +61,10 @@ program.getElementsByClass = function(class_identifier) {
     }
 }
 
+/**
+ * Turns a string into an XML Document.
+ * @param fragment {string} A valid XML string.
+ */
+program.XMLFragToDocument = function(fragment) {
+    return Utilities.XMLStringToDocument("<xml>"+fragment+"</xml>");
+};

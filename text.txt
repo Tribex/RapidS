@@ -1,3 +1,2 @@
 Here is some sample text to read.
 Here is some more.
-Append ^ to text.txt
