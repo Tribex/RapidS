@@ -30,6 +30,9 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeObject;
+import org.mozilla.javascript.Scriptable;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -145,38 +148,36 @@ public class GUI {
      * @param engine The JavaScript engine
      */
     public static void loadInComposite(JComponent parentComposite, Node node, ScriptEngine engine) {
-
-        //Create a map of widgetTypes from the JavaScript object widgets.widgetTypes
-        HashMap<String, Object> widgetTypes = engine.getMap("widgetTypes", engine.scope);
-
-        //Create and populate the list of registered widgets
-        ArrayList<String> registeredWidgets = new ArrayList<String>();
-        for (String widgetType : widgetTypes.keySet()) {
-            registeredWidgets.add(widgetType);
-        }
+        //Get the JavaScript object widgetTypes from the ScriptEngine scope.
+        Scriptable widgetTypes = (Scriptable) engine.scope.get("widgetTypes", engine.scope);
 
         //Get Widgets from the parent Element
         NodeList bodyElementList = node.getChildNodes();
         //Loop through all children of the root element.
         for (int counter=0; counter < bodyElementList.getLength(); counter++) {
 
+            //Isolate the node
             Node widgetNode = bodyElementList.item(counter);
 
+            //Make sure it is a proper element.
             if (widgetNode.getNodeType() == Node.ELEMENT_NODE) {
                 final Element widgetElement = (Element) widgetNode;
 
-                //If this element exists in the list of registered widgets
-                if (registeredWidgets.contains(widgetElement.getNodeName())) {
-                    //Run the JavaScript function to draw and display the widget
-                    engine.call("widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, engine);
+                //If the tagname is found in widgetTypes
+                if (widgetTypes.get(widgetElement.getNodeName(), engine.scope).getClass().getName().equals("org.mozilla.javascript.NativeObject")) {
+
+                    //Make sure the JavaScript widgetType object is really a widget Type
+                    if (((NativeObject) widgetTypes.get(widgetElement.getNodeName(), engine.scope)).get("element").toString().equals(widgetElement.getNodeName())) {
+                        //Run the JavaScript function to draw and display the widget
+                        engine.call("widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, engine);
+                    }
                 }
+
             }
 
         }
-
         //position and draw the widgets
         parentComposite.doLayout();
-
     }
 
 }
