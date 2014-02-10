@@ -28,8 +28,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.UIManager;
 
@@ -63,7 +61,7 @@ public class Loader {
     /**
      * Where widget variables are stored.  Format: WIDGETID {WIDGETID {WIDGET}, class {CLASSNAME}, And so on for the rest of the parameters}
      */
-    public Map<String, Map<String, Object>> XMLObjects = new HashMap<String, Map<String, Object>>();
+    //public Map<String, Map<String, Object>> XMLObjects = new HashMap<String, Map<String, Object>>();
 
     /** Counts Taken ID's for ID-less widgets */
     public Integer XMLObjects__NO__ID = 0;

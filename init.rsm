@@ -103,7 +103,6 @@ spinner {
         //Button Clicking System
             function runBtnEvt(text, message) {
                 var label_list = program.getElementsByClass("changesOnHover");
-                console.log(label_list[0].element);
                 for (var index = 0; index < label_list.length; index++) {
                     program.getElementById("__INIT__").widget.setTitle(text);
                     label_list[index].widget.setText(text+" - "+message);

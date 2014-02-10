@@ -40,9 +40,8 @@ var __widgetOps = {
             }
             var id = WidgetOps.getWidgetId(widgetElement, prependID);
             //TODO: Phase out old WidgetOps class
-            WidgetOps.addWidgetToMaps(id, widgetElement, widget, engine);
+            this.storeWidget(id, widgetElement, widget);
             widget = WidgetOps.getWidgetStyles(widget, id);
-            WidgetOps.addWidgetToMaps(id, widgetElement, widget, engine);
             //Use this instead.
             this.storeWidget(id, widgetElement, widget);
         },

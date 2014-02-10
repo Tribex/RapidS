@@ -28,8 +28,8 @@ import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.mozilla.javascript.NativeObject;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 
 import us.derfers.tribex.rapids.Globals;
 import us.derfers.tribex.rapids.Main;
@@ -43,6 +43,7 @@ import us.derfers.tribex.rapids.Utilities;
  *
  */
 public class WidgetOps {
+    private static ScriptEngine engine = Main.loader.engine;
     //Widget styles
     /**
      * Returns a widget styled with all the styles specified in its element, class.
@@ -52,15 +53,15 @@ public class WidgetOps {
      */
     public static JComponent getWidgetStyles(JComponent widget, String id) {
         //Get the widget data for the id of the widget.
-        Map<String, Object> widgetData = Main.loader.XMLObjects.get(id);
+        NativeObject widgetData = (NativeObject) ((NativeObject) engine.scope.get("__widgetList", engine.scope)).get(id, engine.scope);
 
         //TODO: Move to this as soon as it is ready:
         //NativeObject widgetData = engine.scope.get(id, engine.scope);
 
         //If the element is specified (should be, but just to make sure)
-        if (widgetData.get("element") != null && Globals.stylesMap.get(widgetData.get("element")) != null) {
+        if (widgetData.get("element").toString() != null && Globals.stylesMap.get(widgetData.get("element").toString()) != null) {
             //Get the styles for the element
-            String widgetIdentifier = Main.loader.XMLObjects.get(id).get("element").toString();
+            String widgetIdentifier = widgetData.get("element").toString();
             Map<String, String> styles = Globals.stylesMap.get(widgetIdentifier);
 
             //Load the widget styles.
@@ -70,7 +71,7 @@ public class WidgetOps {
         //If the class is specified
         if (widgetData.get("class") != null && Globals.stylesMap.get("."+widgetData.get("class"))!= null) {
             //Get the styles for the class
-            String widgetIdentifier = Main.loader.XMLObjects.get(id).get("element").toString();
+            String widgetIdentifier = widgetData.get("class").toString();
 
             Map<String, String> styles = Globals.stylesMap.get("."+widgetIdentifier);
 
@@ -255,32 +256,5 @@ public class WidgetOps {
             Main.loader.XMLObjects__NO__ID += 1;
         }
         return widgetID;
-    }
-
-    public static void addWidgetToMaps(String widgetID, Element widgetElement, Object widget, ScriptEngine engine) {
-
-        //Create a HashMap to hold Widget ID and class, as well as other parameters.
-        Map<String, Object> widgetMap = new HashMap<String, Object>();
-
-
-        Utilities.debugMsg("Adding widget "+widgetID+" to XMLWidgets.", 3);
-
-        //Add the widget to the widgetMap
-        widgetMap.put(widgetID, widget);
-
-        //If the ID is set, add it to the Object list so that we can get it later.
-        NamedNodeMap widgetAttributes = widgetElement.getAttributes();
-
-        //Iterate through all the attributes of the widget and add them to the widgetMap
-        for (int i=0; i < widgetAttributes.getLength(); i++) {
-            widgetMap.put(widgetAttributes.item(i).getNodeName(), widgetAttributes.item(i).getTextContent());
-        }
-
-
-        widgetMap.put("element", widgetElement.getNodeName());
-        widgetMap.put("id", widgetID);
-
-        //Add the temporary widgetMap to the XMLWidgets array.
-        Main.loader.XMLObjects.put(widgetID, widgetMap);
     }
 }
