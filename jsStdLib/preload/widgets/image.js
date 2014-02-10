@@ -18,7 +18,7 @@ widgetTypes.registerWidget("img", function (parentComposite, widgetElement, engi
             var widget = new JLabel(new ImageIcon(image));
             parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
-            widgets.initializeWidget(widget, widgetElement, engine);
+            widgetOps.initializeWidget(widget, widgetElement, engine);
 
             return widget;
         } catch (e) {

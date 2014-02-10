@@ -11,7 +11,7 @@ widgetTypes.registerWidget("label", function (parentComposite, widgetElement, en
     //Set button text with the content of the <button></button> tags
     widget.setText(widgetElement.getTextContent());
 
-    widgets.initializeWidget(widget, widgetElement, engine);
+    widgetOps.initializeWidget(widget, widgetElement, engine);
     return widget;
 });
 

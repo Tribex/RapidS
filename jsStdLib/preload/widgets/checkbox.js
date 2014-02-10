@@ -11,7 +11,7 @@ widgetTypes.registerWidget("checkbox", function (parentComposite, widgetElement,
     parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
     //Add the widget to all maps and set event listeners.
-    widgets.initializeWidget(widget, widgetElement, engine);
+    widgetOps.initializeWidget(widget, widgetElement, engine);
 
     //Return the widget for forwards compatibility.
     return widget;

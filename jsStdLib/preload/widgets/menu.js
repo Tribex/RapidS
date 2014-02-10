@@ -22,7 +22,7 @@ widgetTypes.registerWidget("menu", function (parentComposite, widgetElement, eng
 
     GUI.loadInComposite(widget, widgetElement, engine);
 
-    widgets.initializeWidget(widget, widgetElement, engine);
+    widgetOps.initializeWidget(widget, widgetElement, engine);
     return widget;
 });
 
@@ -33,6 +33,6 @@ widgetTypes.registerWidget("menuitem", function (parentComposite, widgetElement,
 
     parentComposite.add(widget);
 
-    widgets.initializeWidget(widget, widgetElement, engine);
+    widgetOps.initializeWidget(widget, widgetElement, engine);
     return widget;
 });

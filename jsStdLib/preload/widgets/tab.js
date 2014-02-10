@@ -23,7 +23,7 @@ widgetTypes.registerWidget("tab", function (parentComposite, widgetElement, engi
         //Load all elements inside of the composite/widget.  INFINITE NESTING!
         GUI.loadInComposite(widget, widgetElement, engine);
 
-        widgets.initializeWidget(widget, widgetElement, engine);
+        widgetOps.initializeWidget(widget, widgetElement, engine);
 
         return widget;
 });

@@ -43,6 +43,7 @@ import us.derfers.tribex.rapids.Utilities;
  *
  */
 public class WidgetOps {
+    private static ScriptEngine engine = Main.loader.engine;
     //Widget styles
     /**
      * Returns a widget styled with all the styles specified in its element, class.
@@ -53,6 +54,9 @@ public class WidgetOps {
     public static JComponent getWidgetStyles(JComponent widget, String id) {
         //Get the widget data for the id of the widget.
         Map<String, Object> widgetData = Main.loader.XMLObjects.get(id);
+
+        //TODO: Move to this as soon as it is ready:
+        //NativeObject widgetData = engine.scope.get(id, engine.scope);
 
         //If the element is specified (should be, but just to make sure)
         if (widgetData.get("element") != null && Globals.stylesMap.get(widgetData.get("element")) != null) {

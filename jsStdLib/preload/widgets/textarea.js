@@ -19,7 +19,7 @@ widgetTypes.registerWidget("textarea", function (parentComposite, widgetElement,
     //Add the scrollpane to the parentComposite
     parentComposite.add(scrollPane, Layouts.getWidgetConstraint(widgetElement));
 
-    widgets.initializeWidget(widget, widgetElement, engine);
+    widgetOps.initializeWidget(widget, widgetElement, engine);
 
     return widget;
 });

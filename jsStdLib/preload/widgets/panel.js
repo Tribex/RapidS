@@ -20,7 +20,7 @@ widgetTypes.registerWidget("panel", function (parentComposite, widgetElement, en
         GUI.loadInComposite(widget, widgetElement, engine);
 
 
-        widgets.initializeWidget(widget, widgetElement, engine);
+        widgetOps.initializeWidget(widget, widgetElement, engine);
 
         return widget;
 });

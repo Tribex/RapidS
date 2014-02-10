@@ -4,9 +4,10 @@
  */
 
 //Import global classes
-importClass(Packages.us.derfers.tribex.rapids.Globals);
-importClass(Packages.us.derfers.tribex.rapids.GUI.Swing.Layouts);
-importClass(Packages.us.derfers.tribex.rapids.GUI.Swing.WidgetOps);
+require(Packages.us.derfers.tribex.rapids.Globals);
+require(Packages.us.derfers.tribex.rapids.GUI.Swing.Layouts);
+require(Packages.us.derfers.tribex.rapids.GUI.Swing.WidgetOps);
+require(Packages.org.w3c.dom.NamedNodeMap);
 
 //A list of registered widgets. Populated by widgetTypes.registerWidget()
 var widgetTypes = {
@@ -22,8 +23,8 @@ var widgetTypes = {
 
 }
 
-//Hold current UI widgets
-var widgets = {
+//Widget Operations
+var widgetOps = {
         //Iterate through listener types and set listeners if they exist
         initializeWidget : function (widget, widgetElement, engine, prependID) {
             if (prependID === null || prependID === undefined) {
@@ -39,9 +40,45 @@ var widgets = {
 
             }
             var id = WidgetOps.getWidgetId(widgetElement, prependID);
+            //TODO: Phase out old WidgetOps class
             WidgetOps.addWidgetToMaps(id, widgetElement, widget, engine);
             widget = WidgetOps.getWidgetStyles(widget, id);
             WidgetOps.addWidgetToMaps(id, widgetElement, widget, engine);
-            widgets[id] = {widget : widget, parent : widget.getParent()}
+            //Use this instead.
+            widgetOps.storeWidget(id, widgetElement, widget);
         },
+
+        storeWidget : function(widgetID, widgetElement, widget) {
+
+            //Create a HashMap to hold Widget ID and class, as well as other parameters.
+            var widgetObject = {};
+
+
+            Utilities.debugMsg("Adding widget "+widgetID+" to widgets object.", 3);
+
+            //Add the widget to the widgetMap
+            widgetObject[widgetID] = widget;
+
+            //If the ID is set, add it to the Object list so that we can get it later.
+            var widgetAttributes = widgetElement.getAttributes();
+
+            //Iterate through all the attributes of the widget and add them to the widgetMap
+            for (var i=0; i < widgetAttributes.getLength(); i++) {
+                widgetObject[widgetAttributes.item(i).getNodeName()] = widgetAttributes.item(i).getTextContent();
+            }
+
+
+            widgetObject["element"] = widgetElement.getNodeName();
+            widgetObject["id"] = widgetID;
+
+            //Add the temporary widgetMap to the XMLWidgets array.
+            widgets[widgetID] = widgetObject;
+        }
+};
+
+
+//Hold current UI widgets
+var widgets = {
+
 }
+

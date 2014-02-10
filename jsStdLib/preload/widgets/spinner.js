@@ -28,7 +28,7 @@ widgetTypes.registerWidget("spinner", function (parentComposite, widgetElement, 
     //Add the panel to the window with all of its constraints.
     parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
-    widgets.initializeWidget(widget, widgetElement, engine);
+    widgetOps.initializeWidget(widget, widgetElement, engine);
 
     return widget;
 });
