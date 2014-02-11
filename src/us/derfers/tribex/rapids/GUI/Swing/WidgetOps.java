@@ -29,7 +29,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.mozilla.javascript.NativeObject;
-import org.w3c.dom.Element;
 
 import us.derfers.tribex.rapids.Globals;
 import us.derfers.tribex.rapids.Main;
@@ -49,11 +48,14 @@ public class WidgetOps {
      * Returns a widget styled with all the styles specified in its element, class.
      * @param widget The original widget
      * @param id The ID of the original widget
+     * @return
      * @return The styled widget
      */
-    public static JComponent getWidgetStyles(JComponent widget, String id) {
+    public static void getWidgetStyles(String id) {
         //Get the widget data for the id of the widget.
         NativeObject widgetData = (NativeObject) ((NativeObject) engine.scope.get("__widgetList", engine.scope)).get(id, engine.scope);
+
+        JComponent widget = (JComponent) widgetData.get("widget");
 
         //TODO: Move to this as soon as it is ready:
         //NativeObject widgetData = engine.scope.get(id, engine.scope);
@@ -65,7 +67,7 @@ public class WidgetOps {
             Map<String, String> styles = Globals.stylesMap.get(widgetIdentifier);
 
             //Load the widget styles.
-            widget = loadWidgetStyles(widget, styles, widgetIdentifier);
+            widget = loadWidgetStyles((JComponent) widgetData.get("widget"), styles, widgetIdentifier);
         }
 
         //If the class is specified
@@ -89,8 +91,6 @@ public class WidgetOps {
             //Load the widget styles.
             widget = loadWidgetStyles(widget, styles, widgetIdentifier);
         }
-
-        return widget;
     }
 
 
@@ -239,22 +239,5 @@ public class WidgetOps {
             return false;
         }
         return true;
-    }
-
-
-    //XXX: Map setup :XXX\\
-
-    public static String getWidgetId(Element widgetElement, String prependID) {
-        //Define the ID of the button
-        String widgetID = null;
-        if (widgetElement.getAttributeNode("id") != null) {
-            widgetID = prependID+widgetElement.getAttributeNode("id").getNodeValue();
-
-            //If not, assign an incremental id: __ID__#
-        } else {
-            widgetID = prependID+"__ID__"+Integer.toString(Main.loader.XMLObjects__NO__ID+1);
-            Main.loader.XMLObjects__NO__ID += 1;
-        }
-        return widgetID;
     }
 }

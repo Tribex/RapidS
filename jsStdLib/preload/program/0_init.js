@@ -9,6 +9,7 @@ require(Packages.us.derfers.tribex.rapids.Utilities);
  * @namespace
  */
 var program = {};
+var document = program;
 
 /**
  * Cause the program to exit with the specified code.
@@ -56,6 +57,56 @@ program.getElementsByClass = function(class_identifier) {
 
     if (classes.length > 0) {
         return classes;
+    } else {
+        return null;
+    }
+}
+
+/**
+ * Gets an array of widget objects from the widgetList Map that are of type 'tagname'.
+ * @param tagname The element of the widgets to return
+ * @return An Array of widgets specified by 'tagname' from widgetList.
+ */
+program.getElementsByTagName = function(tagname) {
+    var elements = [];
+    for(var widgetObj in __widgetList) {
+        if (__widgetList.hasOwnProperty(widgetObj)) {
+            if (__widgetList[widgetObj]["element"] !== null &&
+                    __widgetList[widgetObj]["element"] !== undefined &&
+                    __widgetList[widgetObj]["element"] == tagname) {
+
+                elements.push(__widgetList[widgetObj]);
+            }
+        }
+    }
+
+    if (elements.length > 0) {
+        return elements;
+    } else {
+        return null;
+    }
+}
+
+/**
+ * Gets an array of widget objects from the widgetList Map that have the name 'name'.
+ * @param name The name of the widgets to return
+ * @return An Array of widgets specified by 'tagname' from widgetList.
+ */
+program.getElementsByTagName = function(name) {
+    var elements = [];
+    for(var widgetObj in __widgetList) {
+        if (__widgetList.hasOwnProperty(widgetObj)) {
+            if (__widgetList[widgetObj]["name"] !== null &&
+                    __widgetList[widgetObj]["name"] !== undefined &&
+                    __widgetList[widgetObj]["name"] == name) {
+
+                elements.push(__widgetList[widgetObj]);
+            }
+        }
+    }
+
+    if (elements.length > 0) {
+        return elements;
     } else {
         return null;
     }

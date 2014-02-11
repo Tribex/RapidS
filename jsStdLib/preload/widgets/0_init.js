@@ -24,6 +24,7 @@ var __widgetTypes = {
 
 //Widget Operations
 var __widgetOps = {
+        __NO__ID : 0,
         //Iterate through listener types and set listeners if they exist
         initializeWidget : function (widget, widgetElement, engine, prependID) {
             if (prependID === null || prependID === undefined) {
@@ -38,12 +39,10 @@ var __widgetOps = {
                 }
 
             }
-            var id = WidgetOps.getWidgetId(widgetElement, prependID);
+            var id = this.getWidgetId(widgetElement, prependID);
             //TODO: Phase out old WidgetOps class
             this.storeWidget(id, widgetElement, widget);
-            widget = WidgetOps.getWidgetStyles(widget, id);
-            //Use this instead.
-            this.storeWidget(id, widgetElement, widget);
+            WidgetOps.getWidgetStyles(id);
         },
 
         storeWidget : function(widgetID, widgetElement, widget) {
@@ -64,6 +63,11 @@ var __widgetOps = {
                 widgetObject[widgetAttributes.item(i).getNodeName()] = widgetAttributes.item(i).getTextContent();
             }
 
+            //Set the name of widgetObject
+            if (widgetElement.getAttributeNode("name") !== null) {
+                widgetObject["name"] = widgetElement.getAttributeNode("name").getTextContent();
+            }
+
             //Set the element of widgetObject
             widgetObject["element"] = widgetElement.getNodeName();
 
@@ -80,7 +84,21 @@ var __widgetOps = {
 
             //Add the temporary widgetMap to the widgets object under its id.
             __widgetList[widgetID] = widgetObject;
-        }
+        },
+
+        getWidgetId : function(widgetElement, prependID) {
+            //Define the ID of the button
+            var widgetID = null;
+            if (widgetElement.getAttributeNode("id") !== null) {
+                widgetID = prependID+widgetElement.getAttributeNode("id").getNodeValue();
+
+                //If not, assign an incremental id: __ID__#
+            } else {
+                widgetID = prependID+"__NOID__"+this.__NO__ID;
+                this.__NO__ID += 1;
+            }
+            return widgetID;
+        },
 };
 
 
