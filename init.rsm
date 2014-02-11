@@ -24,6 +24,7 @@
     anchor: west;
 }
 
+
 #rightSide {
     position-x: rel;
     occupied-cells-x: 1;
@@ -149,7 +150,7 @@ spinner {
         //Dynamic appending of widgets.
         program.getElementById("tabP").appendChild('<tab value="Tab2" id="tab2"></tab><tab value="Tab3"></tab>');
         program.getElementById("tab2").appendChild('<tabpane value="Tab2"><tab value="Tab4"></tab></tabpane>');
-        console.log(program.getElementById("tab2").asdf);
+
 </script>
 
 <window id="__INIT__">

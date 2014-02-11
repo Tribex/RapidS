@@ -24,13 +24,17 @@ var __widgetTypes = {
 
 //Widget Operations
 var __widgetOps = {
+
+        //Used for widgets that do not have a unique Id set.
         __NO__ID : 0,
-        //Iterate through listener types and set listeners if they exist
+
+        //For initializing and saving widgets.
         initializeWidget : function (widget, widgetElement, engine, prependID) {
             if (prependID === null || prependID === undefined) {
                 prependID = "";
             }
 
+            //Iterate through listener types and set listeners if they exist
             for (var i=0; i < Globals.listenerTypesArray.length; i++) {
                 var listenerType = Globals.listenerTypesArray[i];
                 //Add a listener for listenerType if specified
@@ -45,10 +49,11 @@ var __widgetOps = {
             WidgetOps.getWidgetStyles(id);
         },
 
+        //Store a widget in the widgetList
         storeWidget : function(widgetID, widgetElement, widget) {
-
             //Create an object to hold the widget and its attributes.
-            var widgetObject = {};
+            __widgetList[widgetID] = {};
+            var widgetObject = __widgetList[widgetID];
 
             Utilities.debugMsg("Adding widget "+widgetID+" to __widgetList object.", 3);
 
@@ -63,16 +68,42 @@ var __widgetOps = {
                 widgetObject[widgetAttributes.item(i).getNodeName()] = widgetAttributes.item(i).getTextContent();
             }
 
-            //Set the name of widgetObject
+            //Define Proxy for widgetObject.name so that we can override the getter and setter to call functions on change.
+            Object.defineProperty(widgetObject, "name", {
+                get : function () {
+                    return this._name;
+                },
+                set : function (val) {
+                    this._name = val;
+                    this.widget.setName(val);
+                }
+            });
+
             if (widgetElement.getAttributeNode("name") !== null) {
                 widgetObject["name"] = widgetElement.getAttributeNode("name").getTextContent();
+            } else {
+                widgetObject["name"] = widgetID;
             }
 
             //Set the element of widgetObject
             widgetObject["element"] = widgetElement.getNodeName();
 
-            //Set the id of widgetObject
             widgetObject["id"] = widgetID;
+
+            //Define Proxy for widgetObject.name so that we can override the getter and setter to call functions on change.
+            Object.defineProperty(widgetObject, "class", {
+                get : function () {
+                    return this._class;
+                },
+                set : function (val) {
+                    this._class = val;
+                    WidgetOps.getWidgetStyles(this.id);
+                }
+            });
+
+            if (widgetElement.getAttributeNode("class") !== null) {
+                widgetObject["class"] = widgetElement.getAttributeNode("class").getTextContent();
+            }
 
             //Add the ability to add a child to this widget at runtime.
             widgetObject["appendChild"] = function(child) {
@@ -82,10 +113,12 @@ var __widgetOps = {
                 }
             }
 
-            //Add the temporary widgetMap to the widgets object under its id.
-            __widgetList[widgetID] = widgetObject;
+            widgetObject["setAttribute"] = function(attribute, data) {
+                widgetObject[attribute] = data;
+            }
         },
 
+        //Get the id of a widget from it's widgetElement.
         getWidgetId : function(widgetElement, prependID) {
             //Define the ID of the button
             var widgetID = null;

@@ -43,13 +43,10 @@ import us.derfers.tribex.rapids.Utilities;
  */
 public class WidgetOps {
     private static ScriptEngine engine = Main.loader.engine;
-    //Widget styles
+
     /**
-     * Returns a widget styled with all the styles specified in its element, class.
-     * @param widget The original widget
+     * Styles a widget with all the styles specified in its element, class.
      * @param id The ID of the original widget
-     * @return
-     * @return The styled widget
      */
     public static void getWidgetStyles(String id) {
         //Get the widget data for the id of the widget.
@@ -86,8 +83,6 @@ public class WidgetOps {
             String widgetIdentifier = "#"+id;
             //Get the styles for the ids
             Map<String, String> styles = Globals.stylesMap.get(widgetIdentifier);
-            widget.setName(id);
-
             //Load the widget styles.
             widget = loadWidgetStyles(widget, styles, widgetIdentifier);
         }
