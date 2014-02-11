@@ -70,9 +70,12 @@ var __widgetOps = {
             //Set the id of widgetObject
             widgetObject["id"] = widgetID;
 
-            //Add the ability to add a child to this widget.
+            //Add the ability to add a child to this widget at runtime.
             widgetObject["appendChild"] = function(child) {
-                Packages.us.derfers.tribex.rapids.GUI.Swing.GUI.loadInComposite(widgetObject.widget, program.XMLFragToDocument(child).getFirstChild());
+                var childNodes = program.XMLFragToDocument(child).getChildNodes();
+                for (var i = 0; i < childNodes.getLength(); i++) {
+                    Packages.us.derfers.tribex.rapids.GUI.Swing.GUI.loadInComposite(widgetObject.widget, childNodes.item(0));
+                }
             }
 
             //Add the temporary widgetMap to the widgets object under its id.

@@ -146,8 +146,8 @@ spinner {
             program.getElementById("rightSide").widget.setText(f.read());
         }
 
-        program.getElementById("tabP").appendChild('<tab value="Tab2"></tab>')
-        program.getElementById("tabP").appendChild('<tab value="Tab3"></tab>')
+        program.getElementById("tabP").appendChild('<tab value="Tab2" id="tab2"></tab><tab value="Tab3"></tab>');
+        program.getElementById("tab2").appendChild('<tabpane value="Tab2"><tab value="Tab4"></tab></tabpane>');
 </script>
 
 <window id="__INIT__">
