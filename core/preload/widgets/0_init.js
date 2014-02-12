@@ -7,6 +7,7 @@
 require(Packages.us.derfers.tribex.rapids.Globals);
 require(Packages.us.derfers.tribex.rapids.GUI.Swing.Layouts);
 require(Packages.us.derfers.tribex.rapids.GUI.Swing.WidgetOps);
+require(Packages.java.awt.GridBagConstraints);
 
 //A list of registered widgets. Populated by __widgetTypes.registerWidget()
 var __widgetTypes = {
@@ -44,13 +45,20 @@ var __widgetOps = {
                 }
 
             }
+            //Get the proper Id for this widget.
             var id = this.getWidgetId(widgetElement, prependID);
-            //TODO: Phase out old WidgetOps class
+
+            //Store the widget in __widgetList
             this.storeWidget(id, widgetElement, widget);
-            //WidgetOps.getWidgetStyles(id);
-            this.getWidgetStyles(id, "#");
-            this.getWidgetStyles(id, ".");
-            this.getWidgetStyles(id, "");
+
+            //Get the styles for the widget's element.
+            this.getWidgetStyles(id, __widgetList[id].element, "");
+
+            //Get the styles for the widget's class. (Can override element)
+            this.getWidgetStyles(id, __widgetList[id].class, ".");
+
+            //Get the styles for the widget's id. (Can override element and class)
+            this.getWidgetStyles(id, id, "#");
         },
 
         //Store a widget in the widgetList
@@ -138,17 +146,21 @@ var __widgetOps = {
         },
 
         //Sets the styles to be applied for widgetID
-        getWidgetStyles : function(widgetID, prependID) {
-            var widgetData = __widgetList[widgetID];
+        getWidgetStyles : function(id, type, prependType) {
+            var widgetData = __widgetList[id];
             widgetData.styles = {};
-            /*var it = Globals.stylesMap.get(prependID+widgetID).entrySet().iterator();
-            while (it.hasNext()) {
-                var entry = it.next();
-                widgetData.styles[entry.getKey()] = entry.getValue();
-                it.remove(); // avoids a ConcurrentModificationException
-            }*/
+            for(var key in this.styles[prependType+type]) {
+                widgetData.styles[key] = this.styles[prependType+type][key];
+                __widgetList[id] = widgetData;
+                console.log("Applying: "+key+ ": " + __widgetList[id].styles[key]);
+                if (__styleList.widgetStyles[key] !== null && __styleList.widgetStyles[key] !== undefined) {
+                    __styleList.widgetStyles[key].apply(__widgetList[id].widget, widgetData.styles[key])
 
-            //console.log(widgetData.styles["background-color"]);
+                } else if (__styleList.layoutStyles[key] !== null && __styleList.layoutStyles[key] !== undefined){
+                    var widgetConstraint = new GridBagConstraints();
+                    __styleList.layoutStyles[key].apply(widgetConstraint, widgetData.styles[key])
+                }
+            }
         }
 };
 

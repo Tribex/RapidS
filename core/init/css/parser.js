@@ -70,10 +70,10 @@ css.parseBody = function(body) {
     for (var bodyI = 0; bodyI < splitBody.length; bodyI++) {
         var kv = splitBody[bodyI].split(":");
         for(var kvI = 0; kvI < kv.length-1; kvI++) {
-            var key = kv[kvI];
-            var value = kv[kvI+1];
+            var key = kv[kvI].trim();
+            var value = kv[kvI+1].trim();
             properties[key] = value;
-            console.log("KEY: "+kv[kvI].trim()+" | VAL: "+kv[kvI+1].trim());
+            console.log("KEY: "+key+" | VAL: "+value);
             kvI++;
         }
     }

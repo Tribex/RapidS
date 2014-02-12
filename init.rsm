@@ -43,14 +43,14 @@ label {
     border: 2 #DDDDDD;
 }
 
-spinner, spinner2 {
+spinner {
     fill: HORIZONTAL;
     margin-left: 20;
     margin-right: 20;
 }
 
 
-#logo spinner {
+#logo {
     anchor: west;
     fill: NONE;
     position-x: rel;
