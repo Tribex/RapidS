@@ -24,6 +24,7 @@ var __widgetTypes = {
 
 //Widget Operations
 var __widgetOps = {
+        //Populated by a call from Java class Loader to css.parseString.
         styles : null,
         //Used for widgets that do not have a unique Id set.
         __NO__ID : 0,
@@ -48,6 +49,8 @@ var __widgetOps = {
             this.storeWidget(id, widgetElement, widget);
             //WidgetOps.getWidgetStyles(id);
             this.getWidgetStyles(id, "#");
+            this.getWidgetStyles(id, ".");
+            this.getWidgetStyles(id, "");
         },
 
         //Store a widget in the widgetList

@@ -42,7 +42,6 @@ import org.w3c.dom.NodeList;
 
 import us.derfers.tribex.rapids.GUI.Swing.GUI;
 import us.derfers.tribex.rapids.jvCoreLib.Sys;
-import us.derfers.tribex.rapids.parsers.CSSParser;
 
 /**
  * Starts the JavaScript engine and begins loading XML for widgets and layout information.
