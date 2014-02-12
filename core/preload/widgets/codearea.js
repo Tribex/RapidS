@@ -24,10 +24,9 @@ __widgetTypes.registerWidget("codearea", function (parentComposite, widgetElemen
     //Set the text of the textArea
     widget.setText(widgetElement.getTextContent());
 
-    //Add the scrollpane to the parentComposite
-    parentComposite.add(scrollPane, Layouts.getWidgetConstraint(widgetElement));
-
-    __widgetOps.initializeWidget(widget, widgetElement, engine);
+    //Add the scrollpane to the parentComposite and initialize it.
+    var id = __widgetOps.initializeWidget(widget, widgetElement, engine);
+    parentComposite.add(scrollPane, __widgetOps.applyWidgetConstraint(id));
 
     return widget;
 });

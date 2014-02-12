@@ -27,7 +27,6 @@ css.parseString = function(string) {
             var body = splitRule[1].trim();
 
             //Head operations
-            console.log("HEAD: "+head);
             var splitHead = head.split(" ");
 
             //Whether or not the next section is a child of the previous
@@ -35,16 +34,16 @@ css.parseString = function(string) {
             if (splitHead.length > 1) {
                 for (var headI = 0; headI < splitHead.length; headI++) {
                     if (splitHead[headI].endsWith(",")) {
-                        console.log("DUPLICATIE: "+splitHead[headI].replace(",", "")+" AND "+splitHead[headI+1]);
+                        //console.log("DUPLICATIE: "+splitHead[headI].replace(",", "")+" AND "+splitHead[headI+1]);
                         stylesObject[headI] = this.parseBody(body);
                         stylesObject[headI+1] = this.parseBody(body);
                         headI++;
                     } else {
                         if (!nxtChild) {
-                            console.log("PARENT: "+splitHead[headI]);
+                            //console.log("PARENT: "+splitHead[headI]);
                             nxtChild = true;
                         } else {
-                            console.log("CHILD: "+splitHead[headI]+" OF "+splitHead[headI-1]);
+                            //console.log("CHILD: "+splitHead[headI]+" OF "+splitHead[headI-1]);
                             nxtChild = false;
                         }
 
@@ -56,7 +55,7 @@ css.parseString = function(string) {
 
 
         } else {
-            console.log("END OF FILE");
+            //console.log("END OF FILE");
         }
     }
     __widgetOps.styles = stylesObject;
@@ -73,10 +72,10 @@ css.parseBody = function(body) {
             var key = kv[kvI].trim();
             var value = kv[kvI+1].trim();
             properties[key] = value;
-            console.log("KEY: "+key+" | VAL: "+value);
+            //console.log("KEY: "+key+" | VAL: "+value);
             kvI++;
         }
     }
-    console.log("\n\n");
+    //console.log("\n\n");
     return properties;
 }

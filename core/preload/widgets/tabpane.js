@@ -9,12 +9,13 @@ require(Packages.java.awt.GridBagLayout);
 __widgetTypes.registerWidget("tabpane", function (parentComposite, widgetElement, engine) {
     var widget = new JTabbedPane();
 
-    parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
-
     //Load all elements inside of the composite/widget.  INFINITE NESTING!
     GUI.loadInComposite(widget, widgetElement);
 
-    __widgetOps.initializeWidget(widget, widgetElement, engine);
+    //Initialize and add the widget
+    var id = __widgetOps.initializeWidget(widget, widgetElement, engine);
+    parentComposite.add(widget, __widgetOps.applyWidgetConstraint(id));
+
     return widget;
 }
 );

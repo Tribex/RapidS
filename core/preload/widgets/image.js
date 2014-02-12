@@ -16,9 +16,10 @@ __widgetTypes.registerWidget("img", function (parentComposite, widgetElement, en
             var image = new ImageIO.read(new File(Globals.getCWD(widgetElement.getAttributeNode("src").getNodeValue())));
 
             var widget = new JLabel(new ImageIcon(image));
-            parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
 
-            __widgetOps.initializeWidget(widget, widgetElement, engine);
+            //Initialize and add the widget.
+            var id = __widgetOps.initializeWidget(widget, widgetElement, engine);
+            parentComposite.add(widget, __widgetOps.applyWidgetConstraint(id));
 
             return widget;
         } catch (e) {

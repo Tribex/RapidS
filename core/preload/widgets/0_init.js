@@ -59,6 +59,10 @@ var __widgetOps = {
 
             //Get the styles for the widget's id. (Can override element and class)
             this.getWidgetStyles(id, id, "#");
+
+            this.applyWidgetStyles(id);
+
+            return id;
         },
 
         //Store a widget in the widgetList
@@ -147,21 +151,41 @@ var __widgetOps = {
 
         //Sets the styles to be applied for widgetID
         getWidgetStyles : function(id, type, prependType) {
-            var widgetData = __widgetList[id];
-            widgetData.styles = {};
+            __widgetList[id].styles = {};
             for(var key in this.styles[prependType+type]) {
-                widgetData.styles[key] = this.styles[prependType+type][key];
-                __widgetList[id] = widgetData;
-                console.log("Applying: "+key+ ": " + __widgetList[id].styles[key]);
-                if (__styleList.widgetStyles[key] !== null && __styleList.widgetStyles[key] !== undefined) {
-                    __styleList.widgetStyles[key].apply(__widgetList[id].widget, widgetData.styles[key])
+                __widgetList[id].styles[key] = this.styles[prependType+type][key];
+            }
+        },
 
-                } else if (__styleList.layoutStyles[key] !== null && __styleList.layoutStyles[key] !== undefined){
-                    var widgetConstraint = new GridBagConstraints();
-                    __styleList.layoutStyles[key].apply(widgetConstraint, widgetData.styles[key])
+        //Not working, not sure why. FIXME
+        applyWidgetStyles : function(id) {
+            for (var key in __widgetList[id].styles) {
+                if (__styleList.widgetStyles[key] !== null && __styleList.widgetStyles[key] !== undefined) {
+                    __styleList.widgetStyles[key].apply(__widgetList[id].widget, __widgetList[id].styles[key])
                 }
             }
-        }
+        },
+
+        applyWidgetConstraint : function(id) {
+            var constraint = new GridBagConstraints();
+            constraint.anchor = GridBagConstraints.LINE_START;
+            constraint.fill = GridBagConstraints.BOTH;
+            constraint.ipadx = 5;
+            constraint.ipadx = 5;
+            constraint.weightx = 0.1;
+            constraint.weighty = 0.1;
+            constraint.gridx = 0;
+            constraint.gridy = GridBagConstraints.RELATIVE;
+
+            for (var key in __widgetList[id].styles) {
+                if (__styleList.layoutStyles[key] !== null && __styleList.layoutStyles[key] !== undefined) {
+                    __styleList.layoutStyles[key].apply(constraint, __widgetList[id].styles[key])
+                }
+            }
+
+            return constraint;
+        },
+
 };
 
 

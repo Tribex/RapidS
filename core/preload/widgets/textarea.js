@@ -16,10 +16,11 @@ __widgetTypes.registerWidget("textarea", function (parentComposite, widgetElemen
     //Set the text of the textArea
     widget.setText(widgetElement.getTextContent());
 
-    //Add the scrollpane to the parentComposite
-    parentComposite.add(scrollPane, Layouts.getWidgetConstraint(widgetElement));
+    //Initialize the widget
+    var id = __widgetOps.initializeWidget(widget, widgetElement, engine);
 
-    __widgetOps.initializeWidget(widget, widgetElement, engine);
+    //Add the scrollpane to the parentComposite
+    parentComposite.add(scrollPane, __widgetOps.applyWidgetConstraint(id));
 
     return widget;
 });

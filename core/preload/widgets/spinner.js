@@ -25,10 +25,11 @@ __widgetTypes.registerWidget("spinner", function (parentComposite, widgetElement
     //Add widget to maps
     var widget = new JSpinner(model);
 
-    //Add the panel to the window with all of its constraints.
-    parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
+    //Initialize the widget
+    var id = __widgetOps.initializeWidget(widget, widgetElement, engine);
 
-    __widgetOps.initializeWidget(widget, widgetElement, engine);
+    //Add the panel to the window with all of its constraints.
+    parentComposite.add(widget, __widgetOps.applyWidgetConstraint(id));
 
     return widget;
 });

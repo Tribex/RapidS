@@ -49,7 +49,7 @@ public class Layouts {
 
             {
                 anchor = GridBagConstraints.LINE_START;
-                fill = BOTH;
+                fill = GridBagConstraints.BOTH;
                 ipadx = 5;
                 ipadx = 5;
                 weightx = 0.1;

@@ -13,14 +13,14 @@ __widgetTypes.registerWidget("panel", function (parentComposite, widgetElement, 
         //Set the layout of the panel to GridBagLayout TODO: Add more layout types
         widget.setLayout(new GridBagLayout());
 
-        //Add the panel to the window with all of its constraints.
-        parentComposite.add(widget, Layouts.getWidgetConstraint(widgetElement));
-
         //Load all elements inside of the composite/widget.  INFINITE NESTING!
         GUI.loadInComposite(widget, widgetElement);
 
+        //Initialize the widget.
+        var id = __widgetOps.initializeWidget(widget, widgetElement, engine);
 
-        __widgetOps.initializeWidget(widget, widgetElement, engine);
+        //Add the panel to the window with all of its constraints.
+        parentComposite.add(widget, __widgetOps.applyWidgetConstraint(id));
 
         return widget;
 });
