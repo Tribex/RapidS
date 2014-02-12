@@ -16,7 +16,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package us.derfers.tribex.rapids.jvStdLib;
+package us.derfers.tribex.rapids.jvCoreLib;
 
 import java.io.BufferedReader;
 import java.io.File;

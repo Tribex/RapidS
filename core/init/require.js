@@ -19,7 +19,7 @@
  */
 function require(classpkg, qualifier) {
     if (typeof(classpkg) == "string") {
-        Packages.us.derfers.tribex.rapids.jvStdLib.Sys.importJS(classpkg);
+        Packages.us.derfers.tribex.rapids.jvCoreLib.Sys.importJS(classpkg);
     } else {
         require_Java(classpkg, qualifier);
     }

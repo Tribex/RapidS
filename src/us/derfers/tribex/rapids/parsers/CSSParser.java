@@ -34,10 +34,6 @@ import java.util.regex.Pattern;
 public class CSSParser {
     private String toParse;
 
-    private Pattern idPattern = Pattern.compile("(.*?)\\s*?\\{(.*?)}", Pattern.DOTALL);
-
-    private Pattern propPattern = Pattern.compile("(.*?):(.+?);.*?", Pattern.DOTALL);
-
     /**
      * Creates a new CSSParser with the CSS to parse.
      * @param ParseString The CSS to parse
@@ -52,24 +48,34 @@ public class CSSParser {
      */
     public Map<String, Map<String, String>> parseAll() {
 
-        //The map that will eventually be returned
-        Map<String, Map<String, String>> idMap = new HashMap<String, Map<String, String>>();
-        Map<String, String> valueMap = new HashMap<String, String>();
-
-        //Pattern to get property id
-
-        Matcher idMatcher = idPattern.matcher(toParse);
-
-        //Initialize properties for further searching
-
-        //Look for properties
-        while (idMatcher.find()) {
-            valueMap = this.getIdValues(idMatcher.group(1).trim(), "");
-            idMap.put(idMatcher.group(1).trim(), valueMap);
+        String[] rules = toParse.split("}");
+        for (String rule : rules){
+            String[] splitRule = rule.split("\\{");
+            if (splitRule.length == 2) {
+                String head = rmTabNewLns(splitRule[0].trim());
+                String body = rmTabNewLns(splitRule[1].trim());
+                System.out.println("HEAD: "+head+"\n");
+                System.out.println("BODY: "+body+"\n");
+            } else {
+                System.out.println("END OF FILE");
+            }
         }
+        //System.exit(0);
+        //Initialize properties for further searching
+        return new HashMap<String, Map<String, String>>();
 
-        return idMap;
 
+    }
+
+    /**
+     * Removes newlines and tabs from a string.
+     * @param string A string with tabs and newlines.
+     * @return A string with all of its tabs and newlines removed.
+     */
+    public static String rmTabNewLns(String string) {
+        string = string.replaceAll("\t", "");
+        string = string.replaceAll("\n", "");
+        return string;
     }
 
     /**
@@ -78,7 +84,7 @@ public class CSSParser {
      * @param prefix The prefix for the identifier: #, ., or null.
      * @return A Map[String, String] of the seperated identifiers and values. eg, {"bgcolor" : "#FFF", "padding" : "200"}
      */
-    public Map<String, String> getIdValues(String idTag, String prefix) {
+    /*public Map<String, String> getIdValues(String idTag, String prefix) {
 
         //The map that will eventually be returned
         Map<String, String> idMap = new HashMap<String, String>();
@@ -114,15 +120,14 @@ public class CSSParser {
      * @param classTag The string identifying the class.
      * @return A Map[String, String] of the seperated identifiers and values. eg, {"bgcolor" : "#FFF", "padding" : "200"}
      */
-    public Map<String, String> getClassValues(String classTag) {
-
+   /* public Map<String, String> getClassValues(String classTag) {
         return getIdValues(classTag, ".");
 
     }
 
-    /**TODO: Implement*/
-    public Map<String, Object> getByAttr(String attrTag) {
+    /*TODO: Implement*/
+   /* public Map<String, Object> getByAttr(String attrTag) {
         return null;
 
-    }
+    }*/
 }

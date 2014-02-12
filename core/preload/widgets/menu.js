@@ -4,7 +4,7 @@
 
 require(Packages.javax.swing.JMenu);
 require(Packages.javax.swing.JMenuItem);
-require(Packages.us.derfers.tribex.rapids.jvStdLib.Window);
+require(Packages.us.derfers.tribex.rapids.jvCoreLib.Window);
 
 __widgetTypes.registerWidget("menu", function (parentComposite, widgetElement, engine) {
     var widget = new JMenu();

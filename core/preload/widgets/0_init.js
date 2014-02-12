@@ -46,7 +46,8 @@ var __widgetOps = {
             var id = this.getWidgetId(widgetElement, prependID);
             //TODO: Phase out old WidgetOps class
             this.storeWidget(id, widgetElement, widget);
-            WidgetOps.getWidgetStyles(id);
+            //WidgetOps.getWidgetStyles(id);
+            this.getWidgetStyles(id, "#");
         },
 
         //Store a widget in the widgetList
@@ -132,6 +133,20 @@ var __widgetOps = {
             }
             return widgetID;
         },
+
+        //Sets the styles to be applied for widgetID
+        getWidgetStyles : function(widgetID, prependID) {
+            var widgetData = __widgetList[widgetID];
+            widgetData.styles = {};
+            /*var it = Globals.stylesMap.get(prependID+widgetID).entrySet().iterator();
+            while (it.hasNext()) {
+                var entry = it.next();
+                widgetData.styles[entry.getKey()] = entry.getValue();
+                it.remove(); // avoids a ConcurrentModificationException
+            }*/
+
+            //console.log(widgetData.styles["background-color"]);
+        }
 };
 
 

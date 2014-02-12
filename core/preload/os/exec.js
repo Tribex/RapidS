@@ -2,7 +2,7 @@
  * @file Allows executing Operating System commands from JavaScript.
  * @author Tribex
  */
-require(Packages.us.derfers.tribex.rapids.jvStdLib.Sys);
+require(Packages.us.derfers.tribex.rapids.jvCoreLib.Sys);
 
 /**
  * Execute a command and optionally wait for it to finish.

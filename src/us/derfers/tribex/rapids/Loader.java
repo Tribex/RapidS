@@ -41,7 +41,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import us.derfers.tribex.rapids.GUI.Swing.GUI;
-import us.derfers.tribex.rapids.jvStdLib.Sys;
+import us.derfers.tribex.rapids.jvCoreLib.Sys;
 import us.derfers.tribex.rapids.parsers.CSSParser;
 
 /**
@@ -89,7 +89,7 @@ public class Loader {
         //Import standard functions. Runs before the file loads
         try {
             //Import the standard JavaScript library (Java section)
-            engine.eval("importPackage(Packages.us.derfers.tribex.rapids.jvStdLib);");
+            engine.eval("importPackage(Packages.us.derfers.tribex.rapids.jvCoreLib);");
 
             debugMsg("Imported JavaScript Standard Library (Java-based)", 3);
 
@@ -104,12 +104,12 @@ public class Loader {
         //XXX: Loader section :XXX\\
         //JAVASCRIPT INITIALIZATION:
         //Run JavaScript that must be run before preload. Mainly provides require() and similar routines.
-        recursiveLoadJS(engine, "jsStdLib/init");
+        recursiveLoadJS(engine, "core/init");
         debugMsg("Imported JavaScript Initialization Library (Init)", 4);
 
         //PRELOAD:
         //Loop through the JavaScript standard library for JavaScript and import all .js files in the preload folder.
-        recursiveLoadJS(engine, "jsStdLib/preload");
+        recursiveLoadJS(engine, "core/preload");
         debugMsg("Imported JavaScript Standard Library (PreLoad)", 3);
 
         //LOAD:
@@ -119,7 +119,7 @@ public class Loader {
 
         //POSTLOAD:
         //Loop through the JavaScript standard library for JavaScript and import all .js files in the postload folder.
-        recursiveLoadJS(engine, "jsStdLib/postload");
+        recursiveLoadJS(engine, "core/postload");
         debugMsg("Imported JavaScript Standard Library (PostLoad)", 3);
 
         //XXX: End loader :XXX\\
@@ -213,13 +213,16 @@ public class Loader {
                         parseLinks(linkElement, engine);
                     }
 
+                    //Parse JavaScript in <script> tags
+                    Main.loader.loadJS(escapedFile, engine);
+
                     //Parse GUI
                     for (int i = 0; i < mainElement.getElementsByTagName("window").getLength(); i++) {
                         GUI.loadWindow((Element) mainElement.getElementsByTagName("window").item(i), engine, false);
                     }
 
-
-                    Main.loader.loadJS(escapedFile, engine);
+                    //Run the program.onLoad property to allow the program to run scripts after the program has loaded.
+                    engine.call("program.onload");
 
                 }
 
