@@ -139,7 +139,7 @@ public class WidgetOps {
      * @param engine The JavaScript engine.
      * @return True on success, False on failure.
      */
-    public static boolean addMethodListener(String type, final JComponent widget, final String value, final ScriptEngine engine) {
+    public static boolean addMethodListener(final String type, final JComponent widget, final String value, final ScriptEngine engine) {
         //Add event listener
         try {
             if (type.equals("onclick")) {
@@ -147,9 +147,9 @@ public class WidgetOps {
                     @Override
                     public void mouseClicked(MouseEvent arg0) {
                         try {
-                            engine.eval(value);
+                            engine.eval(value, "RapidS "+type+" event.");
                         } catch (Exception e1) {
-                            Utilities.showError("Bad JavaScript: "+value);
+                            Utilities.showError("JavaScript error: ("+type+" event in "+widget.getName()+"): "+e1.getMessage());
                             e1.printStackTrace();
                         }
 
@@ -162,9 +162,9 @@ public class WidgetOps {
                     @Override
                     public void mouseEntered(MouseEvent arg0) {
                         try {
-                            engine.eval(value);
+                            engine.eval(value, "RapidS "+type+" event.");
                         } catch (Exception e1) {
-                            Utilities.showError("Bad JavaScript: "+value);
+                            Utilities.showError("JavaScript error: ("+type+" event in "+widget.getName()+"): "+e1.getMessage());
                             e1.printStackTrace();
                         }
 
@@ -177,9 +177,9 @@ public class WidgetOps {
                     @Override
                     public void mouseExited(MouseEvent arg0) {
                         try {
-                            engine.eval(value);
+                            engine.eval(value, "RapidS "+type+" event.");
                         } catch (Exception e1) {
-                            Utilities.showError("Bad JavaScript: "+value);
+                            Utilities.showError("JavaScript error: ("+type+" event in "+widget.getName()+"): "+e1.getMessage());
                             e1.printStackTrace();
                         }
 
@@ -192,9 +192,9 @@ public class WidgetOps {
                     @Override
                     public void mousePressed(MouseEvent arg0) {
                         try {
-                            engine.eval(value);
+                            engine.eval(value, "RapidS "+type+" event.");
                         } catch (Exception e1) {
-                            Utilities.showError("Bad JavaScript: "+value);
+                            Utilities.showError("JavaScript error: ("+type+" event in "+widget.getName()+"): "+e1.getMessage());
                             e1.printStackTrace();
                         }
 
@@ -207,9 +207,9 @@ public class WidgetOps {
                     @Override
                     public void mouseReleased(MouseEvent arg0) {
                         try {
-                            engine.eval(value);
+                            engine.eval(value, "RapidS "+type+" event.");
                         } catch (Exception e1) {
-                            Utilities.showError("Bad JavaScript: "+value);
+                            Utilities.showError("JavaScript error: ("+type+" event in "+widget.getName()+"): "+e1.getMessage());
                             e1.printStackTrace();
                         }
 
@@ -221,8 +221,11 @@ public class WidgetOps {
                 ((JSpinner) widget).addChangeListener(new ChangeListener(){
                     @Override
                     public void stateChanged(ChangeEvent arg0) {
-                        engine.eval(value);
-
+                        try {
+                            engine.eval(value, "RapidS "+type+" event.");
+                        } catch (Exception e1) {
+                            Utilities.showError("JavaScript error: ("+type+" event in "+widget.getName()+"): "+e1.getMessage());
+                        }
                     }
                 });
 

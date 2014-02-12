@@ -89,7 +89,7 @@ public class Loader {
         //Import standard functions. Runs before the file loads
         try {
             //Import the standard JavaScript library (Java section)
-            engine.eval("importPackage(Packages.us.derfers.tribex.rapids.jvCoreLib);");
+            engine.eval("importPackage(Packages.us.derfers.tribex.rapids.jvCoreLib);", "RapidS Loader: Line 92");
 
             debugMsg("Imported JavaScript Standard Library (Java-based)", 3);
 
@@ -287,7 +287,7 @@ public class Loader {
                 debugMsg("Loading Script tag: "+(i+1));
                 //Run all the code inside the <script> tags
                 try {
-                    engine.eval(scriptNode.getTextContent());
+                    engine.eval(scriptNode.getTextContent(), "<script></script> element in rsm file.");
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -313,7 +313,7 @@ public class Loader {
                 if (file.isDirectory()) {
                     recursiveLoadJS(engine, folder+"/"+file.getName());
                 } else if (file.toString().endsWith(".js")) {
-                    engine.eval(new FileReader(new File(Utilities.getJarDirectory()+folder+"/"+file.getName())));
+                    engine.eval(new FileReader(new File(Utilities.getJarDirectory()+folder+"/"+file.getName())), folder+"/"+file.getName());
                     debugMsg("Imported JavaScript File: "+file.getName(), 4);
                 }
             }
@@ -382,7 +382,7 @@ public class Loader {
                         URLConnection connection = url.openConnection();
                         connection.setConnectTimeout(10000);
                         connection.setReadTimeout(10000);
-                        engine.eval(new InputStreamReader(connection.getInputStream()));
+                        engine.eval(new InputStreamReader(connection.getInputStream()), "Remote file: "+linkElement.getAttributeNode("href").getTextContent());
 
                         if (linkElement.getAttributeNode("cache") != null) {
                             try {
@@ -397,7 +397,8 @@ public class Loader {
                         //Attempt to load from the fallback file. (If tag and file exist)
                         if (linkElement.getAttributeNode("fallback") != null) {
                             try {
-                                engine.eval(new java.io.FileReader(Globals.getCWD(linkElement.getAttributeNode("fallback").getTextContent())));
+                                engine.eval(new java.io.FileReader(Globals.getCWD(linkElement.getAttributeNode("fallback").getTextContent())),
+                                        linkElement.getAttributeNode("fallback").getTextContent());
                             } catch (Exception e2) {
                                 Utilities.showError("Error: invalid file in fallback tag pointing to "+linkElement.getAttributeNode("fallback").getTextContent());
                             }
@@ -410,7 +411,8 @@ public class Loader {
                 } else {
                     try {
                         //Run script in file
-                        engine.eval(new java.io.FileReader(Globals.getCWD(linkElement.getAttributeNode("href").getTextContent())));
+                        engine.eval(new java.io.FileReader(Globals.getCWD(linkElement.getAttributeNode("href").getTextContent())),
+                                linkElement.getAttributeNode("href").getTextContent());
                         return true;
 
                     } catch (FileNotFoundException e) {
@@ -483,24 +485,14 @@ public class Loader {
     private boolean loadStyles(String content, String file) {
         //If the user has specified loading from a string, not file
         if (file == null && content != null) {
-            //Create a new CSSParser
-            CSSParser parser = new CSSParser(content);
-
-            //Put all the content of the parsed CSS into the stylesMap
-            Globals.stylesMap.putAll(parser.parseAll());
-            return true;
-            //If the user has specified loading from a file, not string
+            engine.call("css.parseString", content);
         } else if (content == null) {
             //Attempt to get the style information from the file
             try {
                 //Load the file into the string toParse
                 String toParse = FileUtils.readFileToString(new File(file));
 
-                //Create a new CSSParser
-                CSSParser parser = new CSSParser(toParse);
-
-                //Put all the content of the parsed CSS into the stylesMap
-                Globals.stylesMap.putAll(parser.parseAll());
+                engine.call("css.parseString", toParse);
                 return true;
             } catch (IOException e) {
                 Utilities.showError("Error: Invalid CSS formatting in file: "+file);

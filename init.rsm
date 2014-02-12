@@ -113,12 +113,6 @@ spinner {
                 + time.weekOfYear());
 
 
-        //Dynamic appending of widgets.
-        program.getElementById("tabP").appendChild(
-                '<tab value="Tab2" id="tab2"></tab><tab value="Tab3"></tab>');
-        program.getElementById("tab2").appendChild(
-                '<tabpane value="Tab2"><tab value="Tab4"></tab></tabpane>');
-
 
         //A basic thread.
         thread = new Worker("console.log('This is executing in a thread!')");
@@ -126,6 +120,13 @@ spinner {
 
         //Load the text from file f
         program.getElementById("rightSide").widget.setText(f.read());
+
+        //Dynamic appending of widgets.
+        program.getElementById("tabP").appendChild(
+                '<tab value="Tab2" id="tab2"></tab><tab value="Tab3"></tab>');
+        program.getElementById("tab2").appendChild(
+                '<tabpane value="Tab2"><tab value="Tab4"></tab></tabpane>');
+
     }
 
 

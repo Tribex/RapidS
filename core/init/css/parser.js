@@ -4,8 +4,10 @@
 **/
 
 css.parseString = function(string) {
-    var rules = toParse.split("}");
-    for (var rule in rules) {
+    var rules = string.split("}");
+    for (var i = 0; i < rules.length; i++) {
+        var rule = rules[i];
+        console.log(rule);
         var splitRule = rule.split("\\{");
         if (splitRule.length == 2) {
             var head = splitRule[0].trim();

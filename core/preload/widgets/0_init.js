@@ -24,7 +24,7 @@ var __widgetTypes = {
 
 //Widget Operations
 var __widgetOps = {
-
+        styles : null,
         //Used for widgets that do not have a unique Id set.
         __NO__ID : 0,
 

@@ -84,17 +84,17 @@ public class Sys {
         try {
             //Load file from root directory.
             if (fileString.startsWith(System.getProperty("path.separator")) || fileString.startsWith("C:\\")) {
-                Main.loader.engine.eval(new FileReader(fileString));
+                Main.loader.engine.eval(new FileReader(fileString), fileString);
 
                 //Load file from home directory. DOESNT WORK ON WINDOWS VISTA/7
             } else if (fileString.startsWith("~/")) {
                 System.out.println(System.getProperty("user.home")+fileString.replace("~", ""));
-                Main.loader.engine.eval(new FileReader(System.getProperty("user.home")+fileString.replace("~", "")));
+                Main.loader.engine.eval(new FileReader(System.getProperty("user.home")+fileString.replace("~", "")), fileString);
 
                 //Load file from jar directory.
             } else {
                 System.out.println(Globals.CWD);
-                Main.loader.engine.eval(new FileReader(Globals.CWD+fileString));
+                Main.loader.engine.eval(new FileReader(Globals.CWD+fileString), fileString);
             }
         } catch (FileNotFoundException e) {
             Utilities.showError("File does not exist: '" +fileString+"'\n\n"
@@ -142,12 +142,10 @@ public class Sys {
      */
     public static Thread Worker(final String javascript) {
         return new Thread(new Runnable() {
-
             @Override
             public void run() {
-                Main.loader.engine.eval(javascript);
+                Main.loader.engine.eval(javascript, "RapidS worker thread.");
             }
-
         });
     }
 }

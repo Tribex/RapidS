@@ -49,7 +49,7 @@ public class Window {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                engine.eval(function);
+                engine.eval(function, "RapidS window.setTimeout call");
 
             }
         };

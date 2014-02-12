@@ -51,13 +51,13 @@ public class ScriptEngine {
      * Run a JavaScript string through the engine.
      * @param script The script to run.
      */
-    public void eval(String script) {
+    public void eval(String script, String filename) {
         //Create the thread's context
         Context jsContext = Context.enter();
         jsContext.setOptimizationLevel(2);
 
         //Compile the script
-        Script scriptjs = jsContext.compileString(script, "RapidS Script", 1, null);
+        Script scriptjs = jsContext.compileString(script, filename, 1, null);
 
         //Run the script
         scriptjs.exec(jsContext, scope);
@@ -70,14 +70,14 @@ public class ScriptEngine {
      * Run a JavaScript reader (normally a file) through the engine.
      * @param script The script (reader) to run.
      */
-    public void eval(Reader script) {
+    public void eval(Reader script, String filename) {
         Context jsContext = Context.enter();
         jsContext.setOptimizationLevel(2);
 
         /*A Javascript JSON Object*/
         Script scriptjs = null;
         try {
-            scriptjs = jsContext.compileReader(script, "RapidS Script", 1, null);
+            scriptjs = jsContext.compileReader(script, filename, 1, null);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
