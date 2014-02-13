@@ -28,7 +28,8 @@
             <pre class="prettyprint source linenums"><code>/**
  * @file Provides methods for finding the current date and time
  * For sorting purposes larger time periods are at the top,
- * while small time periods (seconds) are at the bottom.
+ * while small time periods (seconds) are at the bottom. Following this
+ * are functions for leap years and other misc functions
  * @author Nateowami
  */
 
@@ -67,11 +68,12 @@ time.date = function () {
 }
 
 /**
- * Gets the name of the current month, such as "January".
+ * Gets the name of the specified month, such as "January".
+ * @param month {integer} The month for which you want the name
  * @returns {string} The name of the current month.
  */
-time.monthName = function () {
-    switch(time.month()){
+time.monthName = function (month) {
+    switch(month){
     //return is as good as break
     case 0:
         return "January";
@@ -109,12 +111,13 @@ time.dayOfWeek = function () {
 }
 
 /**
- * Gets the name of the day of the week, such as "Monday".
+ * Gets the name of the specified day of the week, such as "Monday".
+ * @param day {integer} The day of the week for which you want the name
  * @returns {string} The name of the current day of the week.
  */
-time.dayOfWeekName = function () {
+time.dayOfWeekName = function (day) {
     //return is as good as break
-    switch(time.dayOfWeek()){
+    switch(day){
     case 1:
         return "Sunday";
     case 2:
@@ -197,15 +200,6 @@ time.millisecond = function (){
 //Leap-year stuff below
 
 /**
- * Whether or not the current year is a leap year
- * @returns True if the current year is a leap year, False if not.
- */
-time.isLeapYear = function (){
-    //ask about the current year
-    return time.isLeapYear(time.year());
-}
-
-/**
  * Whether or not the specified year is a leap year
  * @param year {integer} The year to check.
  * @returns True if the specified year is a leap year, False if not.
@@ -227,6 +221,29 @@ time.isLeapYear = function (year){
     }
     return leap;
 }
+
+//misc time functions
+
+/**
+@return {long} The current time, expressed in milliseconds after January 1, 1970, 0:00:00 GMT.
+*/
+time.timeInMillis = function (){
+	return Calendar.getInstance().getTimeInMillis()
+}
+
+/**
+@return {integer} The current day of the year 
+*/
+time.dayOfYear = function (){
+	return Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+}
+
+/**
+@return {integer} The current week of the year. If the year does not start on Monday, the partial week is still counted.
+*/
+time.weekOfYear = function (){
+	return Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
+}
 </code></pre>
         </article>
     </section>
@@ -237,13 +254,13 @@ time.isLeapYear = function (year){
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Namespaces</h3><ul><li><a href="console.html">console</a></li><li><a href="dialogs.html">dialogs</a></li><li><a href="files.html">files</a></li><li><a href="images.html">images</a></li><li><a href="os.html">os</a></li><li><a href="program.html">program</a></li><li><a href="time.html">time</a></li><li><a href="urls.html">urls</a></li><li><a href="window.html">window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alert">alert</a></li><li><a href="global.html#confirm">confirm</a></li><li><a href="global.html#hasNext">hasNext</a></li><li><a href="global.html#hasNextLine">hasNextLine</a></li><li><a href="global.html#print">print</a></li><li><a href="global.html#prompt">prompt</a></li><li><a href="global.html#read">read</a></li><li><a href="global.html#readNext">readNext</a></li><li><a href="global.html#readNextLine">readNextLine</a></li><li><a href="global.html#require">require</a></li><li><a href="global.html#require_Java">require_Java</a></li><li><a href="global.html#Worker">Worker</a></li><li><a href="global.html#write">write</a></li><li><a href="global.html#writeLine">writeLine</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Namespaces</h3><ul><li><a href="console.html">console</a></li><li><a href="css.html">css</a></li><li><a href="dialogs.html">dialogs</a></li><li><a href="files.html">files</a></li><li><a href="images.html">images</a></li><li><a href="os.html">os</a></li><li><a href="program.html">program</a></li><li><a href="time.html">time</a></li><li><a href="urls.html">urls</a></li><li><a href="window.html">window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alert">alert</a></li><li><a href="global.html#confirm">confirm</a></li><li><a href="global.html#hasNext">hasNext</a></li><li><a href="global.html#hasNextLine">hasNextLine</a></li><li><a href="global.html#print">print</a></li><li><a href="global.html#prompt">prompt</a></li><li><a href="global.html#read">read</a></li><li><a href="global.html#readNext">readNext</a></li><li><a href="global.html#readNextLine">readNextLine</a></li><li><a href="global.html#require">require</a></li><li><a href="global.html#require_Java">require_Java</a></li><li><a href="global.html#Worker">Worker</a></li><li><a href="global.html#write">write</a></li><li><a href="global.html#writeLine">writeLine</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri Jan 24 2014 15:59:30 GMT+0800 (HKT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Thu Feb 13 2014 17:36:46 GMT+0800 (HKT)
 </footer>
 
 <script> prettyPrint(); </script>

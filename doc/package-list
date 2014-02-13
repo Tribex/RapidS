@@ -1,4 +1,3 @@
 us.derfers.tribex.rapids
 us.derfers.tribex.rapids.GUI.Swing
-us.derfers.tribex.rapids.jvStdLib
-us.derfers.tribex.rapids.parsers
+us.derfers.tribex.rapids.jvCoreLib
