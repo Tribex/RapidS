@@ -28,8 +28,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.UIManager;
 
@@ -43,8 +41,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import us.derfers.tribex.rapids.GUI.Swing.GUI;
-import us.derfers.tribex.rapids.jvStdLib.Sys;
-import us.derfers.tribex.rapids.parsers.CSSParser;
+import us.derfers.tribex.rapids.jvCoreLib.Sys;
 
 /**
  * Starts the JavaScript engine and begins loading XML for widgets and layout information.
@@ -63,7 +60,7 @@ public class Loader {
     /**
      * Where widget variables are stored.  Format: WIDGETID {WIDGETID {WIDGET}, class {CLASSNAME}, And so on for the rest of the parameters}
      */
-    public Map<String, Map<String, Object>> XMLObjects = new HashMap<String, Map<String, Object>>();
+    //public Map<String, Map<String, Object>> XMLObjects = new HashMap<String, Map<String, Object>>();
 
     /** Counts Taken ID's for ID-less widgets */
     public Integer XMLObjects__NO__ID = 0;
@@ -91,7 +88,7 @@ public class Loader {
         //Import standard functions. Runs before the file loads
         try {
             //Import the standard JavaScript library (Java section)
-            engine.eval("importPackage(Packages.us.derfers.tribex.rapids.jvStdLib);");
+            engine.eval("importPackage(Packages.us.derfers.tribex.rapids.jvCoreLib);", "RapidS Loader: Line 92");
 
             debugMsg("Imported JavaScript Standard Library (Java-based)", 3);
 
@@ -106,12 +103,12 @@ public class Loader {
         //XXX: Loader section :XXX\\
         //JAVASCRIPT INITIALIZATION:
         //Run JavaScript that must be run before preload. Mainly provides require() and similar routines.
-        recursiveLoadJS(engine, "jsStdLib/init");
+        recursiveLoadJS(engine, "core/init");
         debugMsg("Imported JavaScript Initialization Library (Init)", 4);
 
         //PRELOAD:
         //Loop through the JavaScript standard library for JavaScript and import all .js files in the preload folder.
-        recursiveLoadJS(engine, "jsStdLib/preload");
+        recursiveLoadJS(engine, "core/preload");
         debugMsg("Imported JavaScript Standard Library (PreLoad)", 3);
 
         //LOAD:
@@ -121,7 +118,7 @@ public class Loader {
 
         //POSTLOAD:
         //Loop through the JavaScript standard library for JavaScript and import all .js files in the postload folder.
-        recursiveLoadJS(engine, "jsStdLib/postload");
+        recursiveLoadJS(engine, "core/postload");
         debugMsg("Imported JavaScript Standard Library (PostLoad)", 3);
 
         //XXX: End loader :XXX\\
@@ -215,13 +212,16 @@ public class Loader {
                         parseLinks(linkElement, engine);
                     }
 
+                    //Parse JavaScript in <script> tags
+                    Main.loader.loadJS(escapedFile, engine);
+
                     //Parse GUI
                     for (int i = 0; i < mainElement.getElementsByTagName("window").getLength(); i++) {
                         GUI.loadWindow((Element) mainElement.getElementsByTagName("window").item(i), engine, false);
                     }
 
-
-                    Main.loader.loadJS(escapedFile, engine);
+                    //Run the program.onLoad property to allow the program to run scripts after the program has loaded.
+                    engine.call("program.onload");
 
                 }
 
@@ -286,7 +286,7 @@ public class Loader {
                 debugMsg("Loading Script tag: "+(i+1));
                 //Run all the code inside the <script> tags
                 try {
-                    engine.eval(scriptNode.getTextContent());
+                    engine.eval(scriptNode.getTextContent(), "<script></script> element in rsm file.");
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -312,7 +312,7 @@ public class Loader {
                 if (file.isDirectory()) {
                     recursiveLoadJS(engine, folder+"/"+file.getName());
                 } else if (file.toString().endsWith(".js")) {
-                    engine.eval(new FileReader(new File(Utilities.getJarDirectory()+folder+"/"+file.getName())));
+                    engine.eval(new FileReader(new File(Utilities.getJarDirectory()+folder+"/"+file.getName())), folder+"/"+file.getName());
                     debugMsg("Imported JavaScript File: "+file.getName(), 4);
                 }
             }
@@ -381,7 +381,7 @@ public class Loader {
                         URLConnection connection = url.openConnection();
                         connection.setConnectTimeout(10000);
                         connection.setReadTimeout(10000);
-                        engine.eval(new InputStreamReader(connection.getInputStream()));
+                        engine.eval(new InputStreamReader(connection.getInputStream()), "Remote file: "+linkElement.getAttributeNode("href").getTextContent());
 
                         if (linkElement.getAttributeNode("cache") != null) {
                             try {
@@ -396,7 +396,8 @@ public class Loader {
                         //Attempt to load from the fallback file. (If tag and file exist)
                         if (linkElement.getAttributeNode("fallback") != null) {
                             try {
-                                engine.eval(new java.io.FileReader(Globals.getCWD(linkElement.getAttributeNode("fallback").getTextContent())));
+                                engine.eval(new java.io.FileReader(Globals.getCWD(linkElement.getAttributeNode("fallback").getTextContent())),
+                                        linkElement.getAttributeNode("fallback").getTextContent());
                             } catch (Exception e2) {
                                 Utilities.showError("Error: invalid file in fallback tag pointing to "+linkElement.getAttributeNode("fallback").getTextContent());
                             }
@@ -409,7 +410,8 @@ public class Loader {
                 } else {
                     try {
                         //Run script in file
-                        engine.eval(new java.io.FileReader(Globals.getCWD(linkElement.getAttributeNode("href").getTextContent())));
+                        engine.eval(new java.io.FileReader(Globals.getCWD(linkElement.getAttributeNode("href").getTextContent())),
+                                linkElement.getAttributeNode("href").getTextContent());
                         return true;
 
                     } catch (FileNotFoundException e) {
@@ -482,24 +484,14 @@ public class Loader {
     private boolean loadStyles(String content, String file) {
         //If the user has specified loading from a string, not file
         if (file == null && content != null) {
-            //Create a new CSSParser
-            CSSParser parser = new CSSParser(content);
-
-            //Put all the content of the parsed CSS into the stylesMap
-            Globals.stylesMap.putAll(parser.parseAll());
-            return true;
-            //If the user has specified loading from a file, not string
+            engine.call("css.parseString", content);
         } else if (content == null) {
             //Attempt to get the style information from the file
             try {
                 //Load the file into the string toParse
                 String toParse = FileUtils.readFileToString(new File(file));
 
-                //Create a new CSSParser
-                CSSParser parser = new CSSParser(toParse);
-
-                //Put all the content of the parsed CSS into the stylesMap
-                Globals.stylesMap.putAll(parser.parseAll());
+                engine.call("css.parseString", toParse);
                 return true;
             } catch (IOException e) {
                 Utilities.showError("Error: Invalid CSS formatting in file: "+file);

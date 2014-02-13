@@ -20,19 +20,12 @@ package us.derfers.tribex.rapids.GUI.Swing;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-
-import us.derfers.tribex.rapids.Globals;
-import us.derfers.tribex.rapids.Main;
 import us.derfers.tribex.rapids.ScriptEngine;
 import us.derfers.tribex.rapids.Utilities;
 
@@ -43,95 +36,6 @@ import us.derfers.tribex.rapids.Utilities;
  *
  */
 public class WidgetOps {
-    //Widget styles
-    /**
-     * Returns a widget styled with all the styles specified in its element, class.
-     * @param widget The original widget
-     * @param id The ID of the original widget
-     * @return The styled widget
-     */
-    public static JComponent getWidgetStyles(JComponent widget, String id) {
-        //Get the widget data for the id of the widget.
-        Map<String, Object> widgetData = Main.loader.XMLObjects.get(id);
-
-        //If the element is specified (should be, but just to make sure)
-        if (widgetData.get("element") != null && Globals.stylesMap.get(widgetData.get("element")) != null) {
-            //Get the styles for the element
-            String widgetIdentifier = Main.loader.XMLObjects.get(id).get("element").toString();
-            Map<String, String> styles = Globals.stylesMap.get(widgetIdentifier);
-
-            //Load the widget styles.
-            widget = loadWidgetStyles(widget, styles, widgetIdentifier);
-        }
-
-        //If the class is specified
-        if (widgetData.get("class") != null && Globals.stylesMap.get("."+widgetData.get("class"))!= null) {
-            //Get the styles for the class
-            String widgetIdentifier = Main.loader.XMLObjects.get(id).get("element").toString();
-
-            Map<String, String> styles = Globals.stylesMap.get("."+widgetIdentifier);
-
-            //Load the widget styles.
-            widget = loadWidgetStyles(widget, styles, widgetIdentifier);
-        }
-
-        //If the id is specified (It ought to be, but just to be sure)
-        if (Globals.stylesMap.get("#"+id)!= null) {
-            String widgetIdentifier = "#"+id;
-            //Get the styles for the ids
-            Map<String, String> styles = Globals.stylesMap.get(widgetIdentifier);
-            widget.setName(id);
-
-            //Load the widget styles.
-            widget = loadWidgetStyles(widget, styles, widgetIdentifier);
-        }
-
-        return widget;
-    }
-
-
-    /**
-     * Loads and applies styles for widgets.
-     * @param widget The widget to apply styles to.
-     * @param styles A Map of styles for that widget
-     * @return The widget with all the styles applied.
-     */
-    public static JComponent loadWidgetStyles(JComponent widget, Map<String, String> styles, String widgetIdentifier) {
-
-        //Create a map of styles from the JavaScript object styles.widgetStyles
-        HashMap<String, Object> widgetStyleTypes = Main.loader.engine.getMap("widgetStyles", "styles");
-
-        //If there are styles for this identifier
-        if (styles != null && !styles.isEmpty()) {
-
-            //Iterate through them
-            for (int i = 0; i < styles.size(); i++) {
-                //Get the style name
-                String style = (String) styles.keySet().toArray()[i];
-
-                //If there is a style by this name
-                if (widgetStyleTypes.containsKey(style)) {
-
-                    try {
-                        //Attempt to apply it.
-                        widget = (JComponent) Main.loader.engine.call("styles.widgetStyles."+style+".apply", widget, styles.get(style));
-                    } catch (Exception e) {
-                        //Show an error if it is invalid
-                        Utilities.showError("Invalid CSS: '"+widgetIdentifier+" {"+style+" = "+styles.get(style)+";}'. "
-                                + "\n\n Error: "+e.getMessage()+"\n\n Program may not behave as expected.");
-                    }
-
-                //If this style does not exist
-                } else {
-                    //FIXME: Doesn't handle layout style types correctly.
-                    //Utilities.showError("CSS style '"+style+"' (from: "+widgetIdentifier+") does not exist! \nProgram may not behave as expected.");
-                }
-            }
-        }
-        return widget;
-    }
-
-
     /**
      * Facilitates adding of event listeners to XML Widgets.
      * @param type The type of event listener to add
@@ -140,7 +44,7 @@ public class WidgetOps {
      * @param engine The JavaScript engine.
      * @return True on success, False on failure.
      */
-    public static boolean addMethodListener(String type, final JComponent widget, final String value, final ScriptEngine engine) {
+    public static boolean addMethodListener(final String type, final JComponent widget, final String value, final ScriptEngine engine) {
         //Add event listener
         try {
             if (type.equals("onclick")) {
@@ -148,9 +52,9 @@ public class WidgetOps {
                     @Override
                     public void mouseClicked(MouseEvent arg0) {
                         try {
-                            engine.eval(value);
+                            engine.eval(value, "RapidS "+type+" event.");
                         } catch (Exception e1) {
-                            Utilities.showError("Bad JavaScript: "+value);
+                            Utilities.showError("JavaScript error: ("+type+" event in "+widget.getName()+"): "+e1.getMessage());
                             e1.printStackTrace();
                         }
 
@@ -163,9 +67,9 @@ public class WidgetOps {
                     @Override
                     public void mouseEntered(MouseEvent arg0) {
                         try {
-                            engine.eval(value);
+                            engine.eval(value, "RapidS "+type+" event.");
                         } catch (Exception e1) {
-                            Utilities.showError("Bad JavaScript: "+value);
+                            Utilities.showError("JavaScript error: ("+type+" event in "+widget.getName()+"): "+e1.getMessage());
                             e1.printStackTrace();
                         }
 
@@ -178,9 +82,9 @@ public class WidgetOps {
                     @Override
                     public void mouseExited(MouseEvent arg0) {
                         try {
-                            engine.eval(value);
+                            engine.eval(value, "RapidS "+type+" event.");
                         } catch (Exception e1) {
-                            Utilities.showError("Bad JavaScript: "+value);
+                            Utilities.showError("JavaScript error: ("+type+" event in "+widget.getName()+"): "+e1.getMessage());
                             e1.printStackTrace();
                         }
 
@@ -193,9 +97,9 @@ public class WidgetOps {
                     @Override
                     public void mousePressed(MouseEvent arg0) {
                         try {
-                            engine.eval(value);
+                            engine.eval(value, "RapidS "+type+" event.");
                         } catch (Exception e1) {
-                            Utilities.showError("Bad JavaScript: "+value);
+                            Utilities.showError("JavaScript error: ("+type+" event in "+widget.getName()+"): "+e1.getMessage());
                             e1.printStackTrace();
                         }
 
@@ -208,9 +112,9 @@ public class WidgetOps {
                     @Override
                     public void mouseReleased(MouseEvent arg0) {
                         try {
-                            engine.eval(value);
+                            engine.eval(value, "RapidS "+type+" event.");
                         } catch (Exception e1) {
-                            Utilities.showError("Bad JavaScript: "+value);
+                            Utilities.showError("JavaScript error: ("+type+" event in "+widget.getName()+"): "+e1.getMessage());
                             e1.printStackTrace();
                         }
 
@@ -222,8 +126,11 @@ public class WidgetOps {
                 ((JSpinner) widget).addChangeListener(new ChangeListener(){
                     @Override
                     public void stateChanged(ChangeEvent arg0) {
-                        engine.eval(value);
-
+                        try {
+                            engine.eval(value, "RapidS "+type+" event.");
+                        } catch (Exception e1) {
+                            Utilities.showError("JavaScript error: ("+type+" event in "+widget.getName()+"): "+e1.getMessage());
+                        }
                     }
                 });
 
@@ -235,49 +142,5 @@ public class WidgetOps {
             return false;
         }
         return true;
-    }
-
-
-    //XXX: Map setup :XXX\\
-
-    public static String getWidgetId(Element widgetElement, String prependID) {
-        //Define the ID of the button
-        String widgetID = null;
-        if (widgetElement.getAttributeNode("id") != null) {
-            widgetID = prependID+widgetElement.getAttributeNode("id").getNodeValue();
-
-            //If not, assign an incremental id: __ID__#
-        } else {
-            widgetID = prependID+"__ID__"+Integer.toString(Main.loader.XMLObjects__NO__ID+1);
-            Main.loader.XMLObjects__NO__ID += 1;
-        }
-        return widgetID;
-    }
-
-    public static void addWidgetToMaps(String widgetID, Element widgetElement, Object widget, ScriptEngine engine) {
-
-        //Create a HashMap to hold Widget ID and class, as well as other parameters.
-        Map<String, Object> widgetMap = new HashMap<String, Object>();
-
-
-        Utilities.debugMsg("Adding widget "+widgetID+" to XMLWidgets.", 3);
-
-        //Add the widget to the widgetMap
-        widgetMap.put(widgetID, widget);
-
-        //If the ID is set, add it to the Object list so that we can get it later.
-        NamedNodeMap widgetAttributes = widgetElement.getAttributes();
-
-        //Iterate through all the attributes of the widget and add them to the widgetMap
-        for (int i=0; i < widgetAttributes.getLength(); i++) {
-            widgetMap.put(widgetAttributes.item(i).getNodeName(), widgetAttributes.item(i).getTextContent());
-        }
-
-
-        widgetMap.put("element", widgetElement.getNodeName());
-        widgetMap.put("id", widgetID);
-
-        //Add the temporary widgetMap to the XMLWidgets array.
-        Main.loader.XMLObjects.put(widgetID, widgetMap);
     }
 }

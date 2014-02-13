@@ -22,14 +22,13 @@ import java.awt.Container;
 import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 
+import org.mozilla.javascript.NativeObject;
+import org.mozilla.javascript.Scriptable;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -91,12 +90,7 @@ public class GUI {
         JMenuBar menuBar = new JMenuBar();
         window.setJMenuBar(menuBar);
 
-        //Create a subMap for holding the Window and any properties of it
-        Map<String, Object> windowMap = new HashMap<String, Object>();
-
-        windowMap.put(id, window);
-
-        Main.loader.XMLObjects.put(id, windowMap);
+        engine.call("__widgetOps.storeWidget", id, windowElement, window);
 
 
         try {
@@ -122,7 +116,7 @@ public class GUI {
             }
             //XXX: BODY : XXX\\
             //Loop through all children of the body element and add them
-            loadInComposite((JComponent) windowPanel, windowElement.getElementsByTagName("body").item(0), engine);
+            loadInComposite((JComponent) windowPanel, windowElement.getElementsByTagName("body").item(0));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,39 +138,38 @@ public class GUI {
      * @param node The body or any other composite node.
      * @param engine The JavaScript engine
      */
-    public static void loadInComposite(JComponent parentComposite, Node node, ScriptEngine engine) {
-
-        //Create a map of widgetTypes from the JavaScript object widgets.widgetTypes
-        HashMap<String, Object> widgetTypes = engine.getMap("widgetTypes", "widgets");
-
-        //Create and populate the list of registered widgets
-        ArrayList<String> registeredWidgets = new ArrayList<String>();
-        for (String widgetType : widgetTypes.keySet()) {
-            registeredWidgets.add(widgetType);
-        }
+    public static void loadInComposite(JComponent parentComposite, Node node) {
+        //Get the JavaScript object widgetTypes from the ScriptEngine scope.
+        Scriptable widgetTypes = (Scriptable) Main.loader.engine.scope.get("__widgetTypes", Main.loader.engine.scope);
 
         //Get Widgets from the parent Element
         NodeList bodyElementList = node.getChildNodes();
         //Loop through all children of the root element.
         for (int counter=0; counter < bodyElementList.getLength(); counter++) {
 
+            //Isolate the node
             Node widgetNode = bodyElementList.item(counter);
 
+            //Make sure it is a proper element.
             if (widgetNode.getNodeType() == Node.ELEMENT_NODE) {
                 final Element widgetElement = (Element) widgetNode;
 
-                //If this element exists in the list of registered widgets
-                if (registeredWidgets.contains(widgetElement.getNodeName())) {
-                    //Run the JavaScript function to draw and display the widget
-                    engine.call("widgets.widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, engine);
+                //If the tagname is found in widgetTypes
+                if (widgetTypes.get(widgetElement.getNodeName(),
+                        Main.loader.engine.scope).getClass().getName().equals("org.mozilla.javascript.NativeObject")) {
+
+                    //Make sure the JavaScript widgetType object is really a widget Type
+                    if (((NativeObject) widgetTypes.get(widgetElement.getNodeName(), Main.loader.engine.scope)).get("element").toString().equals(widgetElement.getNodeName())) {
+                        //Run the JavaScript function to draw and display the widget
+                        Main.loader.engine.call("__widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, Main.loader.engine);
+                    }
                 }
+
             }
 
         }
-
         //position and draw the widgets
         parentComposite.doLayout();
-
     }
 
 }

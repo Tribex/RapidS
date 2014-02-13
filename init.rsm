@@ -24,6 +24,7 @@
     anchor: west;
 }
 
+
 #rightSide {
     position-x: rel;
     occupied-cells-x: 1;
@@ -71,6 +72,8 @@ spinner {
 </style>
 
 <script type="text/javascript">
+
+    program.onload = function() {
         require(java.awt.Color);
         require(java.lang.Class);
         require(Packages.us.derfers.tribex.rapids);
@@ -86,10 +89,11 @@ spinner {
             multiple: false
         });
         console.log(returnedValues.directory+returnedValues.filename);
-        */
+         */
 
         //Print the OS information
-        console.log("RapidS is running on a "+os.name+" "+os.version+", "+os.arch+"-bit computer.");
+        console.log("RapidS is running on a " + os.name + " " + os.version
+                + ", " + os.arch + "-bit computer.");
 
         //Execute the Operating System command: "ls"
         os.exec("ls", true);
@@ -98,53 +102,77 @@ spinner {
         //dialogs.message("If you find this dialog anoying, just comment out line #90 of init.rsm.", "Message", "info", "icon.png");
         //I found it annoying :)
 
-       console.log(time.year() + " - " +  time.month() + " - "+ time.date() + " - " + time.monthName(time.month()) + " - " + time.dayOfWeek() + " - " + time.dayOfWeekName(time.dayOfWeek()) + " - " + time.isAM() + " - " + time.hour12() + " - " + time.hour24() + " - " + time.minute() + " - " + time.second() + " - " + time.millisecond() + " - " + time.isLeapYear() + " - " + time.timeInMillis() + " - " + time.dayOfYear() + " - " + time.weekOfYear());
+        console.log(time.year() + " - " + time.month() + " - " + time.date()
+                + " - " + time.monthName(time.month()) + " - "
+                + time.dayOfWeek() + " - "
+                + time.dayOfWeekName(time.dayOfWeek()) + " - " + time.isAM()
+                + " - " + time.hour12() + " - " + time.hour24() + " - "
+                + time.minute() + " - " + time.second() + " - "
+                + time.millisecond() + " - " + time.isLeapYear() + " - "
+                + time.timeInMillis() + " - " + time.dayOfYear() + " - "
+                + time.weekOfYear());
 
-        //Button Clicking System
-            function runBtnEvt(text, message) {
-                var label_list = window.getElementsByClass("changesOnHover");
-                for (index = 0; index < label_list.length; ++index) {
-                    window.getElementById("__INIT__").setTitle(text);
-                    label_list[index].setText(text+" - "+message);
-                }
-            }
+
 
         //A basic thread.
         thread = new Worker("console.log('This is executing in a thread!')");
         thread.start();
 
-        function changeBackground(widget, state) {
-                var widgetID = window.getElementById(widget);
-                var color;
-                if (state == 'click') {
-                    var color = Color.decode("#666666");
+        //Load the text from file f
+        program.getElementById("rightSide").widget.setText(f.read());
 
-                    window.setTimeout('changeBackground("'+widget+'", "out")', 200);
+        //Dynamic appending of widgets.
+        program.getElementById("tabP").appendChild(
+                '<tab value="Tab2" id="tab2"></tab><tab value="Tab3"></tab>');
+        program.getElementById("tab2").appendChild(
+                '<tabpane value="Tab2"><tab value="Tab4"></tab></tabpane>');
 
-                } else if (state == 'over') {
-                    var color = Color.decode("#EEEEEE");
-                } else if (state == 'out') {
-                    var color = Color.decode("#999999");
-                }
-                widgetID.setBackground(color);
-            }
+    }
 
-        function showLogo() {
-            if (!window.getElementById('logo').isVisible()) {
-                window.getElementById("logo").setVisible(true);
-                window.getElementById("showLogo").setText("Hide RapidS logo");
-            } else {
-                window.getElementById("logo").setVisible(false);
-                window.getElementById("showLogo").setText("Show RapidS logo");
-            }
+
+    //Button Clicking System
+    function runBtnEvt(text, message) {
+        var label_list = program.getElementsByClass("changesOnHover");
+        for ( var index = 0; index < label_list.length; index++) {
+            program.getElementById("__INIT__").widget.setTitle(text);
+            label_list[index].widget.setText(text + " - " + message);
         }
+    }
 
-        window.getElementById("rightSide").setText(f.read());
 
-        function saveLine() {
-            f.writeLine(window.getElementById('saveLine').getText());
-            window.getElementById("rightSide").setText(f.read());
+    function changeBackground(widget, state) {
+        var widgetID = program.getElementById(widget).widget;
+        var color;
+        if (state == 'click') {
+            var color = Color.decode("#666666");
+
+            window.setTimeout('changeBackground("' + widget + '", "out")',
+                    200);
+
+        } else if (state == 'over') {
+            var color = Color.decode("#EEEEEE");
+        } else if (state == 'out') {
+            var color = Color.decode("#999999");
         }
+        widgetID.setBackground(color);
+    }
+
+    function showLogo() {
+        if (!program.getElementById('logo').widget.isVisible()) {
+            program.getElementById("logo").widget.setVisible(true);
+            program.getElementById("showLogo").widget
+                    .setText("Hide RapidS logo");
+        } else {
+            program.getElementById("logo").widget.setVisible(false);
+            program.getElementById("showLogo").widget
+                    .setText("Show RapidS logo");
+        }
+    }
+
+    function saveLine() {
+        f.writeLine(program.getElementById('saveLine').widget.getText());
+        program.getElementById("rightSide").widget.setText(f.read());
+    }
 </script>
 
 <window id="__INIT__">
@@ -176,7 +204,7 @@ spinner {
         <menu value="Help">
             <menuitem>MenuItem</menuitem>
         </menu>
-        <label class="changesOnHover" onmouseup="runBtnEvt('Click', 'No Id')"
+        <label id="TEST" class="changesOnHover" onmouseup="runBtnEvt('Click', 'No Id')"
             onmouseover="runBtnEvt('Mouse Over', 'No Id')"
             onmouseout="runBtnEvt('Mouse Out', 'No Id')">label changes on mouseover, mouseout, and click.</label>
         <label id="clickLabel"
@@ -184,16 +212,15 @@ spinner {
             onmouseover="changeBackground('clickLabel', 'over')"
             onmouseout="changeBackground('clickLabel', 'out')">Clickable label</label>
         <button id="clickableButton" class="changesOnHover"
-            onclick="runBtnEvt('Click', window.getElementById('clickableButton').getName())"
-            onmouseover="runBtnEvt('Mouse Over', window.getElementById('clickableButton').getName())"
-            onmouseout="runBtnEvt('Mouse Out', window.getElementById('clickableButton').getName())">
+            onclick="runBtnEvt('Click', program.getElementById('clickableButton').id)"
+            onmouseover="runBtnEvt('Mouse Over', program.getElementById('clickableButton').id)"
+            onmouseout="runBtnEvt('Mouse Out', program.getElementById('clickableButton').id)">
             Changes the status of the label.</button>
         <spinner id="spinner" value="10" max="20" min="-1"
-            onselection="runBtnEvt(window.getElementById('spinner').getValue(), window.getElementById('spinner').getName())" />
+            onselection="runBtnEvt(program.getElementById('spinner').widget.getValue(), program.getElementById('spinner').id)" />
         <textfield id="lineToSave" class="standardPosition">Enter a single line of text here!</textfield>
         <button id="saveLine" onclick="saveLine()">Append ^ to text.txt</button>
-        <checkbox class="standardPosition" onclick="console.log('My Checkbox')">My
-        Checkbox</checkbox>
+        <checkbox class="standardPosition" onclick="console.log('My Checkbox')">My Checkbox</checkbox>
         <textarea id="rightSide">Enter multiple lines of text here!</textarea>
         <tabpane id="tabP">
         <tab value="Tab1">
