@@ -3,5 +3,7 @@
  *  @author Tribex
 **/
 
-/** Global 'css' variable **/
+/** Global 'css' variable
+ * @namespace css
+ **/
 var css = {};

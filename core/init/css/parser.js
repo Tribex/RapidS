@@ -2,6 +2,11 @@
  * @file Provides a rudimentary parser for parsing CSS into JavaScript objects.
  * @author Tribex
 **/
+
+/**
+ * Parses all the CSS in 'string' and adds it to __widgetOps.styles
+ * @param string {string} A string of CSS.
+ */
 css.parseString = function(string) {
     //Preserve previous styles.
     var stylesObject = __widgetOps.styles;
@@ -33,11 +38,14 @@ css.parseString = function(string) {
             var nxtChild = false;
             if (splitHead.length > 1) {
                 for (var headI = 0; headI < splitHead.length; headI++) {
+                    //Working
                     if (splitHead[headI].endsWith(",")) {
                         //console.log("DUPLICATIE: "+splitHead[headI].replace(",", "")+" AND "+splitHead[headI+1]);
                         stylesObject[headI] = this.parseBody(body);
                         stylesObject[headI+1] = this.parseBody(body);
                         headI++;
+
+                    //TODO: Multiple levels of inheritance.
                     } else {
                         if (!nxtChild) {
                             //console.log("PARENT: "+splitHead[headI]);
@@ -61,7 +69,9 @@ css.parseString = function(string) {
     __widgetOps.styles = stylesObject;
 }
 
-
+/**
+ * Should not be public, but it is.
+ */
 css.parseBody = function(body) {
     var properties = {};
     //Body Operations

@@ -104,6 +104,7 @@ var __widgetOps = {
             //Set the element of widgetObject
             widgetObject["element"] = widgetElement.getNodeName();
 
+            //Set the id of widgetObject
             widgetObject["id"] = widgetID;
 
             //Define Proxy for widgetObject.name so that we can override the getter and setter to call functions on change.
@@ -117,6 +118,7 @@ var __widgetOps = {
                 }
             });
 
+            //Set the class of widgetObject
             if (widgetElement.getAttributeNode("class") !== null) {
                 widgetObject["class"] = widgetElement.getAttributeNode("class").getTextContent();
             }
@@ -129,6 +131,7 @@ var __widgetOps = {
                 }
             }
 
+            //Define the setAttribute method so that people can be more programmatic.
             widgetObject["setAttribute"] = function(attribute, data) {
                 widgetObject[attribute] = data;
             }
@@ -151,22 +154,29 @@ var __widgetOps = {
 
         //Sets the styles to be applied for widgetID
         getWidgetStyles : function(id, type, prependType) {
-            __widgetList[id].styles = {};
+            //If the styles have not already been defined, create a new object (prevents overwriting of previous styles).
+            if (__widgetList[id].styles === null || __widgetList[id].styles === undefined) {
+                __widgetList[id].styles = {};
+            }
+
+            //Add styles to the widgetList[id] styles object. Does not distinguish between style inheritance types.
             for(var key in this.styles[prependType+type]) {
                 __widgetList[id].styles[key] = this.styles[prependType+type][key];
             }
         },
 
-        //Not working, not sure why. FIXME
+        //Apply the styles to the widget
         applyWidgetStyles : function(id) {
             for (var key in __widgetList[id].styles) {
                 if (__styleList.widgetStyles[key] !== null && __styleList.widgetStyles[key] !== undefined) {
-                    __styleList.widgetStyles[key].apply(__widgetList[id].widget, __widgetList[id].styles[key])
+                    __widgetList[id].widget = __styleList.widgetStyles[key].apply(__widgetList[id].widget, __widgetList[id].styles[key])
                 }
             }
         },
 
+        //Apply the styles to the widgetConstraint. Called from the widget's constructor.
         applyWidgetConstraint : function(id) {
+            //Create a new constraint with default values.
             var constraint = new GridBagConstraints();
             constraint.anchor = GridBagConstraints.LINE_START;
             constraint.fill = GridBagConstraints.BOTH;
@@ -177,12 +187,14 @@ var __widgetOps = {
             constraint.gridx = 0;
             constraint.gridy = GridBagConstraints.RELATIVE;
 
+            //Apply the styles
             for (var key in __widgetList[id].styles) {
                 if (__styleList.layoutStyles[key] !== null && __styleList.layoutStyles[key] !== undefined) {
                     __styleList.layoutStyles[key].apply(constraint, __widgetList[id].styles[key])
                 }
             }
 
+            //Return the constraint for use by widgets.
             return constraint;
         },
 

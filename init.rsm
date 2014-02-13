@@ -204,7 +204,7 @@ spinner {
         <menu value="Help">
             <menuitem>MenuItem</menuitem>
         </menu>
-        <label class="changesOnHover" onmouseup="runBtnEvt('Click', 'No Id')"
+        <label id="TEST" class="changesOnHover" onmouseup="runBtnEvt('Click', 'No Id')"
             onmouseover="runBtnEvt('Mouse Over', 'No Id')"
             onmouseout="runBtnEvt('Mouse Out', 'No Id')">label changes on mouseover, mouseout, and click.</label>
         <label id="clickLabel"
