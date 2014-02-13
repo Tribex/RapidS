@@ -20,18 +20,12 @@ package us.derfers.tribex.rapids.GUI.Swing;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.mozilla.javascript.NativeObject;
-
-import us.derfers.tribex.rapids.Globals;
-import us.derfers.tribex.rapids.Main;
 import us.derfers.tribex.rapids.ScriptEngine;
 import us.derfers.tribex.rapids.Utilities;
 
@@ -42,95 +36,6 @@ import us.derfers.tribex.rapids.Utilities;
  *
  */
 public class WidgetOps {
-    private static ScriptEngine engine = Main.loader.engine;
-
-    /**
-     * Styles a widget with all the styles specified in its element, class.
-     * @param id The ID of the original widget
-     */
-    public static void getWidgetStyles(String id) {
-        //Get the widget data for the id of the widget.
-        NativeObject widgetData = (NativeObject) ((NativeObject) engine.scope.get("__widgetList", engine.scope)).get(id, engine.scope);
-
-        JComponent widget = (JComponent) widgetData.get("widget");
-
-        //TODO: Move to this as soon as it is ready:
-        //NativeObject widgetData = engine.scope.get(id, engine.scope);
-
-        //If the element is specified (should be, but just to make sure)
-        if (widgetData.get("element").toString() != null && Globals.stylesMap.get(widgetData.get("element").toString()) != null) {
-            //Get the styles for the element
-            String widgetIdentifier = widgetData.get("element").toString();
-            Map<String, String> styles = Globals.stylesMap.get(widgetIdentifier);
-
-            //Load the widget styles.
-            widget = loadWidgetStyles((JComponent) widgetData.get("widget"), styles, widgetIdentifier);
-        }
-
-        //If the class is specified
-        if (widgetData.get("class") != null && Globals.stylesMap.get("."+widgetData.get("class"))!= null) {
-            //Get the styles for the class
-            String widgetIdentifier = widgetData.get("class").toString();
-
-            Map<String, String> styles = Globals.stylesMap.get("."+widgetIdentifier);
-
-            //Load the widget styles.
-            widget = loadWidgetStyles(widget, styles, widgetIdentifier);
-        }
-
-        //If the id is specified (It ought to be, but just to be sure)
-        if (Globals.stylesMap.get("#"+id)!= null) {
-            String widgetIdentifier = "#"+id;
-            //Get the styles for the ids
-            Map<String, String> styles = Globals.stylesMap.get(widgetIdentifier);
-            //Load the widget styles.
-            widget = loadWidgetStyles(widget, styles, widgetIdentifier);
-        }
-    }
-
-
-    /**
-     * Loads and applies styles for widgets.
-     * @param widget The widget to apply styles to.
-     * @param styles A Map of styles for that widget
-     * @return The widget with all the styles applied.
-     */
-    public static JComponent loadWidgetStyles(JComponent widget, Map<String, String> styles, String widgetIdentifier) {
-
-        //Create a map of styles from the JavaScript object styles.widgetStyles
-        HashMap<String, Object> widgetStyleTypes = Main.loader.engine.getMap("widgetStyles", "__styleList");
-
-        //If there are styles for this identifier
-        if (styles != null && !styles.isEmpty()) {
-
-            //Iterate through them
-            for (int i = 0; i < styles.size(); i++) {
-                //Get the style name
-                String style = (String) styles.keySet().toArray()[i];
-
-                //If there is a style by this name
-                if (widgetStyleTypes.containsKey(style)) {
-
-                    try {
-                        //Attempt to apply it.
-                        widget = (JComponent) Main.loader.engine.call("__styleList.widgetStyles."+style+".apply", widget, styles.get(style));
-                    } catch (Exception e) {
-                        //Show an error if it is invalid
-                        Utilities.showError("Invalid CSS: '"+widgetIdentifier+" {"+style+" = "+styles.get(style)+";}'. "
-                                + "\n\n Error: "+e.getMessage()+"\n\n Program may not behave as expected.");
-                    }
-
-                //If this style does not exist
-                } else {
-                    //FIXME: Doesn't handle layout style types correctly.
-                    //Utilities.showError("CSS style '"+style+"' (from: "+widgetIdentifier+") does not exist! \nProgram may not behave as expected.");
-                }
-            }
-        }
-        return widget;
-    }
-
-
     /**
      * Facilitates adding of event listeners to XML Widgets.
      * @param type The type of event listener to add
