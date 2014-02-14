@@ -114,7 +114,8 @@ var __widgetOps = {
                 },
                 set : function (val) {
                     this._class = val;
-                    WidgetOps.getWidgetStyles(this.id);
+                    __widgetOps.getWidgetStyles(this.id, this.class, ".");
+                    __widgetOps.applyWidgetStyles(this.id);
                 }
             });
 

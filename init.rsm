@@ -173,6 +173,7 @@ spinner {
         f.writeLine(program.getElementById('saveLine').widget.getText());
         program.getElementById("rightSide").widget.setText(f.read());
     }
+
 </script>
 
 <window id="__INIT__">
@@ -226,6 +227,7 @@ spinner {
         <tab value="Tab1">
         <button class="standardPosition" id="showLogo" onclick="showLogo()">Hide RapidS logo</button>
         <img class="standardPosition" id="logo" src="icon.png" /> </tab></tabpane>
+        <codearea id="???"></codearea>
     </body>
 </window>
 </rsm>

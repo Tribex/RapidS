@@ -25,3 +25,8 @@ os.arch = System.getProperty("os.arch");
  * The Operating System version.
  */
 os.version = System.getProperty("os.version");
+
+/**
+ * The system file seperator. \ on Windows, / on OSX and Linux.
+ */
+os.pathSep = System.getProperty("file.separator");
