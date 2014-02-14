@@ -20,6 +20,13 @@ program.exit = function (code) {
 }
 
 /**
+ * Always called once the GUI loads.
+ */
+program.onload = function() {
+    return;
+}
+
+/**
  * Alias to Utilities.showError();
  */
 program.showError = Packages.us.derfers.tribex.rapids.Utilities.showError;

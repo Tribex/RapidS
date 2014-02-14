@@ -33,7 +33,7 @@ public class Globals {
     public static String CWD = null;
 
     /**
-     * Getter for the CWD. Useful for JavaScripts that need it.
+     * Getter for the CWD. Useful for scripts that deal with files.
      * @return selCWD
      */
     public static String getCWD() {
@@ -41,7 +41,7 @@ public class Globals {
     }
 
     /**
-     * Getter for the CWD. Useful for JavaScripts that need it.
+     * Getter for the CWD. Useful for scripts that deal with files.
      * @param append The file to append to the CWD.
      * @return selCWD
      */
