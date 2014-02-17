@@ -65,7 +65,7 @@ public class Utilities {
             debugMsg("Unable to mimic System Look and feel, falling back to Ocean");
             e.printStackTrace();
         }
-        JOptionPane.showMessageDialog(null, errMsg);
+        JOptionPane.showMessageDialog(null, errMsg, "Error", 2);
     }
 
     /**
@@ -94,25 +94,25 @@ public class Utilities {
         try {
             en = ClassLoader.getSystemClassLoader().getResources(folder);
 
-        ArrayList<String> filenames = new ArrayList<String>();
-        if (en.hasMoreElements()) {
-            URL metaInf=en.nextElement();
-            File fileMetaInf=new File(metaInf.toURI());
+            ArrayList<String> filenames = new ArrayList<String>();
+            if (en.hasMoreElements()) {
+                URL metaInf=en.nextElement();
+                File fileMetaInf=new File(metaInf.toURI());
 
-            //List the files
-            String[] sortedFiles = fileMetaInf.list();
+                //List the files
+                String[] sortedFiles = fileMetaInf.list();
 
-            //Sort the files
-            Arrays.sort(sortedFiles);
+                //Sort the files
+                Arrays.sort(sortedFiles);
 
-            //Iterate through the files.
-            for (String item : sortedFiles) {
-                System.out.println(item);
-                filenames.add(item);
+                //Iterate through the files.
+                for (String item : sortedFiles) {
+                    System.out.println(item);
+                    filenames.add(item);
+                }
             }
-        }
 
-        return filenames;
+            return filenames;
 
         } catch (Exception e) {
             showError("Error getting file list (inside jar) from "+folder+"\n\n"
@@ -162,15 +162,26 @@ public class Utilities {
      * @throws SAXException
      * @throws IOException
      */
-    public static Document XMLStringToDocument(String string) throws ParserConfigurationException, SAXException, IOException {
+    public static Document XMLStringToDocument(String string) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e1) {
+            Utilities.showError("Error: "+e1.fillInStackTrace());
+        }
 
+        Document doc = null;
         //Parse filePath
-        Document doc = db.parse(new InputSource(new StringReader(string)));
+        try {
+            doc = db.parse(new InputSource(new StringReader(string)));
+            //Stabilize parsed document
+            doc.normalize();
+        } catch (Exception e) {
+            Utilities.showError("Error: Improperly formatted XML: \n"+e.fillInStackTrace());
+            System.exit(0);
+        }
 
-        //Stabilize parsed document
-        doc.normalize();
         return doc;
     }
 

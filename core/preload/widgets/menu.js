@@ -17,6 +17,7 @@ __widgetTypes.registerWidget("menu", function (parentComposite, widgetElement, e
         widget.setText(widgetElement.getAttributeNode("value").getTextContent());
     } else {
         Utilities.showError("Error: No value tag in menu element.");
+        return null;
     }
     parentComposite.add(widget);
 

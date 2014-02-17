@@ -129,7 +129,13 @@ public class ScriptEngine {
         fct = (Function)parentScope.get(splitObjs[splitObjs.length-1], parentScope);
 
         //Call the function with the arguments passed to call.
-        Object result = fct.call(jsContext, parentScope, parentScope, args);
+        Object result = null;
+        try {
+            result = fct.call(jsContext, parentScope, parentScope, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Utilities.showError("Error: "+e.fillInStackTrace());
+        }
 
         Context.exit();
         return result;

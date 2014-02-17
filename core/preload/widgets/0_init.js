@@ -127,8 +127,10 @@ var __widgetOps = {
             //Add the ability to add a child to this widget at runtime.
             widgetObject["appendChild"] = function(child) {
                 var childNodes = program.XMLFragToDocument(child).getChildNodes();
-                for (var i = 0; i < childNodes.getLength(); i++) {
-                    Packages.us.derfers.tribex.rapids.GUI.Swing.GUI.loadInComposite(widgetObject.widget, childNodes.item(0));
+                if (childNodes != null) {
+                    for (var i = 0; i < childNodes.getLength(); i++) {
+                        Packages.us.derfers.tribex.rapids.GUI.Swing.GUI.loadInComposite(widgetObject.widget, childNodes.item(0));
+                    }
                 }
             }
 
@@ -161,8 +163,10 @@ var __widgetOps = {
             }
 
             //Add styles to the widgetList[id] styles object. Does not distinguish between style inheritance types.
-            for(var key in this.styles[prependType+type]) {
-                __widgetList[id].styles[key] = this.styles[prependType+type][key];
+            if (this.styles != null && this.styles[prependType+type] != null) {
+                for(var key in this.styles[prependType+type]) {
+                    __widgetList[id].styles[key] = this.styles[prependType+type][key];
+                }
             }
         },
 

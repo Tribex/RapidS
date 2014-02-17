@@ -2,7 +2,7 @@
 
 <style type="text/css">
 #clickableButton {
-    margin-left: 20;
+    margin-saaeft: 20;
     margin-right: 20;
     position-x: 0;
     position-y: rel;
@@ -124,8 +124,6 @@ spinner {
                 '<tab value="Tab2" id="tab2"></tab><tab value="Tab3"></tab>');
         program.getElementById("tab2").appendChild(
                 '<tabpane value="Tab2"><tab value="Tab4"></tab></tabpane>');
-
-        program.getElementById("?").widget.setVisible(true);
 
     }
 

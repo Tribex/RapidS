@@ -78,7 +78,7 @@ public class GUI {
             id = windowElement.getAttributeNode("id").getTextContent();
             window.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
-                   window.setVisible(false);
+                    window.setVisible(false);
                 }
             });
         }
@@ -92,35 +92,56 @@ public class GUI {
 
         engine.call("__widgetOps.storeWidget", id, windowElement, window);
 
-
         try {
             //XXX: HEAD :XXX\\
             //Get Window information from the Head Element
 
             //Parse link information in the header
-            NodeList headElementList = windowElement.getElementsByTagName("head").item(0).getChildNodes();
+            NodeList headElements = windowElement.getElementsByTagName("head");
 
-            //Loop through the children of the Head element
-            for (int counter=0; counter < headElementList.getLength(); counter++) {
+            //Make sure we have a valid amount of head elements. (1 allowed, no more, no less).
+            if (headElements.getLength() == 1) {
+                NodeList headElementList = headElements.item(0).getChildNodes();
 
-                Node headNode = headElementList.item(counter);
+                //Loop through the children of the Head element
+                for (int counter=0; counter < headElementList.getLength(); counter++) {
 
-                //Make sure we have real element nodes
-                if (headNode.getNodeType() == Node.ELEMENT_NODE) {
-                    final Element headElement = (Element) headNode;
-                    //Set the shell title with the title or window_title node
-                    if (headElement.getNodeName().equals("title") || headElement.getNodeName().equals("window_title")) {
-                        window.setTitle(headElement.getTextContent());
+                    Node headNode = headElementList.item(counter);
+
+                    //Make sure we have real element nodes
+                    if (headNode.getNodeType() == Node.ELEMENT_NODE) {
+                        final Element headElement = (Element) headNode;
+                        //Set the shell title with the title or window_title node
+                        if (headElement.getNodeName().equals("title") || headElement.getNodeName().equals("window_title")) {
+                            window.setTitle(headElement.getTextContent());
+                        }
                     }
                 }
+            } else {
+                Utilities.showError("Error: A window should have one head element, and one head element only. \n\n"
+                        + " Continuing, program may become unstable.");
             }
+
+            //Set the window title to "Untitled Window" if no title has been set yet.
+            if (window.getTitle().equals("")) {
+                window.setTitle("Untitled Window");
+            }
+
             //XXX: BODY : XXX\\
-            //Loop through all children of the body element and add them
-            loadInComposite((JComponent) windowPanel, windowElement.getElementsByTagName("body").item(0));
+            //Make sure that there is only one body tag per window.
+            NodeList bodyElements = windowElement.getElementsByTagName("body");
+            if (bodyElements.getLength() == 1) {
+                //Loop through all children of the body element and add them
+                loadInComposite((JComponent) windowPanel, bodyElements.item(0));
+            } else {
+                Utilities.showError("Error: A window should have one body element, and one body element only. \n\n"
+                        + " Program exiting, fatal error.");
+                System.exit(1);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
-            Utilities.showError("Unable to properly initialize a Swing GUI. File may be corrupt or incorrectly formatted. \n\n"+e.getMessage());
+            Utilities.showError("Unable to properly initialize a Swing GUI. File may be corrupt or incorrectly formatted. \n\n"+e.fillInStackTrace());
         }
         //Fit the window to the elements in it.
         window.pack();
@@ -163,6 +184,10 @@ public class GUI {
                         //Run the JavaScript function to draw and display the widget
                         Main.loader.engine.call("__widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, Main.loader.engine);
                     }
+
+                    //If the widget is not found in widgetTypes
+                } else {
+                    Utilities.showError("Error: Unknown widget type: "+widgetElement.getNodeName());
                 }
 
             }
