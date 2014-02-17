@@ -114,7 +114,10 @@ public class Loader {
         //LOAD:
         //Begin loading the XML file(s)
         debugMsg("Loading "+filePath+"", 2);
-        loadAll(fileEscaped, engine);
+        loadAll(fileEscaped);
+
+        //Run the program.onLoad property to allow the program to run scripts after the GUI has loaded.
+        engine.call("program.onload");
 
         //POSTLOAD:
         //Loop through the JavaScript standard library for JavaScript and import all .js files in the postload folder.
@@ -130,7 +133,7 @@ public class Loader {
      * @param parent The (optional) parent Object, Eg, a JFrame or JPanel.
      * @param engine The JavaScript engine to pass to GUI_Swing
      */
-    public void loadAll(String escapedFile, ScriptEngine engine) {
+    public void loadAll(String escapedFile) {
 
         //Attempt to load .rsm file filePath
         try {
@@ -147,11 +150,11 @@ public class Loader {
             //Make sure there is only ONE body element
             if (mainNodeList.getLength() == 1) {
                 debugMsg("Parsing Main Element", 4);
-                //Get body Element
+                //Get rsm Element
                 Element mainElement = (Element) mainNodeList.item(0);
 
                 debugMsg("Setting Theme", 4);
-                //If the bodyelement has the attribute "theme"
+                //If the mainElement has the attribute "theme"
                 if (mainElement.getAttributeNode("theme") != null) {
                     //Get the value of the attribute theme for the body element
                     Attr swing_Theme = mainElement.getAttributeNode("theme");
@@ -187,43 +190,51 @@ public class Loader {
                         try {
                             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                         } catch (Exception a) {
+                            a.printStackTrace();
                             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                         }
                         debugMsg("Look and Feel (Swing) set to System", 3);
-
                     }
-
-
-                    //Parse styles
-                    for (int i = 0; i < mainElement.getElementsByTagName("style").getLength(); i++) {
-                        Element styleElement = (Element) mainElement.getElementsByTagName("style").item(i);
-                        //Load all styles from the style tags
-                        if (styleElement.getAttributeNode("href") != null) {
-                            loadStyles(null, styleElement.getTextContent());
-                        } else {
-                            loadStyles(styleElement.getTextContent(), null);
-
-                        }
+                } else {
+                    //If swing_Theme == camo or is not set, use the system look'n'feel
+                    try {
+                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    } catch (Exception a) {
+                        a.printStackTrace();
+                        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                     }
-
-                    //Parse links
-                    for (int i = 0; i < mainElement.getElementsByTagName("link").getLength(); i++) {
-                        Element linkElement = (Element) mainElement.getElementsByTagName("link").item(i);
-                        parseLinks(linkElement, engine);
-                    }
-
-                    //Parse JavaScript in <script> tags
-                    Main.loader.loadJS(escapedFile, engine);
-
-                    //Parse GUI
-                    for (int i = 0; i < mainElement.getElementsByTagName("window").getLength(); i++) {
-                        GUI.loadWindow((Element) mainElement.getElementsByTagName("window").item(i), engine, false);
-                    }
-
-                    //Run the program.onLoad property to allow the program to run scripts after the program has loaded.
-                    engine.call("program.onload");
+                    debugMsg("Look and Feel (Swing) set to System", 3);
 
                 }
+
+                //Parse styles
+                for (int i = 0; i < mainElement.getElementsByTagName("style").getLength(); i++) {
+                    Element styleElement = (Element) mainElement.getElementsByTagName("style").item(i);
+                    //Load all styles from the style tags
+                    if (styleElement.getAttributeNode("href") != null) {
+                        loadStyles(null, styleElement.getTextContent());
+                    } else {
+                        loadStyles(styleElement.getTextContent(), null);
+
+                    }
+                }
+
+                //Parse links
+                for (int i = 0; i < mainElement.getElementsByTagName("link").getLength(); i++) {
+                    Element linkElement = (Element) mainElement.getElementsByTagName("link").item(i);
+                    parseLinks(linkElement, engine);
+                }
+
+                //Parse JavaScript in <script> tags
+                Main.loader.loadJS(escapedFile, engine);
+
+                //Parse GUI
+                for (int i = 0; i < mainElement.getElementsByTagName("window").getLength(); i++) {
+                    GUI.loadWindow((Element) mainElement.getElementsByTagName("window").item(i), engine, false);
+                }
+
+
+
 
             } else { //There was more than one body tag, or 0 body tags
 
@@ -435,7 +446,7 @@ public class Loader {
                 if (linkElement.getAttributeNode("href").getNodeValue().contains("://")) {
                     try {
                         //Load the file from the internet.
-                        Main.loader.loadAll(Utilities.EscapeScriptTags(IOUtils.toString(new URL(linkElement.getAttributeNode("href").getNodeValue()))), engine);
+                        Main.loader.loadAll(Utilities.EscapeScriptTags(IOUtils.toString(new URL(linkElement.getAttributeNode("href").getNodeValue()))));
 
                         if (linkElement.getAttributeNode("cache") != null) {
                             try {
@@ -447,7 +458,7 @@ public class Loader {
                     } catch (Exception e) {
                         if (linkElement.getAttributeNode("fallback") != null) {
                             try {
-                                Main.loader.loadAll(Utilities.EscapeScriptTags(FileUtils.readFileToString(new File(Globals.getCWD(linkElement.getAttributeNode("fallback").getNodeValue())))), engine);
+                                Main.loader.loadAll(Utilities.EscapeScriptTags(FileUtils.readFileToString(new File(Globals.getCWD(linkElement.getAttributeNode("fallback").getNodeValue())))));
                             } catch (Exception e2) {
                                 Utilities.showError("Error: invalid file in fallback tag pointing to "+linkElement.getAttributeNode("fallback").getTextContent());
                             }
@@ -457,7 +468,7 @@ public class Loader {
                     //Load the file from the Hard Drive
                 } else {
                     try {
-                        Main.loader.loadAll(Utilities.EscapeScriptTags(FileUtils.readFileToString(new File(Globals.getCWD(linkElement.getAttributeNode("href").getNodeValue())))), engine);
+                        Main.loader.loadAll(Utilities.EscapeScriptTags(FileUtils.readFileToString(new File(Globals.getCWD(linkElement.getAttributeNode("href").getNodeValue())))));
                     } catch (DOMException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();

@@ -112,8 +112,6 @@ spinner {
                 + time.timeInMillis() + " - " + time.dayOfYear() + " - "
                 + time.weekOfYear());
 
-
-
         //A basic thread.
         thread = new Worker("console.log('This is executing in a thread!')");
         thread.start();
@@ -126,6 +124,8 @@ spinner {
                 '<tab value="Tab2" id="tab2"></tab><tab value="Tab3"></tab>');
         program.getElementById("tab2").appendChild(
                 '<tabpane value="Tab2"><tab value="Tab4"></tab></tabpane>');
+
+        program.getElementById("?").widget.setVisible(true);
 
     }
 
@@ -227,7 +227,6 @@ spinner {
         <tab value="Tab1">
         <button class="standardPosition" id="showLogo" onclick="showLogo()">Hide RapidS logo</button>
         <img class="standardPosition" id="logo" src="icon.png" /> </tab></tabpane>
-        <codearea id="???"></codearea>
     </body>
 </window>
 </rsm>
