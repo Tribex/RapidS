@@ -2,13 +2,14 @@
 
 <style type="text/css">
 #clickableButton {
-    margin-saaeft: 20;
+    margin-left: 20;
     margin-right: 20;
     position-x: 0;
     position-y: rel;
     anchor: west;
     padding-y: 40;
     padding-x: 20;
+    foreground-color: #FF0000;
 }
 
 #clickLabel {

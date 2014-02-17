@@ -15,5 +15,6 @@ __widgetTypes.registerWidget("button", function (parentComposite, widgetElement,
     parentComposite.add(widget, __widgetOps.applyWidgetConstraint(id));
 
     return widget;
-});
+},
+[], []);
 

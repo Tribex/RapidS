@@ -162,12 +162,81 @@ var __widgetOps = {
                 __widgetList[id].styles = {};
             }
 
+            var getElementStyles = function(element, key) {
+                //Whether or not this style is whitelisted for this widget.
+                var styleWhitelisted = false;
+
+                //Whether or not to keep the style after this iteration is complete.
+                var keepStyle = true;
+
+                //Iterate through the whitelist and see if this style is whitelisted.
+                if (__widgetTypes[element] != null && __widgetTypes[element].styleWhitelist != null) {
+                    for (var iwl=0; iwl < __widgetTypes[element].styleWhitelist.length; iwl++) {
+                        //If this style is in the whitelist
+                        if (key == __widgetTypes[element].styleWhitelist[iwl]) {
+                            //confirm that we have whitelisted this style, so that the blacklist is ignored.
+                            styleWhitelisted = true;
+                            //Keep the style
+                            keepStyle = true;
+                            //Exit the loop
+                            break;
+
+                            //If the style is not in this iteration
+                        } else {
+                            //If the element has a parent, check the parent for this style
+                            if (__widgetTypes[element].styleWhitelist[iwl].startsWith("+")) {
+
+                                if (__widgetTypes[element].styleWhitelist[iwl].split("+").length > 1) {
+                                    var parent = __widgetTypes[element].styleWhitelist[iwl].split("+")[1];
+                                    //Iterate through the same styles in the parent
+                                    keepStyle = getElementStyles(parent, key);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //If the style is not whitelisted, check and see if it is blacklisted.
+                if (!styleWhitelisted) {
+                    if (__widgetTypes[element] != null && __widgetTypes[element].styleBlacklist != null) {
+                        for (var ibl=0; ibl < __widgetTypes[element].styleBlacklist.length; ibl++) {
+                            //If the style is in the blacklist
+                            if (key == __widgetTypes[element].styleBlacklist[ibl] || __widgetTypes[element].styleBlacklist[ibl] == "*") {
+                                //Do not keep the style, and exit the loop.
+                                keepStyle = false;
+                                break;
+
+                                //If the style is not in this iteration of the blacklist
+                            } else {
+                                //Check and see if there is a parent blacklist
+                                if (__widgetTypes[element].styleBlacklist[iwl] != null && __widgetTypes[element].styleBlacklist[iwl].startsWith("+")) {
+                                    if (__widgetTypes[element].styleBlacklist[iwl].split("+").length > 1) {
+                                        var parent = __widgetTypes[element].styleBlacklist[iwl].split("+")[1];
+                                        //Iterate through the parent blacklist and keep or not appropraitely.
+                                        keepStyle = getElementStyles(parent, key);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //Return whether or not to keep the style.
+                return keepStyle;
+            }
             //Add styles to the widgetList[id] styles object. Does not distinguish between style inheritance types.
             if (this.styles != null && this.styles[prependType+type] != null) {
+
                 for(var key in this.styles[prependType+type]) {
-                    __widgetList[id].styles[key] = this.styles[prependType+type][key];
+                    var widgetData = __widgetList[id];
+
+                    if (getElementStyles(widgetData.element, key)) {
+                        __widgetList[id].styles[key] = this.styles[prependType+type][key];
+                    }
                 }
             }
+
+
         },
 
         //Apply the styles to the widget

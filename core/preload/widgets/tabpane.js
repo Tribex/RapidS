@@ -17,6 +17,6 @@ __widgetTypes.registerWidget("tabpane", function (parentComposite, widgetElement
     parentComposite.add(widget, __widgetOps.applyWidgetConstraint(id));
 
     return widget;
-}
-);
+},
+[], []);
 
