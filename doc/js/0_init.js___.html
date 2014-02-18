@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: preload/io/images.js</title>
+    <title>JSDoc: Source: preload/os/0_init.js</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Source: preload/io/images.js</h1>
+    <h1 class="page-title">Source: preload/os/0_init.js</h1>
     
     
 
@@ -26,32 +26,37 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Provides image operations. May be moved into a separate folder.
- * @author Nateowami
+ * @file Creates the global os object for other files to use.
+ * @author Tribex
  */
 
+require(Packages.java.lang.System);
+
 /**
- * Images object for operating on images
+ * The Operating System reference object
  * @namespace
  */
-var images = {};
+var os = {};
 
 /**
- * Get an icon from the source location.
- * @param src {string} The source location of the image
- * @returns {ImageIcon} An image object containing the image from the src.
+ * The Operating System name, eg: Linux, Windows 7, OSX (darwin?).
  */
-images.getImageIcon = function(src){
-    try{
-        var image = new ImageIcon(src);
-        return image;
-    }
-    catch (e) {
-            Utilities.showError("Error reading image file: "+filename+". Does it exist?\n\n"+e.message);
-            return null;
-    }
-}
+os.name = System.getProperty("os.name");
 
+/**
+ * The Operating System architecture (32-bit or 64-bit).
+ */
+os.arch = System.getProperty("os.arch");
+
+/**
+ * The Operating System version.
+ */
+os.version = System.getProperty("os.version");
+
+/**
+ * The system file seperator. \ on Windows, / on OSX and Linux.
+ */
+os.pathSep = System.getProperty("file.separator");
 </code></pre>
         </article>
     </section>

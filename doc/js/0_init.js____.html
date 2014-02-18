@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: preload/program/0_init.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: preload/program/0_init.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Provides important program functions.
+ * @author Tribex
+ */
+
+require(Packages.us.derfers.tribex.rapids.Utilities);
+/**
+ * Contains methods that deal with the program.
+ * @namespace
+ */
+var program = {};
+var document = program;
+
+/**
+ * Cause the program to exit with the specified code.
+ * @param code {integer} 0 for success, 1+ for error.
+ */
+program.exit = function (code) {
+    System.exit(code);
+}
+
+/**
+ * Always called once the GUI loads.
+ */
+program.onload = function() {
+    return;
+}
+
+/**
+ * Alias to Utilities.showError();
+ */
+program.showError = Packages.us.derfers.tribex.rapids.Utilities.showError;
+
+
+/**
+ * Gets the widget object fromm the XMLWidgets Map that matches 'id'.
+ * @param id The id of the widget to return
+ * @return The widget object specified by 'id' from XMLWidgets
+ */
+program.getElementById = function (id) {
+    if (__widgetList[id] !== null &amp;&amp; __widgetList[id] !== undefined) {
+        return __widgetList[id];
+    }
+};
+
+
+/**
+ * Gets an array of widget objects from the widgetList Map that match 'class_identifier'.
+ * @param class_identifier The class of the widgets to return
+ * @return An Array of widgets specified by the 'class_identifier' from widgetList.
+ */
+program.getElementsByClass = function(class_identifier) {
+    var classes = [];
+    for(var widgetObj in __widgetList) {
+        if (__widgetList.hasOwnProperty(widgetObj)) {
+            if (__widgetList[widgetObj]["class"] !== null &amp;&amp;
+                    __widgetList[widgetObj]["class"] !== undefined &amp;&amp;
+                    __widgetList[widgetObj]["class"] == class_identifier) {
+
+                classes.push(__widgetList[widgetObj]);
+            }
+        }
+    }
+
+    if (classes.length > 0) {
+        return classes;
+    } else {
+        return null;
+    }
+}
+
+/**
+ * Gets an array of widget objects from the widgetList Map that are of type 'tagname'.
+ * @param tagname The element of the widgets to return
+ * @return An Array of widgets specified by 'tagname' from widgetList.
+ */
+program.getElementsByTagName = function(tagname) {
+    var elements = [];
+    for(var widgetObj in __widgetList) {
+        if (__widgetList.hasOwnProperty(widgetObj)) {
+            if (__widgetList[widgetObj]["element"] !== null &amp;&amp;
+                    __widgetList[widgetObj]["element"] !== undefined &amp;&amp;
+                    __widgetList[widgetObj]["element"] == tagname) {
+
+                elements.push(__widgetList[widgetObj]);
+            }
+        }
+    }
+
+    if (elements.length > 0) {
+        return elements;
+    } else {
+        return null;
+    }
+}
+
+/**
+ * Gets an array of widget objects from the widgetList Map that have the name 'name'.
+ * @param name The name of the widgets to return
+ * @return An Array of widgets specified by 'tagname' from widgetList.
+ */
+program.getElementsByTagName = function(name) {
+    var elements = [];
+    for(var widgetObj in __widgetList) {
+        if (__widgetList.hasOwnProperty(widgetObj)) {
+            if (__widgetList[widgetObj]["name"] !== null &amp;&amp;
+                    __widgetList[widgetObj]["name"] !== undefined &amp;&amp;
+                    __widgetList[widgetObj]["name"] == name) {
+
+                elements.push(__widgetList[widgetObj]);
+            }
+        }
+    }
+
+    if (elements.length > 0) {
+        return elements;
+    } else {
+        return null;
+    }
+}
+
+/**
+ * Turns a string into an XML Document.
+ * @param fragment {string} A valid XML string.
+ */
+program.XMLFragToDocument = function(fragment) {
+    return Utilities.XMLStringToDocument("&lt;xml>"+fragment+"&lt;/xml>");
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Namespaces</h3><ul><li><a href="__widgetOps.html">__widgetOps</a></li><li><a href="__widgetTypes.html">__widgetTypes</a></li><li><a href="console.html">console</a></li><li><a href="css.html">css</a></li><li><a href="dialogs.html">dialogs</a></li><li><a href="files.html">files</a></li><li><a href="images.html">images</a></li><li><a href="os.html">os</a></li><li><a href="program.html">program</a></li><li><a href="time.html">time</a></li><li><a href="urls.html">urls</a></li><li><a href="window.html">window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alert">alert</a></li><li><a href="global.html#confirm">confirm</a></li><li><a href="global.html#hasNext">hasNext</a></li><li><a href="global.html#hasNextLine">hasNextLine</a></li><li><a href="global.html#print">print</a></li><li><a href="global.html#prompt">prompt</a></li><li><a href="global.html#read">read</a></li><li><a href="global.html#readNext">readNext</a></li><li><a href="global.html#readNextLine">readNextLine</a></li><li><a href="global.html#require">require</a></li><li><a href="global.html#require_Java">require_Java</a></li><li><a href="global.html#Worker">Worker</a></li><li><a href="global.html#write">write</a></li><li><a href="global.html#writeLine">writeLine</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Tue Feb 18 2014 20:19:07 GMT+0800 (HKT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

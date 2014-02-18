@@ -34,26 +34,26 @@
       
       <section>
 		<div id="main">
-			<h1 id="rapids">RapidS</h1>
+			<h1 id="rapids---build-statushttpstravis-ciorgtribexrapidspngbranchmasterhttpstravis-ciorgtribexrapids">RapidS - <a href="https://travis-ci.org/Tribex/RapidS"><img src="https://travis-ci.org/Tribex/RapidS.png?branch=master" alt="Build Status" /></a></h1>
 
 <p>A Java toolkit for creating cross-platform programs using just XML (.rsm), CSS and JavaScript.</p>
 
 <h1 id="progress-toward-basic-usability">Progress toward basic usability:</h1>
-<p><em>80%</em></p>
+<p><em>90%</em></p>
 
 <ul>
   <li>Initial Loader - 99%</li>
-  <li>CSS Parser - 80%</li>
+  <li>CSS Parser - 90%</li>
   <li>JavaScript Parsing System - 100%</li>
   <li>XML Widget JavaScript Callbacks - 100% (Basic set, more will be added later)</li>
-  <li>JavaScript-Java Standard Library - 60%</li>
+  <li>JavaScript-Java Standard Library - 70%</li>
   <li>Linking and relative file support - 100%</li>
   <li>Swing GUI XML Loader - 100%</li>
   <li>Swing layout support - 20% - TODO</li>
   <li>File format specification - TODO</li>
 </ul>
 
-<h1 id="a-demo-rsm-file---alpha-02">A demo .rsm file - Alpha 0.2:</h1>
+<h1 id="a-demo-rsm-file---alpha-03">A demo .rsm file - Alpha 0.3:</h1>
 
 <pre><code>&lt;rsm theme="camo"&gt;
 &lt;link rel="stylesheet" href="styles.css"/&gt;
@@ -127,19 +127,19 @@ button {
 
     //Button Clicking System
         function runBtnEvt(text, sourceID) {
-            var label_list = window.getElementsByClass("changesOnHover");
-            for (index = 0; index &amp;lt; label_list.length; ++index) {
+            var label_list = program.getElementsByClass("changesOnHover");
+            for (index = 0; index &lt; label_list.length; ++index) {
                 if (sourceID == 0) {
                     label_list[index].setText(text+" from Label");
-                    window.setTitle(text);
+                    program.getElementById("__INIT__").widget.setTitle(text);
                 } else {
-                    label_list[index].setText(text+" from Button");
+                    label_list[index].widget.setText(text+" from Button");
                 }
             }
          }
 
          function changeBackground(widget, state) {
-            var widgetID = window.getElementById(widget);
+            var widgetID = program.getElementById(widget).widget;
             var color;
             if (state == 'click') {
                 var color = Color.decode("#666666");
@@ -159,33 +159,35 @@ button {
     &lt;head&gt;
         &lt;title&gt;RapidS: Test init file&lt;/title&gt;
 
-	&lt;/head&gt;
+    &lt;/head&gt;
 
-	&lt;body layout="gridBag" theme="camo"&gt;
+    &lt;body layout="gridBag" theme="camo"&gt;
 
-    	&lt;label class="changesOnHover" onmouseup="runBtnEvt('Click', 0)"
-        	onmouseover="runBtnEvt('Mouse Over', 0)"
-        	onmouseout="runBtnEvt('Mouse Out', 0)"&gt;label changes on	mouseover, mouseout, and click.&lt;/label&gt;
+        &lt;label class="changesOnHover" onmouseup="runBtnEvt('Click', 0)"
+            onmouseover="runBtnEvt('Mouse Over', 0)"
+            onmouseout="runBtnEvt('Mouse Out', 0)"&gt;label changes on	mouseover, mouseout, and click.&lt;/label&gt;
 
-    	&lt;label id="onButton" onclick="changeBackground('onButton', 'click')"
-        	onmouseover="changeBackground('onButton', 'over')"
-        	onmouseout="changeBackground('onButton', 'out')"&gt;Clickable label on Button&lt;/label&gt;
+        &lt;label id="onButton" onclick="changeBackground('onButton', 'click')"
+            onmouseover="changeBackground('onButton', 'over')"
+            onmouseout="changeBackground('onButton', 'out')"&gt;Clickable label on Button&lt;/label&gt;
 
-    	&lt;button id="clickableButton" class="changesOnHover" onclick="runBtnEvt('Click', 1)"
-        	onmouseover="runBtnEvt('Mouse Over', 1)"
-        	onmouseout="runBtnEvt('Mouse Out', 1)"&gt;Changes the status of the label.&lt;/button&gt;
+        &lt;button id="clickableButton" class="changesOnHover" onclick="runBtnEvt('Click', 1)"
+            onmouseover="runBtnEvt('Mouse Over', 1)"
+            onmouseout="runBtnEvt('Mouse Out', 1)"&gt;Changes the status of the label.&lt;/button&gt;
 
-    	&lt;spinner id="spinner" value="10" max="20" min="-1"
-        	onselection="runBtnEvt('Spinner: '+$spinner.getValue(), 1)" /&gt;
+        &lt;spinner id="spinner" value="10" max="20" min="-1"
+            onselection="runBtnEvt('Spinner: '+program.getElementById('spinner').widget.getValue(), 1)" /&gt;
 
-    	&lt;textfield class="standardPosition"&gt;Enter a single line of text here!&lt;/textfield&gt;
+        &lt;textfield class="standardPosition"&gt;Enter a single line of text here!&lt;/textfield&gt;
 
-    	&lt;textarea id="rightSide"&gt;Enter multiple lines of text here!&lt;/textarea&gt;
+        &lt;textarea id="rightSide"&gt;Enter multiple lines of text here!&lt;/textarea&gt;
 
-	&lt;/body&gt;
+    &lt;/body&gt;
 &lt;/window&gt;
 &lt;/rsm&gt;
 </code></pre>
+
+<p><a href="https://bitdeli.com/free" title="Bitdeli Badge"><img src="https://d2weczhvl823v0.cloudfront.net/Tribex/rapids/trend.png" alt="Bitdeli Badge" /></a></p>
 
 		</div>
 	  </section>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: preload/os/exec.js</title>
+    <title>JSDoc: Source: preload/program/loadRSM.js</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Source: preload/os/exec.js</h1>
+    <h1 class="page-title">Source: preload/program/loadRSM.js</h1>
     
     
 
@@ -26,23 +26,61 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Allows executing Operating System commands from JavaScript.
+ * @file Adds the ability to load a rsm or CSS file via JavaScript.
  * @author Tribex
- */
-require(Packages.us.derfers.tribex.rapids.jvCoreLib.Sys);
+ **/
+
+require(Packages.us.derfers.tribex.rapids.Main);
+require(Packages.us.derfers.tribex.rapids.Utilities);
+require(Packages.us.derfers.tribex.rapids.Globals);
+
+require(Packages.java.net.URL);
+require(Packages.org.apache.commons.io.FileUtils);
+require(Packages.org.apache.commons.io.IOUtils);
 
 /**
- * Execute a command and optionally wait for it to finish.
- * @param command {string} The command to run.
- * @param waitfor {boolean} Wait for the command to finish or not.
+ * Load an rsm file from a URL or file, with the option to cache or fallback if the file or URL is not found.
+ * @param fileLocation {string} the location or URL of the file to be loaded.
+ * @param cache {string} where to cache the file (optional)
+ * @param fallback {string} load this file instead of the URL if it is not found (optional)
  */
-os.exec = function(command, waitfor) {
-    if (waitfor != null &amp;&amp; waitfor != undefined) {
-        return Sys.execCommand(command, new Packages.java.lang.Boolean(waitfor));
+program.loadRSM = function(fileLocation, cache, fallback) {
+    //If the file is a URL on the internet:
+    if (fileLocation.contains("://")) {
+        try {
+            //Load the file from the internet.
+            Main.loader.loadAll(Utilities.EscapeScriptTags(IOUtils.toString(new URL(fileLocation))));
+
+            if (cache != null) {
+                try {
+                    FileUtils.writeStringToFile(new File(Globals.getCWD(cache)), IOUtils.toString(new URL(fileLocation)));
+                } catch (e2) {
+                    program.showError("Error: Unable to cache to file "+cache);
+                }
+            }
+        } catch (e) {
+            if (fallback != null) {
+                try {
+                    Main.loader.loadAll(Utilities.EscapeScriptTags(FileUtils.readFileToString(new File(Globals.getCWD(fallback)))));
+                } catch (e2) {
+                    program.showError("Error: Invalid file in fallback tag pointing to "+fallback);
+                }
+            } else {
+                program.showError("Error: Unable to load file: "+fileLocation+" and no fallback file found.");
+            }
+        }
+
+        //Load the file from the Hard Drive
     } else {
-        return Sys.execCommand(command, false);
+        try {
+            Main.loader.loadAll(Utilities.EscapeScriptTags(FileUtils.readFileToString(new File(Globals.getCWD(fileLocation)))));
+        } catch (e) {
+            program.showError("Error: Unable to find file "+fallback);
+        }
     }
 }
+
+
 </code></pre>
         </article>
     </section>

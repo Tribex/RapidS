@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: preload/io/images.js</title>
+    <title>JSDoc: Source: init/window/0_init.js</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Source: preload/io/images.js</h1>
+    <h1 class="page-title">Source: init/window/0_init.js</h1>
     
     
 
@@ -26,31 +26,10 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Provides image operations. May be moved into a separate folder.
- * @author Nateowami
- */
-
-/**
- * Images object for operating on images
+ * Provides access to the Java Window object for ease of use and familiarity.
  * @namespace
  */
-var images = {};
-
-/**
- * Get an icon from the source location.
- * @param src {string} The source location of the image
- * @returns {ImageIcon} An image object containing the image from the src.
- */
-images.getImageIcon = function(src){
-    try{
-        var image = new ImageIcon(src);
-        return image;
-    }
-    catch (e) {
-            Utilities.showError("Error reading image file: "+filename+". Does it exist?\n\n"+e.message);
-            return null;
-    }
-}
+var window = Packages.us.derfers.tribex.rapids.jvCoreLib.Window;
 
 </code></pre>
         </article>

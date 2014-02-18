@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Namespace: images</title>
+    <title>JSDoc: Namespace: __widgetOps</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Namespace: images</h1>
+    <h1 class="page-title">Namespace: __widgetOps</h1>
     
     
 
@@ -27,7 +27,7 @@
     
 <header>
     <h2>
-    images
+    __widgetOps
     </h2>
     
 </header>  
@@ -38,7 +38,7 @@
     
     
         
-            <div class="description">Images object for operating on images</div>
+            <div class="description">Widget Operations</div>
         
         
         
@@ -64,7 +64,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="images.js.html">preload/io/images.js</a>, <a href="images.js.html#line10">line 10</a>
+        <a href="0_init.js.html">preload/widgets/0_init.js</a>, <a href="0_init.js.html#line28">line 28</a>
     </li></ul></dd>
     
     
@@ -98,7 +98,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="getImageIcon"><span class="type-signature">&lt;static> </span>getImageIcon<span class="signature">(src)</span><span class="type-signature"> &rarr; {ImageIcon}</span></h4>
+    <h4 class="name" id="initializeWidget"><span class="type-signature">&lt;static> </span>initializeWidget<span class="signature">(widget, widgetElement, parentID, prependID)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -106,7 +106,7 @@
     
     
     <div class="description">
-        Get an icon from the source location.
+        Applies styles, stores, and parses widgets.
     </div>
     
 
@@ -140,7 +140,53 @@
 	
         <tr>
             
-                <td class="name"><code>src</code></td>
+                <td class="name"><code>widget</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">JComponent</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">A Swing widget.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>widgetElement</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Element</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The XML element that the widget came from.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>parentID</code></td>
             
             
             <td class="type">
@@ -156,7 +202,30 @@
             
             
             
-            <td class="description last">The source location of the image</td>
+            <td class="description last">The id of the parent widget.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>prependID</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">A string that will be prepended to this widget's ID. Currently not used.</td>
         </tr>
 	
 	
@@ -187,7 +256,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="images.js.html">preload/io/images.js</a>, <a href="images.js.html#line17">line 17</a>
+        <a href="0_init.js.html">preload/widgets/0_init.js</a>, <a href="0_init.js.html#line41">line 41</a>
     </li></ul></dd>
     
     
@@ -208,28 +277,6 @@
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    An image object containing the image from the src.
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">ImageIcon</span>
-
-
-	</dd>
-</dl>
-
-        
     
     
 </dd>

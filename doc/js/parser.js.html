@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: init/css/parser.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: init/css/parser.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Provides a rudimentary parser for parsing CSS into JavaScript objects.
+ * @author Tribex
+**/
+
+/**
+ * Parses all the CSS in 'string' and adds it to __widgetOps.styles
+ * @param string {string} A string of CSS.
+ */
+css.parseString = function(string) {
+    //Preserve previous styles.
+    var stylesObject = __widgetOps.styles;
+
+    //If there are no previous styles
+    if (stylesObject === null || stylesObject === undefined) {
+        //Create an empty object to hold parsed styles.
+        stylesObject = {};
+    }
+
+    //Split the CSS into rules
+    var rules = string.split("}");
+
+    //Iterate though the rules
+    for (var i = 0; i &lt; rules.length; i++) {
+
+        var rule = rules[i];
+
+        //Split the rule into head and body
+        var splitRule = rule.split("{");
+        if (splitRule.length == 2) {
+            var head = splitRule[0].trim();
+            var body = splitRule[1].trim();
+
+            //Head operations
+            var splitHead = head.split(" ");
+
+            //Whether or not the next section is a child of the previous
+            var nxtChild = false;
+            if (splitHead.length > 1) {
+                for (var headI = 0; headI &lt; splitHead.length; headI++) {
+                    //Working
+                    if (splitHead[headI].endsWith(",")) {
+                        //console.log("DUPLICATIE: "+splitHead[headI].replace(",", "")+" AND "+splitHead[headI+1]);
+                        stylesObject[headI] = this.parseBody(body);
+                        stylesObject[headI+1] = this.parseBody(body);
+                        headI++;
+
+                    //TODO: Multiple levels of inheritance.
+                    } else {
+                        if (!nxtChild) {
+                            //console.log("PARENT: "+splitHead[headI]);
+                            nxtChild = true;
+                        } else {
+                            //console.log("CHILD: "+splitHead[headI]+" OF "+splitHead[headI-1]);
+                            nxtChild = false;
+                        }
+
+                    }
+                }
+            } else {
+                stylesObject[splitHead[0]] = this.parseBody(body);
+            }
+
+
+        } else {
+            //console.log("END OF FILE");
+        }
+    }
+    __widgetOps.styles = stylesObject;
+}
+
+/**
+ * Should not be public, but it is.
+ */
+css.parseBody = function(body) {
+    var properties = {};
+    //Body Operations
+    var splitBody = body.split(";");
+    for (var bodyI = 0; bodyI &lt; splitBody.length; bodyI++) {
+        var kv = splitBody[bodyI].split(":");
+        for(var kvI = 0; kvI &lt; kv.length-1; kvI++) {
+            var key = kv[kvI].trim();
+            var value = kv[kvI+1].trim();
+            properties[key] = value;
+            //console.log("KEY: "+key+" | VAL: "+value);
+            kvI++;
+        }
+    }
+    //console.log("\n\n");
+    return properties;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Namespaces</h3><ul><li><a href="__widgetOps.html">__widgetOps</a></li><li><a href="__widgetTypes.html">__widgetTypes</a></li><li><a href="console.html">console</a></li><li><a href="css.html">css</a></li><li><a href="dialogs.html">dialogs</a></li><li><a href="files.html">files</a></li><li><a href="images.html">images</a></li><li><a href="os.html">os</a></li><li><a href="program.html">program</a></li><li><a href="time.html">time</a></li><li><a href="urls.html">urls</a></li><li><a href="window.html">window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alert">alert</a></li><li><a href="global.html#confirm">confirm</a></li><li><a href="global.html#hasNext">hasNext</a></li><li><a href="global.html#hasNextLine">hasNextLine</a></li><li><a href="global.html#print">print</a></li><li><a href="global.html#prompt">prompt</a></li><li><a href="global.html#read">read</a></li><li><a href="global.html#readNext">readNext</a></li><li><a href="global.html#readNextLine">readNextLine</a></li><li><a href="global.html#require">require</a></li><li><a href="global.html#require_Java">require_Java</a></li><li><a href="global.html#Worker">Worker</a></li><li><a href="global.html#write">write</a></li><li><a href="global.html#writeLine">writeLine</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Tue Feb 18 2014 20:19:07 GMT+0800 (HKT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
