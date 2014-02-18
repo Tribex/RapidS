@@ -55,7 +55,7 @@ public class GUI {
      */
     public void loadWindow(Element windowElement, ScriptEngine engine, Boolean setVisible) {
         //XXX: Initialization :XXX\\
-        String id = "";
+        String windowID = "";
 
         final JFrame window = new JFrame();
 
@@ -65,7 +65,7 @@ public class GUI {
 
         if (windowElement.hasAttribute("id") && windowElement.getAttributeNode("id").getTextContent().equals("__INIT__")) {
             setVisible = true;
-            id = "__INIT__";
+            windowID = "__INIT__";
             window.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
                     System.exit(0);
@@ -75,7 +75,7 @@ public class GUI {
             Utilities.showError("ERROR: Window does not have an id. Unable to recover.");
             System.exit(0);
         } else {
-            id = windowElement.getAttributeNode("id").getTextContent();
+            windowID = windowElement.getAttributeNode("id").getTextContent();
             window.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
                     window.setVisible(false);
@@ -90,7 +90,7 @@ public class GUI {
         JMenuBar menuBar = new JMenuBar();
         window.setJMenuBar(menuBar);
 
-        engine.call("__widgetOps.storeWidget", id, windowElement, window);
+        engine.call("__widgetOps.storeWidget", windowID, windowElement, window);
 
         try {
             //XXX: HEAD :XXX\\
@@ -132,7 +132,7 @@ public class GUI {
             NodeList bodyElements = windowElement.getElementsByTagName("body");
             if (bodyElements.getLength() == 1) {
                 //Loop through all children of the body element and add them
-                loadInComposite((JComponent) windowPanel, bodyElements.item(0));
+                loadInComposite((JComponent) windowPanel, bodyElements.item(0), windowID);
             } else {
                 Utilities.showError("Error: A window should have one body element, and one body element only. \n\n"
                         + " Program exiting, fatal error.");
@@ -159,7 +159,7 @@ public class GUI {
      * @param node The body or any other composite node.
      * @param engine The JavaScript engine
      */
-    public static void loadInComposite(JComponent parentComposite, Node node) {
+    public static void loadInComposite(JComponent parentComposite, Node node, String id) {
         //Get the JavaScript object widgetTypes from the ScriptEngine scope.
         Scriptable widgetTypes = (Scriptable) Main.loader.engine.scope.get("__widgetTypes", Main.loader.engine.scope);
 
@@ -182,7 +182,7 @@ public class GUI {
                     //Make sure the JavaScript widgetType object is really a widget Type
                     if (((NativeObject) widgetTypes.get(widgetElement.getNodeName(), Main.loader.engine.scope)).get("element").toString().equals(widgetElement.getNodeName())) {
                         //Run the JavaScript function to draw and display the widget
-                        Main.loader.engine.call("__widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, Main.loader.engine);
+                        Main.loader.engine.call("__widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, id);
                     }
 
                     //If the widget is not found in widgetTypes

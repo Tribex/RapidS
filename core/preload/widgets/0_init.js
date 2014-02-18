@@ -31,7 +31,7 @@ var __widgetOps = {
         __NO__ID : 0,
 
         //For initializing and saving widgets.
-        initializeWidget : function (widget, widgetElement, engine, prependID) {
+        initializeWidget : function (widget, widgetElement, parentID, prependID) {
             if (prependID === null || prependID === undefined) {
                 prependID = "";
             }
@@ -41,7 +41,7 @@ var __widgetOps = {
                 var listenerType = Globals.listenerTypesArray[i];
                 //Add a listener for listenerType if specified
                 if (widgetElement.getAttributeNode(listenerType) != null) {
-                    WidgetOps.addMethodListener(listenerType, widget, widgetElement.getAttributeNode(listenerType).getNodeValue(), engine);
+                    WidgetOps.addMethodListener(listenerType, widget, widgetElement.getAttributeNode(listenerType).getNodeValue());
                 }
 
             }
@@ -49,7 +49,7 @@ var __widgetOps = {
             var id = this.getWidgetId(widgetElement, prependID);
 
             //Store the widget in __widgetList
-            this.storeWidget(id, widgetElement, widget);
+            this.storeWidget(id, widgetElement, widget, parentID);
 
             //Get the styles for the widget's element.
             this.getWidgetStyles(id, __widgetList[id].element, "");
@@ -66,7 +66,7 @@ var __widgetOps = {
         },
 
         //Store a widget in the widgetList
-        storeWidget : function(widgetID, widgetElement, widget) {
+        storeWidget : function(widgetID, widgetElement, widget, parentID) {
             //Create an object to hold the widget and its attributes.
             __widgetList[widgetID] = {};
             var widgetObject = __widgetList[widgetID];
@@ -124,12 +124,23 @@ var __widgetOps = {
                 widgetObject["class"] = widgetElement.getAttributeNode("class").getTextContent();
             }
 
+            //Set the parent of the widget
+            widgetObject["parent"] = parentID;
+
+            //Add this widget to the parent's children.
+            if (__widgetList[parentID] != null) {
+                if(__widgetList[parentID]["children"] == null) {
+                    __widgetList[parentID]["children"] = [];
+                }
+                __widgetList[parentID]["children"].push(widgetID);
+            }
+
             //Add the ability to add a child to this widget at runtime.
             widgetObject["appendChild"] = function(child) {
                 var childNodes = program.XMLFragToDocument(child).getChildNodes();
                 if (childNodes != null) {
                     for (var i = 0; i < childNodes.getLength(); i++) {
-                        Packages.us.derfers.tribex.rapids.GUI.Swing.GUI.loadInComposite(widgetObject.widget, childNodes.item(0));
+                        Packages.us.derfers.tribex.rapids.GUI.Swing.GUI.loadInComposite(widgetObject.widget, childNodes.item(0), this.id);
                     }
                 }
             }

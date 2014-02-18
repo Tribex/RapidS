@@ -6,15 +6,15 @@ require(Packages.javax.swing.JTabbedPane);
 require(Packages.javax.swing.JPanel);
 require(Packages.java.awt.GridBagLayout);
 
-__widgetTypes.registerWidget("tabpane", function (parentComposite, widgetElement, engine) {
+__widgetTypes.registerWidget("tabpane", function (parentComposite, widgetElement, parentID) {
     var widget = new JTabbedPane();
 
-    //Load all elements inside of the composite/widget.  INFINITE NESTING!
-    GUI.loadInComposite(widget, widgetElement);
-
     //Initialize and add the widget
-    var id = __widgetOps.initializeWidget(widget, widgetElement, engine);
+    var id = __widgetOps.initializeWidget(widget, widgetElement, parentID);
     parentComposite.add(widget, __widgetOps.applyWidgetConstraint(id));
+
+    //Load all elements inside of the composite/widget.  INFINITE NESTING!
+    GUI.loadInComposite(widget, widgetElement, id);
 
     return widget;
 },

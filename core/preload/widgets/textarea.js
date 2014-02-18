@@ -5,7 +5,7 @@
 require(Packages.javax.swing.JTextArea);
 require(Packages.javax.swing.JScrollPane);
 
-__widgetTypes.registerWidget("textarea", function (parentComposite, widgetElement, engine) {
+__widgetTypes.registerWidget("textarea", function (parentComposite, widgetElement, parentID) {
 
     //Create a new textarea
     widget = new JTextArea();
@@ -17,7 +17,7 @@ __widgetTypes.registerWidget("textarea", function (parentComposite, widgetElemen
     widget.setText(widgetElement.getTextContent());
 
     //Initialize the widget
-    var id = __widgetOps.initializeWidget(widget, widgetElement, engine);
+    var id = __widgetOps.initializeWidget(widget, widgetElement, parentID);
 
     //Add the scrollpane to the parentComposite
     parentComposite.add(scrollPane, __widgetOps.applyWidgetConstraint(id));

@@ -6,7 +6,7 @@ require(Packages.javax.swing.JMenu);
 require(Packages.javax.swing.JMenuItem);
 require(Packages.us.derfers.tribex.rapids.jvCoreLib.Window);
 
-__widgetTypes.registerWidget("menu", function (parentComposite, widgetElement, engine) {
+__widgetTypes.registerWidget("menu", function (parentComposite, widgetElement, parentID) {
     var widget = new JMenu();
 
     if (widgetElement.getParentNode().getNodeName() == "body") {
@@ -21,19 +21,20 @@ __widgetTypes.registerWidget("menu", function (parentComposite, widgetElement, e
     }
     parentComposite.add(widget);
 
-    GUI.loadInComposite(widget, widgetElement);
+    var id = __widgetOps.initializeWidget(widget, widgetElement, parentID);
 
-    __widgetOps.initializeWidget(widget, widgetElement, engine);
+    GUI.loadInComposite(widget, widgetElement, id);
+
     return widget;
 });
 
-__widgetTypes.registerWidget("menuitem", function (parentComposite, widgetElement, engine) {
+__widgetTypes.registerWidget("menuitem", function (parentComposite, widgetElement, parentID) {
     var widget = new JMenuItem();
 
     widget.setText(widgetElement.getTextContent());
 
     parentComposite.add(widget);
 
-    __widgetOps.initializeWidget(widget, widgetElement, engine);
+    __widgetOps.initializeWidget(widget, widgetElement, parentID);
     return widget;
 });

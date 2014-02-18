@@ -1,6 +1,6 @@
 require(Packages.javax.swing.JCheckBox);
 
-__widgetTypes.registerWidget("checkbox", function (parentComposite, widgetElement, engine) {
+__widgetTypes.registerWidget("checkbox", function (parentComposite, widgetElement, parentID) {
     //Create a new Checkbox.
     var widget = new JCheckBox();
 
@@ -8,7 +8,7 @@ __widgetTypes.registerWidget("checkbox", function (parentComposite, widgetElemen
     widget.setText(widgetElement.getTextContent());
 
     //Add the widget to all maps and set event listeners.
-    var id = __widgetOps.initializeWidget(widget, widgetElement, engine);
+    var id = __widgetOps.initializeWidget(widget, widgetElement, parentID);
 
     //Add the panel to the window with all of its constraints.
     parentComposite.add(widget, __widgetOps.applyWidgetConstraint(id));

@@ -26,6 +26,7 @@ import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import us.derfers.tribex.rapids.Main;
 import us.derfers.tribex.rapids.ScriptEngine;
 import us.derfers.tribex.rapids.Utilities;
 
@@ -44,7 +45,8 @@ public class WidgetOps {
      * @param engine The JavaScript engine.
      * @return True on success, False on failure.
      */
-    public static boolean addMethodListener(final String type, final JComponent widget, final String value, final ScriptEngine engine) {
+    public static boolean addMethodListener(final String type, final JComponent widget, final String value) {
+        final ScriptEngine engine = Main.loader.engine;
         //Add event listener
         try {
             if (type.equals("onclick")) {
