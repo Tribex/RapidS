@@ -333,7 +333,7 @@ public class Loader {
     }
 
     /**
-     * Loads scripts and styles from link tags. Currently files only, URLS not supported :C
+     * Loads scripts and styles from link tags.
      * @param linkElement The element from which to load the content from.
      * @param engine The ScriptEngine to run links to scripts in.
      * @return
@@ -341,9 +341,10 @@ public class Loader {
     private boolean parseLinks(Element linkElement, ScriptEngine engine) {
 
         //Check and see if the <link> tag contains a rel and href attribute
-        if (linkElement.getAttributeNode("rel") != null && linkElement.getAttribute("href") != null) {
+        if (linkElement.getAttribute("href") != null) {
             //If it links to a stylesheet
-            if (linkElement.getAttributeNode("rel").getTextContent().equals("stylesheet")) {
+            if ((linkElement.getAttributeNode("rel") != null &&linkElement.getAttributeNode("rel").getTextContent().equals("stylesheet"))
+                    || linkElement.getAttributeNode("href").getTextContent().endsWith(".css")) {
 
                 //Check and see if the href and URL exist.
                 if (linkElement.getAttributeNode("href").getNodeValue().contains("://")) {
@@ -380,7 +381,8 @@ public class Loader {
                 }
 
                 //If it links to a script
-            } else if (linkElement.getAttributeNode("rel").getTextContent().equals("script")) {
+            } else if ((linkElement.getAttributeNode("rel") != null &&linkElement.getAttributeNode("rel").getTextContent().equals("script"))
+                    || linkElement.getAttributeNode("href").getTextContent().endsWith(".js")) {
 
                 //Check and see if the file exists
                 if (linkElement.getAttributeNode("href").getNodeValue().contains("://")) {

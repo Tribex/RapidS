@@ -9,13 +9,11 @@ require(Packages.us.derfers.tribex.rapids.GUI.Swing.Layouts);
 require(Packages.us.derfers.tribex.rapids.GUI.Swing.WidgetOps);
 require(Packages.java.awt.GridBagConstraints);
 
-//A list of registered widgets. Populated by __widgetTypes.registerWidget()
+/**
+ * A list of registered widgets. Populated by __widgetTypes.registerWidget()
+ * @namespace
+ */
 var __widgetTypes = {
-        //Used to add a new widget to the GUI
-        addWidget : function(name, func) {
-            this[name] = func;
-        },
-
         //Used to register a new widget type.
         registerWidget : function (element, loader, styleBlacklist, styleWhitelist, customData) {
             this[element] = {element : element, loader : loader, styleBlacklist : styleBlacklist, styleWhitelist : styleWhitelist}
@@ -23,14 +21,23 @@ var __widgetTypes = {
 
 }
 
-//Widget Operations
+/**
+ * Widget Operations
+ * @namespace
+ */
 var __widgetOps = {
         //Populated by a call from Java class Loader to css.parseString.
         styles : null,
         //Used for widgets that do not have a unique Id set.
         __NO__ID : 0,
 
-        //For initializing and saving widgets.
+        /**
+         * Applies styles, stores, and parses widgets.
+         * @param widget {JComponent} A Swing widget.
+         * @param widgetElement {Element} The XML element that the widget came from.
+         * @param parentID {string} The id of the parent widget.
+         * @param prependID {string} A string that will be prepended to this widget's ID. Currently not used.
+         */
         initializeWidget : function (widget, widgetElement, parentID, prependID) {
             if (prependID === null || prependID === undefined) {
                 prependID = "";
