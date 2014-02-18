@@ -54,7 +54,12 @@ public class Main {
             //If the program is started with a .rsm file to parse other than init.rsm.
             } else if (!arg.startsWith("-")){
                 //Create a file to test its location
-                File file = new File(Utilities.getJarDirectory()+arg);
+                File file = null;
+                if (!arg.startsWith(":\\", 1) && !arg.startsWith("/")) {
+                    file = new File(Utilities.getJarDirectory()+arg);
+                } else {
+                    file = new File(arg);
+                }
 
                 //Make sure the file exists and is a directory
                 if (file.exists() && !file.isDirectory()) {
