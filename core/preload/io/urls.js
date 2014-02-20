@@ -1,7 +1,6 @@
 /** Provides basic url reading and writing features
  * --USES APACHE COMMONS IO--*/
 
-//import packages
 require(Packages.java.net.URL);
 require(Packages.us.derfers.tribex.rapids.Globals);
 require(Packages.us.derfers.tribex.rapids.Utilities);
@@ -11,8 +10,8 @@ require(Packages.org.jdesktop.http.async.XmlHttpRequest);
 
 /**
  * A connection to a URL.
- * @param url {String} The url to connect to.
- * @param encoding {String} The encoding to use for the URL
+ * @param url {string} The url to connect to.
+ * @param encoding {string} The encoding to use for the URL
  * @namespace
  */
 function urls(url, encoding) {
@@ -40,7 +39,7 @@ function urls(url, encoding) {
 
     /**
      * BROKEN: Sends a post request to the URL.
-     * @param data {String} The data to send in the post request.
+     * @param data {string} The data to send in the post request.
      * @memberof urls
      */
     this.post = function(data) {
@@ -51,7 +50,7 @@ function urls(url, encoding) {
 
     /**
      * Kinda works: Sends a get request to the URL.
-     * @param data {String} The data to send in the GET request.
+     * @param data {string} The data to send in the GET request.
      * @memberof urls
      */
     this.get = function(data) {
@@ -70,8 +69,8 @@ function urls(url, encoding) {
 
 /**
  * Returns a urls object with the specified URL and encoding.
- * @param url {String} The web address of the file you are trying to manipulate.
- * @param encoding {String} The encoding of the file at the URL address.
+ * @param url {string} The web address of the file you are trying to manipulate.
+ * @param encoding {string} The encoding of the file at the URL address.
  */
 urls.open = function(url, encoding) {
     if (encoding == null) {
@@ -83,8 +82,8 @@ urls.open = function(url, encoding) {
 
 /**
  * Static function to read the plain-text content of a URL.
- * @param url {String} The URL to read from.
- * @param encoding {String} The encoding of the file at the URL.
+ * @param url {string} The URL to read from.
+ * @param encoding {string} The encoding of the file at the URL.
  */
 urls.read = function(url, encoding) {
     if (encoding == null) {
@@ -101,4 +100,48 @@ urls.read = function(url, encoding) {
     } catch (e) {
         return e.message;
     }
+}
+
+/**
+ * Static function to save the bytes of a file on the internet to a location on the hard drive.
+ * @param url {string} The URL from wich to download bytes from.
+ * @param file {string} The location of the file to save the bytes to.
+ * @param callback {function} A function to call once the file
+ */
+urls.download = function(url, file, callback, connectTimeout, readTimeout) {
+    if (readTimeout == null && connectTimeout == null) {
+        try {
+            FileUtils.copyURLToFile(new URL(url), new File(Globals.getCWD(file)), 15000, 200000000);
+            return runCallback(true);
+        } catch (e) {
+            Utilities.showError("Error downloading from '"+url+"'. Unable to establish connection. (Timed out)");
+            return runCallback(false);
+        }
+    } else if (readTimeout == null) {
+        try {
+            FileUtils.copyURLToFile(new URL(url), new File(Globals.getCWD(file)), connectTimeout/2, connectTimeout/2);
+            return runCallback(true);
+        } catch (e) {
+            Utilities.showError("Error downloading from '"+url+"'. Unable to establish connection. (Timed out)");
+            return runCallback(false);
+        }
+    } else {
+        try {
+            FileUtils.copyURLToFile(new URL(url), new File(Globals.getCWD(file)), connectTimeout, readTimeout);
+            return runCallback(true);
+        } catch (e) {
+            Utilities.showError("Error downloading from '"+url+"'. Unable to establish connection. (Timed out)");
+            return runCallback(false);
+        }
+    }
+
+    function runCallback(boolean) {
+        if (callback != null) {
+            callback(boolean);
+            return boolean;
+        } else {
+            return boolean;
+        }
+    }
+
 }

@@ -16,7 +16,7 @@ var images = {};
  */
 images.getImageIcon = function(src){
     try{
-        var image = new ImageIcon(src);
+        var image = new ImageIcon(Globals.getCWD(src));
         return image;
     }
     catch (e) {
