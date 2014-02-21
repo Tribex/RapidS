@@ -126,6 +126,7 @@ spinner {
         program.getElementById("tab2").appendChild(
                 '<tabpane value="Tab2"><tab value="Tab4"></tab></tabpane>');
 
+        //audio.openFile("arr.mp3").playSound();
     }
 
 
