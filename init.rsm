@@ -127,6 +127,15 @@ spinner {
         program.getElementById("tab2").appendChild(
                 '<tabpane value="Tab2"><tab value="Tab4"></tab></tabpane>');
 
+        /*program.getElementById("paintme").widget.setPaint(function(graphics) {
+            var rect = new RoundRectangle2D.Double();
+            rect.setRoundRect(5, 5, 20, 20, 10, 10);
+            if(bool) {
+                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            }
+            g.fill(rect);
+            }
+        );*/
     }
 
 
@@ -206,8 +215,7 @@ spinner {
     <label id="TEST"
         class="changesOnHover" onmouseup="runBtnEvt('Click', 'No Id')"
         onmouseover="runBtnEvt('Mouse Over', 'No Id')"
-        onmouseout="runBtnEvt('Mouse Out', 'No Id')">label changes on
-        mouseover, mouseout, and click.</label> <label id="clickLabel"
+        onmouseout="runBtnEvt('Mouse Out', 'No Id')">label changes on mouseover, mouseout, and click.</label> <label id="clickLabel"
         onclick="changeBackground('clickLabel', 'click')"
         onmouseover="changeBackground('clickLabel', 'over')"
         onmouseout="changeBackground('clickLabel', 'out')">Clickable
@@ -215,20 +223,15 @@ spinner {
     <button id="clickableButton" class="changesOnHover"
         onclick="runBtnEvt('Click', program.getElementById('clickableButton').id)"
         onmouseover="runBtnEvt('Mouse Over', program.getElementById('clickableButton').id)"
-        onmouseout="runBtnEvt('Mouse Out', program.getElementById('clickableButton').id)">
-        Changes the status of the label.</button>
+        onmouseout="runBtnEvt('Mouse Out', program.getElementById('clickableButton').id)">Changes the status of the label.</button>
     <spinner id="spinner" value="10" max="20" min="-1"
         onselection="runBtnEvt(program.getElementById('spinner').widget.getValue(), program.getElementById('spinner').id)" />
-    <textfield id="lineToSave" class="standardPosition">Enter a
-    single line of text here!</textfield>
-    <button id="saveLine" onclick="saveLine()">Append ^ to
-        text.txt</button>
-    <checkbox class="standardPosition" onclick="console.log('My Checkbox')">My
-    Checkbox</checkbox>
+    <textfield id="lineToSave" class="standardPosition">Enter a single line of text here!</textfield>
+    <button id="saveLine" onclick="saveLine()">Append ^ to text.txt</button>
+    <checkbox class="standardPosition" onclick="console.log('My Checkbox')">My Checkbox</checkbox>
     <textarea id="rightSide">Enter multiple lines of text here!</textarea>
     <tabpane id="tabP"> <tab value="Tab1" id="tab1">
-    <button class="standardPosition" id="showLogo" onclick="showLogo()">Show
-        RapidS logo</button>
+    <button class="standardPosition" id="showLogo" onclick="showLogo()">Show RapidS logo</button>
     <img class="standardPosition" id="logo" src="icon.png" /> </tab></tabpane>
 </body>
 </window> </rsm>
