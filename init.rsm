@@ -203,7 +203,7 @@ spinner {
     <menu value="Help">
         <menuitem>MenuItem</menuitem>
     </menu>
-    <panel id="paintme" onpaint="console.log('?')"> <label id="TEST"
+    <label id="TEST"
         class="changesOnHover" onmouseup="runBtnEvt('Click', 'No Id')"
         onmouseover="runBtnEvt('Mouse Over', 'No Id')"
         onmouseout="runBtnEvt('Mouse Out', 'No Id')">label changes on
@@ -217,7 +217,6 @@ spinner {
         onmouseover="runBtnEvt('Mouse Over', program.getElementById('clickableButton').id)"
         onmouseout="runBtnEvt('Mouse Out', program.getElementById('clickableButton').id)">
         Changes the status of the label.</button>
-    </panel>
     <spinner id="spinner" value="10" max="20" min="-1"
         onselection="runBtnEvt(program.getElementById('spinner').widget.getValue(), program.getElementById('spinner').id)" />
     <textfield id="lineToSave" class="standardPosition">Enter a
