@@ -112,6 +112,9 @@ spinner {
                 + time.millisecond() + " - " + time.isLeapYear() + " - "
                 + time.timeInMillis() + " - " + time.dayOfYear() + " - "
                 + time.weekOfYear());
+                
+        //try to play a simple sound
+        audio.playClip("audio.wav");
 
         //A basic thread.
         thread = new Worker("console.log('This is executing in a thread!')");
