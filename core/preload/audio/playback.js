@@ -16,7 +16,7 @@ require(Packages.javax.sound.sampled.DataLine);
  * @param nameAndURL {string} The name and URL of the sound you want to play
  */
 audio.playClip = function(nameAndURL){
-    var sound = AudioSystem.getAudioInputStream(new File(Globalg.getCWD(nameAndURL)));
+    var sound = AudioSystem.getAudioInputStream(new File(Globals.getCWD(nameAndURL)));
 
     //This fixes an error on Ubuntu.
     var info = new DataLine.Info(Clip, sound.getFormat());
