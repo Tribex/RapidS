@@ -8,10 +8,29 @@ require(Packages.us.derfers.tribex.rapids.GUI.Swing.GUI);
 
 __widgetTypes.registerWidget("panel", function (parentComposite, widgetElement, parentID) {
         //Create a new Panel
+
+        var id = __widgetOps.getWidgetId(widgetElement);
+
         var widget = new JavaAdapter(JPanel, {
-            paintComponent : function(graphics, func) {
-                if (func != null) {
-                    func(graphics);
+            //This overrides the default paint method. May cause some bugs, not entirely sure.
+            paint : function(graphics) {
+                //Paint the component itself.
+                this.paintComponent(graphics);
+
+                //Paint the component's border.
+                this.paintBorder(graphics);
+
+                //If there is a function to paint below the children of this component, run it, passing the graphics.
+                if (program.getElementById(id).paintBelow != null) {
+                    program.getElementById(id).paintBelow(graphics);
+                }
+
+                //Paint the children of this component.
+                this.paintChildren(graphics);
+
+                //If there is a function to paint above the children of this component, run it, passing the graphics.
+                if (program.getElementById(id).paintAbove != null) {
+                    program.getElementById(id).paintAbove(graphics);
                 }
             },
         });

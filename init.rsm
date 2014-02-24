@@ -112,9 +112,7 @@ spinner {
                 + time.millisecond() + " - " + time.isLeapYear() + " - "
                 + time.timeInMillis() + " - " + time.dayOfYear() + " - "
                 + time.weekOfYear());
-                
-        //try to play a simple sound
-        audio.playClip("audio.wav");
+
 
         //A basic thread.
         thread = new Worker("console.log('This is executing in a thread!')");
@@ -129,27 +127,8 @@ spinner {
         program.getElementById("tab2").appendChild(
                 '<tabpane value="Tab2"><tab value="Tab4"></tab></tabpane>');
 
-        program.getElementById("paintme").widget.setPaint(function(graphics) {
-            var rect = new RoundRectangle2D.Double();
-            rect.setRoundRect(5, 5, 20, 20, 10, 10);
-            if(bool) {
-                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            }
-            g.fill(rect);
-            }
-        );
-
-
     }
 
-    function paintSmth(g, bool) {
-        var rect = new RoundRectangle2D.Double();
-        rect.setRoundRect(5, 5, 20, 20, 10, 10);
-        if(bool) {
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        }
-        g.fill(rect);
-    }
 
     //Button Clicking System
     function runBtnEvt(text, message) {
@@ -224,7 +203,7 @@ spinner {
     <menu value="Help">
         <menuitem>MenuItem</menuitem>
     </menu>
-    <panel id="paintme" onpaint="paintSmth()"> <label id="TEST"
+    <panel id="paintme" onpaint="console.log('?')"> <label id="TEST"
         class="changesOnHover" onmouseup="runBtnEvt('Click', 'No Id')"
         onmouseover="runBtnEvt('Mouse Over', 'No Id')"
         onmouseout="runBtnEvt('Mouse Out', 'No Id')">label changes on

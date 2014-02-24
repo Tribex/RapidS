@@ -10,6 +10,11 @@
         <pathelement location="lib/rhino.jar"/>
         <pathelement location="lib/HttpRequest.jar"/>
         <pathelement location="lib/jsyntax.jar"/>
+        <pathelement location="lib/audio/jorbis-0.0.15.jar"/>
+        <pathelement location="lib/audio/jogg-0.0.7.jar"/>
+        <pathelement location="lib/audio/jl1.0.1.jar"/>
+        <pathelement location="lib/audio/startup2.jar"/>
+        <pathelement location="lib/audio/easyogg.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -74,6 +79,12 @@
             <zipfileset dir="lib" includes="rhino.jar"/>
             <zipfileset dir="lib" includes="HttpRequest.jar"/>
             <zipfileset dir="lib" includes="jsyntax.jar"/>
+            <zipfileset dir="lib/audio" includes="jorbis-0.0.15.jar"/>
+            <zipfileset dir="lib/audio" includes="jogg-0.0.7.jar"/>
+            <zipfileset dir="lib/audio" includes="jl1.0.1.jar"/>
+            <zipfileset dir="lib/audio" includes="startup2.jar"/>
+            <zipfileset dir="lib/audio" includes="easyogg.jar"/>
+
         </jar>
         <copy includeemptydirs="false" todir="dist">
             <fileset dir=".">
