@@ -8,7 +8,13 @@ require(Packages.us.derfers.tribex.rapids.GUI.Swing.GUI);
 
 __widgetTypes.registerWidget("panel", function (parentComposite, widgetElement, parentID) {
         //Create a new Panel
-        var widget = new JPanel();
+        var widget = new JavaAdapter(JPanel, {
+            paintComponent : function(graphics, func) {
+                if (func != null) {
+                    func(graphics);
+                }
+            },
+        });
 
         //Set the layout of the panel to GridBagLayout TODO: Add more layout types
         widget.setLayout(new GridBagLayout());
