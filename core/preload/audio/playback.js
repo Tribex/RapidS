@@ -1,24 +1,26 @@
 /**
- * @file Contains audio playback functionality.
- * @author Tribex
+ * @file Provides functions for playing audio
+ * @author Nateowami
  */
+
 require(Packages.us.derfers.tribex.rapids.Globals);
+require(Packages.java.io.File);
+require(Packages.javax.sound.sampled.AudioInputStream);
 require(Packages.javax.sound.sampled.AudioSystem);
+require(Packages.javax.sound.sampled.Clip);
+require(Packages.javax.sound.sampled.DataLine);
+
 /**
- * Returns an audio stream that can be stopped, played, and paused.
+ * Plays a sound clip. If the clip specified is too long errors may occur. A clip is not buffered
+ * and therefore cannot play a large file. TODO
+ * @param nameAndURL {string} The name and URL of the sound you want to play
  */
-audio.openFile = function(file) {
-    var audioObject = {};
-    audioObject.file = file;
-    audioObject.playSound = function() {
-        try {
-            var clip = AudioSystem.getClip();
-            var inputStream = AudioSystem.getAudioInputStream(new File(Globals.getCWD(audioObject.file)));
-            clip.open(inputStream);
-            clip.start();
-        } catch (e) {
-            console.log(e.message);
-        }
-    }
-    return audioObject;
-}
+audio.playClip = function(nameAndURL){
+    var sound = AudioSystem.getAudioInputStream(new File(Globalg.getCWD(nameAndURL)));
+
+    //This fixes an error on Ubuntu.
+    var info = new DataLine.Info(Clip, sound.getFormat());
+    var clip = AudioSystem.getLine(info);
+    clip.open(sound);
+    clip.start();
+};

@@ -1,6 +1,6 @@
 /**
  * @file Provides audio playing, recording, and converting utilities.
- * @author Tribex
+ * @author Tribex, Nateowami
  **/
 
 /**
