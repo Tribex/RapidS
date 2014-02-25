@@ -77,8 +77,10 @@ public class GUI {
             Utilities.showError("Unable to properly initialize a Swing GUI. File may be corrupt or incorrectly formatted. \n\n"+e.fillInStackTrace());
         }
 
-        //Open the window
-        engine.eval("program.getElementById('__INIT__').widget.setVisible(true);", "GUI Process");
+        //Open the window if it is the top-level window.
+        if (windowID.equals("__INIT__")) {
+            engine.eval("program.getElementById('__INIT__').widget.setVisible(true);", "GUI Process");
+        }
         //XXX: END WINDOW CREATION :XXX\\
     }
 

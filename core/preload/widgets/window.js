@@ -31,7 +31,7 @@ __widgetTypes.registerWidget("window", function (widgetElement) {
         windowID = widgetElement.getAttributeNode("id").getTextContent();
         widget.addWindowListener(new JavaAdapter(WindowAdapter, {
             windowClosing : function(evt) {
-                window.setVisible(false);
+                widget.setVisible(false);
             },
         }));
     }
