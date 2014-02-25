@@ -8,7 +8,7 @@ require(Packages.javax.swing.JMenuBar);
 require(Packages.java.awt.GridBagLayout);
 require(Packages.java.awt.event.WindowAdapter);
 
-__widgetTypes.registerWidget("window", function (widgetElement) {
+__widgetTypes.registerWidget("window", function (COMPATABILITY_ARGUMENT, widgetElement) {
     //Create a new Window
     var widget = new JFrame();
 

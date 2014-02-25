@@ -40,7 +40,7 @@ public class GUI {
      * @param engine The JavaScript engine to run scripts in.
      */
     public void loadWindow(Element windowElement, ScriptEngine engine) {
-        String windowID = (String) engine.call("__widgetTypes.window.loader", windowElement);
+        String windowID = (String) engine.call("__widgetTypes.window.loader", null, windowElement);
 
         try {
             //XXX: HEAD :XXX\\
