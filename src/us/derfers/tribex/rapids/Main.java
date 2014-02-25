@@ -37,10 +37,16 @@ public class Main {
     public static Loader loader = new Loader();
 
     /**
+     * The argument list. Passed to RapidS programs.
+     */
+    public static String[] programArguments;
+
+    /**
      * The main method for RapidS. Program execution starts here
      * @param args The command line arguments
      */
     public static void main(String[] args) {
+        programArguments = args;
         //Value to facilitate automatic loading of init.rsm
         Boolean hasLoaded  = false;
 

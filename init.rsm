@@ -79,6 +79,8 @@ spinner {
         require(java.awt.RenderingHints);
         require(java.awt.geom.RoundRectangle2D);
 
+        console.log("Program argument #1: "+arguments[0]);
+
         var f = files.open("text.txt", "rw+");
 
         //Demonstrates file dialogs
@@ -126,16 +128,6 @@ spinner {
                 '<tab value="Tab2" id="tab2"></tab><tab value="Tab3"></tab>');
         program.getElementById("tab2").appendChild(
                 '<tabpane value="Tab2"><tab value="Tab4"></tab></tabpane>');
-
-        /*program.getElementById("paintme").widget.setPaint(function(graphics) {
-            var rect = new RoundRectangle2D.Double();
-            rect.setRoundRect(5, 5, 20, 20, 10, 10);
-            if(bool) {
-                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            }
-            g.fill(rect);
-            }
-        );*/
     }
 
 

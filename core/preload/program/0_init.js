@@ -22,7 +22,7 @@ program.exit = function (code) {
 /**
  * Always called once the GUI loads.
  */
-program.onload = function() {
+program.onload = function(args) {
     return;
 }
 
