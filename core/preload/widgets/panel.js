@@ -45,7 +45,7 @@ __widgetTypes.registerWidget("panel", function (parentComposite, widgetElement, 
         parentComposite.add(widget, __widgetOps.applyWidgetConstraint(id));
 
         //Load all elements inside of the composite/widget.  INFINITE NESTING!
-        GUI.loadInComposite(widget, widgetElement, parentID);
+        __widgetOps.loadInComposite(widget, widgetElement, parentID);
 
         return widget;
 });

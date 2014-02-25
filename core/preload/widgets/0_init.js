@@ -8,6 +8,8 @@ require(Packages.us.derfers.tribex.rapids.Globals);
 require(Packages.us.derfers.tribex.rapids.GUI.Swing.Layouts);
 require(Packages.us.derfers.tribex.rapids.GUI.Swing.WidgetOps);
 require(Packages.java.awt.GridBagConstraints);
+require(Packages.org.w3c.dom.Node);
+
 
 /**
  * A list of registered widgets. Populated by __widgetTypes.registerWidget()
@@ -147,7 +149,7 @@ var __widgetOps = {
                 var childNodes = program.XMLFragToDocument(child).getChildNodes();
                 if (childNodes != null) {
                     for (var i = 0; i < childNodes.getLength(); i++) {
-                        Packages.us.derfers.tribex.rapids.GUI.Swing.GUI.loadInComposite(widgetObject.widget, childNodes.item(0), this.id);
+                        __widgetOps.loadInComposite(widgetObject.widget, childNodes.item(0), this.id);
                     }
                 }
             }
@@ -288,6 +290,43 @@ var __widgetOps = {
 
             //Return the constraint for use by widgets.
             return constraint;
+        },
+
+        /**
+         * Loads all XML widgets into the parent composite.
+         * @param parentComposite Any widget that can accept children
+         * @param node The body or any other composite node.
+         * @param engine The JavaScript engine
+         */
+        loadInComposite : function(parentComposite, node, id, childWhiteList, childBlackList) {
+            var childElementList = node.getChildNodes();
+            //Loop through all children of the root element.
+            for (var counter=0; counter < childElementList.getLength(); counter++) {
+                //Isolate the node
+                var widgetElement = childElementList.item(counter);
+
+                //Make sure it is a proper element.
+                if (widgetElement.getNodeType() == Node.ELEMENT_NODE) {
+
+                    //If the tagname is found in widgetTypes
+                    if (__widgetTypes[widgetElement.getNodeName()] != null) {
+
+                        //Make sure the JavaScript widgetType object is really a widget Type
+                        if (__widgetTypes[widgetElement.getNodeName()].element == widgetElement.getNodeName()) {
+                            //Run the JavaScript function to draw and display the widget
+                            __widgetTypes[widgetElement.getNodeName()].loader(parentComposite, widgetElement, id);
+                        }
+
+                        //If the widget is not found in widgetTypes
+                    } else {
+                        program.showError("Error: Unknown widget type: "+widgetElement.getNodeName());
+                    }
+
+                }
+
+            }
+            //position and draw the widgets
+            parentComposite.doLayout();
         },
 
 };

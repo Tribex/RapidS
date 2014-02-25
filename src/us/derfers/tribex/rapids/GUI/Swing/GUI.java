@@ -23,17 +23,13 @@ import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 
-import org.mozilla.javascript.NativeObject;
-import org.mozilla.javascript.Scriptable;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import us.derfers.tribex.rapids.Main;
 import us.derfers.tribex.rapids.ScriptEngine;
 import us.derfers.tribex.rapids.Utilities;
 
@@ -131,8 +127,10 @@ public class GUI {
             //Make sure that there is only one body tag per window.
             NodeList bodyElements = windowElement.getElementsByTagName("body");
             if (bodyElements.getLength() == 1) {
+                String[] whitelist = {"*"};
+                String[] blacklist = {"menuitem", "tab"};
                 //Loop through all children of the body element and add them
-                loadInComposite((JComponent) windowPanel, bodyElements.item(0), windowID);
+                engine.call("__widgetOps.loadInComposite", windowPanel, bodyElements.item(0), windowID, whitelist, blacklist);
             } else {
                 Utilities.showError("Error: A window should have one body element, and one body element only. \n\n"
                         + " Program exiting, fatal error.");
@@ -151,50 +149,6 @@ public class GUI {
         //Open the window
         window.setVisible(setVisible);
         //XXX: END WIDGET CREATION :XXX\\
-    }
-
-    /**
-     * Loads all XML widgets into the parent composite.
-     * @param parentComposite Any widget that can accept children
-     * @param node The body or any other composite node.
-     * @param engine The JavaScript engine
-     */
-    public static void loadInComposite(JComponent parentComposite, Node node, String id) {
-        //Get the JavaScript object widgetTypes from the ScriptEngine scope.
-        Scriptable widgetTypes = (Scriptable) Main.loader.engine.scope.get("__widgetTypes", Main.loader.engine.scope);
-
-        //Get Widgets from the parent Element
-        NodeList bodyElementList = node.getChildNodes();
-        //Loop through all children of the root element.
-        for (int counter=0; counter < bodyElementList.getLength(); counter++) {
-
-            //Isolate the node
-            Node widgetNode = bodyElementList.item(counter);
-
-            //Make sure it is a proper element.
-            if (widgetNode.getNodeType() == Node.ELEMENT_NODE) {
-                final Element widgetElement = (Element) widgetNode;
-
-                //If the tagname is found in widgetTypes
-                if (widgetTypes.get(widgetElement.getNodeName(),
-                        Main.loader.engine.scope).getClass().getName().equals("org.mozilla.javascript.NativeObject")) {
-
-                    //Make sure the JavaScript widgetType object is really a widget Type
-                    if (((NativeObject) widgetTypes.get(widgetElement.getNodeName(), Main.loader.engine.scope)).get("element").toString().equals(widgetElement.getNodeName())) {
-                        //Run the JavaScript function to draw and display the widget
-                        Main.loader.engine.call("__widgetTypes."+widgetElement.getNodeName()+".loader", parentComposite, widgetElement, id);
-                    }
-
-                    //If the widget is not found in widgetTypes
-                } else {
-                    Utilities.showError("Error: Unknown widget type: "+widgetElement.getNodeName());
-                }
-
-            }
-
-        }
-        //position and draw the widgets
-        parentComposite.doLayout();
     }
 
 }

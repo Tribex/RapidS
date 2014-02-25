@@ -23,7 +23,7 @@ __widgetTypes.registerWidget("menu", function (parentComposite, widgetElement, p
 
     var id = __widgetOps.initializeWidget(widget, widgetElement, parentID);
 
-    GUI.loadInComposite(widget, widgetElement, id);
+    __widgetOps.loadInComposite(widget, widgetElement, id, ["menuitem"], ["*"]);
 
     return widget;
 });
