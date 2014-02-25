@@ -14,9 +14,9 @@ __widgetTypes.registerWidget("tabpane", function (parentComposite, widgetElement
     parentComposite.add(widget, __widgetOps.applyWidgetConstraint(id));
 
     //Load all elements inside of the composite/widget.  INFINITE NESTING!
-    __widgetOps.loadInComposite(widget, widgetElement, id, ["tab"], ["*"]);
+    __widgetOps.loadInComposite(widget, widgetElement, id);
 
     return widget;
 },
-[], []);
+[], [], ["tab"]);
 

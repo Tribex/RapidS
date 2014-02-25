@@ -6,6 +6,8 @@ require(Packages.javax.swing.JPanel);
 require(Packages.java.awt.GridBagLayout);
 require(Packages.us.derfers.tribex.rapids.GUI.Swing.GUI);
 
+__widgetOps.defaultLegalChildren.push("!tab");
+
 __widgetTypes.registerWidget("tab", function (parentComposite, widgetElement, parentID) {
         //Create a new Panel
         var widget = new JPanel();
@@ -23,7 +25,7 @@ __widgetTypes.registerWidget("tab", function (parentComposite, widgetElement, pa
         //Load all elements inside of the composite/widget.  INFINITE NESTING!
         var id = __widgetOps.initializeWidget(widget, widgetElement, parentID);
 
-        __widgetOps.loadInComposite(widget, widgetElement, id, ["menuitem"], ["*"]);
+        __widgetOps.loadInComposite(widget, widgetElement, id);
 
         return widget;
-});
+}, [], [], ["*"]);

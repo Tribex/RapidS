@@ -17,8 +17,8 @@ require(Packages.org.w3c.dom.Node);
  */
 var __widgetTypes = {
         //Used to register a new widget type.
-        registerWidget : function (element, loader, styleBlacklist, styleWhitelist, customData) {
-            this[element] = {element : element, loader : loader, styleBlacklist : styleBlacklist, styleWhitelist : styleWhitelist}
+        registerWidget : function (element, loader, styleBlacklist, styleWhitelist, legalChildren) {
+            this[element] = {element : element, loader : loader, styleBlacklist : styleBlacklist, styleWhitelist : styleWhitelist, legalChildren : legalChildren}
         },
 
 }
@@ -28,6 +28,7 @@ var __widgetTypes = {
  * @namespace
  */
 var __widgetOps = {
+        defaultLegalChildren : ["*"],
         //Populated by a call from Java class Loader to css.parseString.
         styles : null,
         //Used for widgets that do not have a unique Id set.
@@ -294,11 +295,12 @@ var __widgetOps = {
 
         /**
          * Loads all XML widgets into the parent composite.
-         * @param parentComposite Any widget that can accept children
-         * @param node The body or any other composite node.
-         * @param engine The JavaScript engine
+         * @param parentComposite {JComponent} Any widget that can accept children
+         * @param node {Element} The body or any other composite node.
+         * @param id {string} The id of parentComposite
+         * @param legalChildren {array} An array of valid or invalid children tag names.
          */
-        loadInComposite : function(parentComposite, node, id, childWhiteList, childBlackList) {
+        loadInComposite : function(parentComposite, node, id) {
             var childElementList = node.getChildNodes();
             //Loop through all children of the root element.
             for (var counter=0; counter < childElementList.getLength(); counter++) {
@@ -307,19 +309,30 @@ var __widgetOps = {
 
                 //Make sure it is a proper element.
                 if (widgetElement.getNodeType() == Node.ELEMENT_NODE) {
-
                     //If the tagname is found in widgetTypes
                     if (__widgetTypes[widgetElement.getNodeName()] != null) {
-
-                        //Make sure the JavaScript widgetType object is really a widget Type
-                        if (__widgetTypes[widgetElement.getNodeName()].element == widgetElement.getNodeName()) {
-                            //Run the JavaScript function to draw and display the widget
-                            __widgetTypes[widgetElement.getNodeName()].loader(parentComposite, widgetElement, id);
+                        if (__widgetList[id] != null && __widgetTypes[__widgetList[id].element] != null) {
+                            var legalChildren = __widgetTypes[__widgetList[id].element].legalChildren;
+                            //console.log(legalChildren);
+                        } else {
+                            var legalChildren = this.defaultLegalChildren;
                         }
 
-                        //If the widget is not found in widgetTypes
-                    } else {
-                        program.showError("Error: Unknown widget type: "+widgetElement.getNodeName());
+                        if ((legalChildren.contains("*") && !legalChildren.contains("!"+widgetElement.getNodeName()))
+                                || legalChildren.contains(widgetElement.getNodeName())) {
+
+                            //Make sure the JavaScript widgetType object is really a widget Type
+                            if (__widgetTypes[widgetElement.getNodeName()].element == widgetElement.getNodeName()) {
+                                //Run the JavaScript function to draw and display the widget
+                                __widgetTypes[widgetElement.getNodeName()].loader(parentComposite, widgetElement, id);
+                            }
+
+                            //If the widget is not found in widgetTypes
+                        } else {
+                            program.showError("Error: Illegal child widget for "+id+": "+widgetElement.getNodeName());
+                        }
+                    }else {
+                        program.showError("Error: Widget: "+widgetElement.getNodeName()+" does not exist or is not registered.");
                     }
 
                 }

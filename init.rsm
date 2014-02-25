@@ -210,8 +210,7 @@ spinner {
         onmouseout="runBtnEvt('Mouse Out', 'No Id')">label changes on mouseover, mouseout, and click.</label> <label id="clickLabel"
         onclick="changeBackground('clickLabel', 'click')"
         onmouseover="changeBackground('clickLabel', 'over')"
-        onmouseout="changeBackground('clickLabel', 'out')">Clickable
-        label</label>
+        onmouseout="changeBackground('clickLabel', 'out')">Clickable label</label>
     <button id="clickableButton" class="changesOnHover"
         onclick="runBtnEvt('Click', program.getElementById('clickableButton').id)"
         onmouseover="runBtnEvt('Mouse Over', program.getElementById('clickableButton').id)"

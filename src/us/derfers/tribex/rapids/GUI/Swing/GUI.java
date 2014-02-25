@@ -18,14 +18,6 @@
 
 package us.derfers.tribex.rapids.GUI.Swing;
 
-import java.awt.Container;
-import java.awt.GridBagLayout;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -44,49 +36,11 @@ public class GUI {
      * Starts the JFrame, sets a GridBagLayout TODO: allow layouts to be configurable, Sets the Window Title,
      * loads Styles, and runs loadInComposite to load widgets.
      *
-     * @param escapedFile The escaped file to load from.
+     * @param windowElement The window XML element.
      * @param engine The JavaScript engine to run scripts in.
-     * @param parent Optional parent JFrame or Composite. Will be elaborated on soon.
-     * @param clearWidgets Wether or not to clear all widgets out of the parent before loading more into it.
      */
-    public void loadWindow(Element windowElement, ScriptEngine engine, Boolean setVisible) {
-        //XXX: Initialization :XXX\\
-        String windowID = "";
-
-        final JFrame window = new JFrame();
-
-        Container windowPanel = window.getContentPane();
-
-        window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-
-        if (windowElement.hasAttribute("id") && windowElement.getAttributeNode("id").getTextContent().equals("__INIT__")) {
-            setVisible = true;
-            windowID = "__INIT__";
-            window.addWindowListener(new WindowAdapter() {
-                public void windowClosing(WindowEvent e) {
-                    System.exit(0);
-                }
-            });
-        } else if (windowElement.getAttributeNode("id") == null) {
-            Utilities.showError("ERROR: Window does not have an id. Unable to recover.");
-            System.exit(0);
-        } else {
-            windowID = windowElement.getAttributeNode("id").getTextContent();
-            window.addWindowListener(new WindowAdapter() {
-                public void windowClosing(WindowEvent e) {
-                    window.setVisible(false);
-                }
-            });
-        }
-
-        //TODO: Flexible layout types
-        //Create a gridbaglayout
-        windowPanel.setLayout(new GridBagLayout());
-
-        JMenuBar menuBar = new JMenuBar();
-        window.setJMenuBar(menuBar);
-
-        engine.call("__widgetOps.storeWidget", windowID, windowElement, window);
+    public void loadWindow(Element windowElement, ScriptEngine engine) {
+        String windowID = (String) engine.call("__widgetTypes.window.loader", windowElement);
 
         try {
             //XXX: HEAD :XXX\\
@@ -109,7 +63,7 @@ public class GUI {
                         final Element headElement = (Element) headNode;
                         //Set the shell title with the title or window_title node
                         if (headElement.getNodeName().equals("title") || headElement.getNodeName().equals("window_title")) {
-                            window.setTitle(headElement.getTextContent());
+                            engine.eval("program.getElementById('"+windowID+"').widget.setTitle('"+headElement.getTextContent()+"');", "GUI Process");
                         }
                     }
                 }
@@ -118,37 +72,14 @@ public class GUI {
                         + " Continuing, program may become unstable.");
             }
 
-            //Set the window title to "Untitled Window" if no title has been set yet.
-            if (window.getTitle().equals("")) {
-                window.setTitle("Untitled Window");
-            }
-
-            //XXX: BODY : XXX\\
-            //Make sure that there is only one body tag per window.
-            NodeList bodyElements = windowElement.getElementsByTagName("body");
-            if (bodyElements.getLength() == 1) {
-                String[] whitelist = {"*"};
-                String[] blacklist = {"menuitem", "tab"};
-                //Loop through all children of the body element and add them
-                engine.call("__widgetOps.loadInComposite", windowPanel, bodyElements.item(0), windowID, whitelist, blacklist);
-            } else {
-                Utilities.showError("Error: A window should have one body element, and one body element only. \n\n"
-                        + " Program exiting, fatal error.");
-                System.exit(1);
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
             Utilities.showError("Unable to properly initialize a Swing GUI. File may be corrupt or incorrectly formatted. \n\n"+e.fillInStackTrace());
         }
-        //Fit the window to the elements in it.
-        window.pack();
-
-        //Loading the JS must be done ABSOLUTELY LAST before the setVisible() call, or some properties will be missed.
 
         //Open the window
-        window.setVisible(setVisible);
-        //XXX: END WIDGET CREATION :XXX\\
+        engine.eval("program.getElementById('__INIT__').widget.setVisible(true);", "GUI Process");
+        //XXX: END WINDOW CREATION :XXX\\
     }
 
 }
