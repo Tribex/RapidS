@@ -1,14 +1,15 @@
-Thank you for your interest in **RapidS**! Here are some guidelines for contributing, to make things go smoother and easier for everyone.
+Thank you for your interest in **RapidS**! Here are some guidelines for contributing to make things go smoother and easier for everyone.
 
 ## Getting Started ##
 1. Start by forking the repository by clicking ![the Fork button.](http://i81.servimg.com/u/f81/16/33/06/11/forkme12.png)
 2. Clone the script onto your computer by running ```git clone https://github.com/yourusername/RapidS.git``` or if you are using a GUI client, however you clone repositories.
 3. Read up on the code and project layout and guidelines below.
 4. Make a new branch off the branch you want to merge into and commit to it. This way, there will be fewer merge conflicts when you submit a pull request. Please name the branch something related to the changes you are making! It will be easier to identify.
-4. Edit away! A list of stuff to do are filed in project [Issues](https://github.com/TribeX-Software-Development/RapidS/issues). 
-5. Once you finish your work, submit a [pull request](https://github.com/TribeX-Software-Development/RapidS/pulls) by clicking ![the Pull Request button.](http://i81.servimg.com/u/f81/16/33/06/11/pullre10.png)
-6. If everything checks out, your changes will be merged! :D
-7. Don't forget to share the project with your friends and ![Star!](http://i81.servimg.com/u/f81/16/33/06/11/star11.png)
+5. Edit away! A list of stuff to do are filed in project [Issues](https://github.com/TribeX-Software-Development/RapidS/issues). 
+6. Once you finish your work, submit a [pull request](https://github.com/TribeX-Software-Development/RapidS/pulls) by clicking ![the Pull Request button.](http://i81.servimg.com/u/f81/16/33/06/11/pullre10.png)
+7. Pull requests should describe your branch, detail what was added and removed, and describe why you think your pull request should be merged.  Try to use proper grammar please!
+8. If everything checks out, your changes will be merged! :D
+9. Don't forget to share the project with your friends and ![Star!](http://i81.servimg.com/u/f81/16/33/06/11/star11.png)
 
 
 ### Separate Branches ###
@@ -107,6 +108,7 @@ core
       0_init.js - Contains var widgets = {};
       panel.js - Contains panel widget;
  ```
+ * Try to pollute the global scope as little as possible. similar features should go in their own folder under their own object. (Eg preload/audio/playback.js maps to ```audio.playClip();```)
  
 **Thanks to [LDR-Importer](http://github.com/le717/LDR-Importer) for providing this article template that I so wonderously ripped off. :smile:**
 
