@@ -116,13 +116,13 @@ public class Loader {
         debugMsg("Loading "+filePath+"", 2);
         loadAll(fileEscaped);
 
-        //Run the program.onLoad property to allow the program to run scripts after the GUI has loaded.
-        engine.call("program.onload");
-
         //POSTLOAD:
         //Loop through the JavaScript standard library for JavaScript and import all .js files in the postload folder.
         recursiveLoadJS(engine, "core/postload");
         debugMsg("Imported JavaScript Standard Library (PostLoad)", 3);
+
+        //Run the program.onload property to allow the program to run scripts after the GUI has loaded.
+        engine.call("program.onload", (Object[]) Main.programArguments);
 
         //XXX: End loader :XXX\\
     }
