@@ -28,10 +28,8 @@ Both forks and the main repository should follow this. This make the process of 
 +"Line 2\n"
 +"Line 3"
 ```
-* Please trim white space from the end of lines and blank lines.
 * Please try to document your code as much as possible. It is understood you may not have the time to and others might need to do it,
 but if you do have the time do document, go right ahead and do it and perhaps whatever else may need it!
-* Spaces are preferred over tabs. At the same time, we recommend you use tabs in your editor/IDE and just replace the tabs with spaces before commiting.
 
 ### Recommended Code Style (CSS) ###
 * A Travis CI builder is attached to automatically check the script for any errors.
@@ -57,13 +55,13 @@ background-color: red;
 * We provide but would prefer that you not use shorthand css, such as the margin value. Instead, please set all four margin-DIR values.
 * As of yet, CSS inheritance levels are not yet supported. This means that code such as this will not work: 
 ```css
-label, .special, #redLabel {
+label .special #redLabel {
 	background-color: #FF0000;
 }
 ```
 * However, style duplication is supported, so this wil work:
 ```css
-label .special #redLabel {
+label, .special, #redLabel, {
 	background-color: #FF0000;
 }
 ```
@@ -85,8 +83,7 @@ Output of above example:
 [Text Line 1        Text Line 2]
 ```
 
-### Recommended Code Style (RapidS ECMAScript API) ###
-* A Travis CI builder is attached to automatically check the script for any errors.
+### Recommended File Layouts (RapidS ECMAScript API) ###
 * If you are adding a new global object that will contain properties and methods, please place it in its own folder and file in 0_init.js. Code not following this format will not be merged. Good Example:
 ```
 core
