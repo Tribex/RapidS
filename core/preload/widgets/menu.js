@@ -6,6 +6,9 @@ require(Packages.javax.swing.JMenu);
 require(Packages.javax.swing.JMenuItem);
 require(Packages.us.derfers.tribex.rapids.jvCoreLib.Window);
 
+__widgetOps.defaultLegalChildren.push("!menu");
+__widgetOps.defaultLegalChildren.push("!menuitem");
+
 __widgetTypes.registerWidget("menu", function (parentComposite, widgetElement, parentID) {
     var widget = new JMenu();
 
@@ -23,10 +26,10 @@ __widgetTypes.registerWidget("menu", function (parentComposite, widgetElement, p
 
     var id = __widgetOps.initializeWidget(widget, widgetElement, parentID);
 
-    GUI.loadInComposite(widget, widgetElement, id);
+    __widgetOps.loadInComposite(widget, widgetElement, id);
 
     return widget;
-});
+}, [], [], ["menuitem", "menu"]);
 
 __widgetTypes.registerWidget("menuitem", function (parentComposite, widgetElement, parentID) {
     var widget = new JMenuItem();

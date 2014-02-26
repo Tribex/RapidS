@@ -230,7 +230,7 @@ public class Loader {
 
                 //Parse GUI
                 for (int i = 0; i < mainElement.getElementsByTagName("window").getLength(); i++) {
-                    GUI.loadWindow((Element) mainElement.getElementsByTagName("window").item(i), engine, false);
+                    GUI.loadWindow((Element) mainElement.getElementsByTagName("window").item(i), engine);
                 }
 
 
