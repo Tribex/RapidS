@@ -4,7 +4,7 @@ Thank you for your interest in **RapidS**! Here are some guidelines for contribu
 1. Start by forking the repository by clicking ![the Fork button.](http://i81.servimg.com/u/f81/16/33/06/11/forkme12.png)
 2. Clone the script onto your computer by running ```git clone https://github.com/yourusername/RapidS.git``` or if you are using a GUI client, however you clone repositories.
 3. Read up on the code and project layout and guidelines below.
-4. Make a new branch off the branch you want to merge into and commit to it. This way, there will be fewer merge conflicts when you submit a pull request. Please name the branch something related to the changes you are making! It will be easier to identify.
+4. After forking, you should create a new branch in your reposity for the feature you want to work on. The work that you want to merge into the fork's master for that feature should be written there. Once the feature is complete, simply submit a pull request to merge your feature branch into the fork's master. Please name the branch something related to the changes you are making! It will be easier to identify.
 5. Edit away! A list of stuff to do are filed in project [Issues](https://github.com/TribeX-Software-Development/RapidS/issues). 
 6. Once you finish your work, submit a [pull request](https://github.com/TribeX-Software-Development/RapidS/pulls) by clicking ![the Pull Request button.](http://i81.servimg.com/u/f81/16/33/06/11/pullre10.png)
 7. Pull requests should describe your branch, detail what was added and removed, and describe why you think your pull request should be merged.  Try to use proper grammar please!
@@ -28,10 +28,8 @@ Both forks and the main repository should follow this. This make the process of 
 +"Line 2\n"
 +"Line 3"
 ```
-* Please trim white space from the end of lines and blank lines.
 * Please try to document your code as much as possible. It is understood you may not have the time to and others might need to do it,
 but if you do have the time do document, go right ahead and do it and perhaps whatever else may need it!
-* Spaces are preferred over tabs. At the same time, we recommend you use tabs in your editor/IDE and just replace the tabs with spaces before commiting.
 
 ### Recommended Code Style (CSS) ###
 * A Travis CI builder is attached to automatically check the script for any errors.
@@ -57,13 +55,13 @@ background-color: red;
 * We provide but would prefer that you not use shorthand css, such as the margin value. Instead, please set all four margin-DIR values.
 * As of yet, CSS inheritance levels are not yet supported. This means that code such as this will not work: 
 ```css
-label, .special, #redLabel {
+label .special #redLabel {
 	background-color: #FF0000;
 }
 ```
 * However, style duplication is supported, so this wil work:
 ```css
-label .special #redLabel {
+label, .special, #redLabel, {
 	background-color: #FF0000;
 }
 ```
@@ -85,8 +83,7 @@ Output of above example:
 [Text Line 1        Text Line 2]
 ```
 
-### Recommended Code Style (RapidS ECMAScript API) ###
-* A Travis CI builder is attached to automatically check the script for any errors.
+### Recommended File Layouts (RapidS ECMAScript API) ###
 * If you are adding a new global object that will contain properties and methods, please place it in its own folder and file in 0_init.js. Code not following this format will not be merged. Good Example:
 ```
 core
