@@ -128,6 +128,9 @@ spinner {
                 '<tab value="Tab2" id="tab2"></tab><tab value="Tab3"></tab>');
         program.getElementById("tab2").appendChild(
                 '<tabpane value="Tab2"><tab value="Tab4"></tab></tabpane>');
+
+        req = new HttpRequest();
+        req.open("GET", "http://localhost/~joshua/test.php");
     }
 
 
