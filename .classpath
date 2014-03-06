@@ -4,12 +4,12 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/rhino.jar"/>
-	<classpathentry kind="lib" path="lib/HttpRequest.jar"/>
 	<classpathentry kind="lib" path="lib/jsyntax.jar"/>
 	<classpathentry kind="lib" path="lib/audio/jogg-0.0.7.jar"/>
 	<classpathentry kind="lib" path="lib/audio/jorbis-0.0.15.jar"/>
 	<classpathentry kind="lib" path="lib/audio/easyogg.jar"/>
 	<classpathentry kind="lib" path="lib/audio/startup2.jar"/>
 	<classpathentry kind="lib" path="lib/audio/jl1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/HttpRequest.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
