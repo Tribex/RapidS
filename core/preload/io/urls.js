@@ -1,12 +1,13 @@
-/** Provides basic url reading and writing features
- * --USES APACHE COMMONS IO--*/
+/**
+ * @file Provides basic url reading and writing features
+ * @author Tribex
+ * --USES APACHE COMMONS IO--
+ */
 
 require(Packages.java.net.URL);
 require(Packages.us.derfers.tribex.rapids.Globals);
 require(Packages.us.derfers.tribex.rapids.Utilities);
 require(Packages.org.apache.commons.io.IOUtils);
-require(Packages.org.jdesktop.http.Method);
-require(Packages.org.jdesktop.http.async.XmlHttpRequest);
 
 /**
  * A connection to a URL.
@@ -27,35 +28,6 @@ function urls(url, encoding) {
     this.read = function() {
         try {
             var hasRead = IOUtils.toString(new URL(url));
-            if (hasRead != "" && hasRead != " " && hasRead != null && hasRead != undefined) {
-                return hasRead;
-            } else {
-                return "Error: URL not found: '"+url+"'.";
-            }
-        } catch (e) {
-            return e.message;
-        }
-    }
-
-    /**
-     * BROKEN: Sends a post request to the URL.
-     * @param data {string} The data to send in the post request.
-     * @memberof urls
-     */
-    this.post = function(data) {
-        var req = new XmlHttpRequest();
-        req.open(Method.POST, url);
-        req.send(data);
-    }
-
-    /**
-     * Kinda works: Sends a get request to the URL.
-     * @param data {string} The data to send in the GET request.
-     * @memberof urls
-     */
-    this.get = function(data) {
-        try {
-            var hasRead = IOUtils.toString(new URL(url+data));
             if (hasRead != "" && hasRead != " " && hasRead != null && hasRead != undefined) {
                 return hasRead;
             } else {
